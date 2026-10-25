@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>راهنمای داشبورد منابع انسانی</title>
+<link href="../../fonts/fonts.css" rel="stylesheet">
+<link href="../../fonts/vazirmatn.css" rel="stylesheet">
+<script>
+(function(){var q=new URLSearchParams(location.search).get('theme');if(q==='dark'||q==='light')document.documentElement.setAttribute('data-theme',q);})();
+</script>
+<style>
+:root{
+  --page:#f3f5f8;--panel:#ffffff;--panel2:#eef1f5;--line:#e2e6ec;--ink:#121826;--ink2:#4a5468;--muted:#8a93a5;
+  --blue:#2a78d6;--soft:#e3edfb;--deep:#0d366b;--orange:#eb6834;--green:#1baf7a;--red:#c23434;
+  --good-ink:#11845a;--bad-ink:#c23434;--warn-ink:#b9471a;
+  --shadow:0 1px 2px rgba(18,24,38,.06),0 4px 16px rgba(18,24,38,.05);
+  --orange-soft:#fdeee6;--green-soft:#e0f5ec;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --page:#0e1116;--panel:#161a21;--panel2:#1d222b;--line:#2a303b;--ink:#f1f3f7;--ink2:#c2c8d3;--muted:#8a93a5;
+  --blue:#3987e5;--soft:#1b2a3f;--deep:#9ec5f4;--orange:#d95926;--green:#199e70;--red:#e05a5a;
+  --good-ink:#3fcf98;--bad-ink:#ff7b7b;--warn-ink:#f08a5d;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+  --orange-soft:#3a271d;--green-soft:#173229;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --page:#0e1116;--panel:#161a21;--panel2:#1d222b;--line:#2a303b;--ink:#f1f3f7;--ink2:#c2c8d3;--muted:#8a93a5;
+  --blue:#3987e5;--soft:#1b2a3f;--deep:#9ec5f4;--orange:#d95926;--green:#199e70;--red:#e05a5a;
+  --good-ink:#3fcf98;--bad-ink:#ff7b7b;--warn-ink:#f08a5d;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+  --orange-soft:#3a271d;--green-soft:#173229;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0}
+body{background:var(--page);color:var(--ink);font-family:"IBM Plex Sans Arabic",Vazirmatn,Tahoma,sans-serif;font-size:15px;line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--blue)}
+button{font:inherit;color:inherit}
+.top{position:sticky;top:0;z-index:20;background:var(--panel);border-bottom:1px solid var(--line)}
+.top-in{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.top h1{font-size:17px;margin:0;font-weight:700}
+.top p{margin:0;font-size:12.5px;color:var(--ink2)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:6px 12px;font-size:13px;cursor:pointer;text-decoration:none;color:var(--ink);white-space:nowrap;line-height:1.6}
+.btn:hover{border-color:var(--blue)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn svg{width:16px;height:16px}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 20px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:36px;align-items:start}
+.toc{position:sticky;top:78px;max-height:calc(100vh - 96px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:14px 10px}
+.toc b{display:block;font-size:12.5px;color:var(--muted);padding:0 10px 6px;font-weight:600}
+.toc a{display:block;padding:4px 10px;border-radius:8px;color:var(--ink2);text-decoration:none;font-size:13.5px;line-height:1.7}
+.toc a:hover{background:var(--panel2);color:var(--ink)}
+.toc a.on{background:var(--soft);color:var(--blue);font-weight:600}
+article{max-width:760px;min-width:0}
+section{scroll-margin-top:84px;padding-bottom:12px;margin-bottom:28px;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+h2{font-size:21px;margin:0 0 8px;line-height:1.5}
+h3{font-size:15.5px;margin:18px 0 6px}
+p{margin:8px 0}
+ul,ol{margin:6px 0;padding-right:22px}
+li{margin:3px 0}
+.lead{font-size:16px;color:var(--ink2)}
+.hero{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:20px 22px;margin-bottom:24px}
+.hero h2{font-size:23px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chip{background:var(--panel2);border-radius:999px;padding:2px 12px;font-size:12.5px;color:var(--ink2)}
+figure{margin:14px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+figure img{display:block;width:100%;height:auto}
+.figside{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:22px;align-items:start}
+.figside figure{margin-top:8px}
+figcaption{font-size:12.5px;color:var(--ink2);padding:8px 14px;border-top:1px solid var(--line);background:var(--panel2)}
+.box{border-radius:12px;padding:12px 16px;margin:12px 0;font-size:14.5px}
+.ex{background:var(--panel);border:1px solid var(--line);border-right:4px solid var(--blue)}
+.ex .t{font-weight:700;font-size:13px;color:var(--blue);display:block;margin-bottom:2px}
+.q{background:var(--green-soft);border-right:4px solid var(--green)}
+.q .t{font-weight:700;font-size:13px;color:var(--good-ink);display:block;margin-bottom:2px}
+.warn{background:var(--orange-soft);border-right:4px solid var(--orange)}
+.warn .t{font-weight:700;font-size:13px;color:var(--warn-ink);display:block;margin-bottom:2px}
+b[data-v]{font-variant-numeric:tabular-nums}
+.go{display:inline-flex;align-items:center;gap:4px;font-size:13.5px;text-decoration:none;font-weight:600;margin-top:4px}
+.go:hover{text-decoration:underline}
+.steps{counter-reset:s;list-style:none;padding:0}
+.steps li{counter-increment:s;position:relative;padding:10px 52px 10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:8px 0}
+.steps li::before{content:counter(s,persian);position:absolute;right:14px;top:10px;width:26px;height:26px;border-radius:8px;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.tw{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:8px 12px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--panel2);font-weight:600;font-size:12.5px;color:var(--ink2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.c{text-align:center;white-space:nowrap}
+.y{color:var(--good-ink);font-weight:700}.h{color:var(--blue);font-weight:600}.n{color:var(--muted)}
+.ftable td:first-child{white-space:nowrap;font-weight:600}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin:8px 0}
+summary{cursor:pointer;font-weight:600}
+details p{margin:8px 0 2px;color:var(--ink2)}
+dl{margin:8px 0}
+dt{font-weight:700;margin-top:12px}
+dd{margin:2px 0 0;color:var(--ink2)}
+footer{max-width:1180px;margin:0 auto;padding:18px 20px 28px;color:var(--muted);font-size:12.5px;text-align:center;border-top:1px solid var(--line)}
+@media (max-width:900px){
+  .wrap{grid-template-columns:minmax(0,1fr);gap:16px;padding:14px 16px}
+  .toc{position:sticky;top:var(--toptop,60px);z-index:10;max-height:none;display:flex;gap:6px;overflow-x:auto;padding:8px;border-radius:12px;scrollbar-width:none}
+  .toc::-webkit-scrollbar{display:none}
+  .toc b{display:none}
+  .toc a{white-space:nowrap;flex:none;background:var(--panel2);font-size:12.5px;padding:3px 10px}
+  section{scroll-margin-top:130px}
+  .top-in{padding:10px 16px}
+  .figside{grid-template-columns:minmax(0,1fr)}
+  .figside figure{max-width:240px;margin:8px auto}
+}
+@media (max-width:560px){
+  body{font-size:14.5px}
+  h2{font-size:19px}
+  .hero{padding:16px}
+  .hero h2{font-size:20px}
+  .top p{display:none}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div><h1>راهنمای داشبورد منابع انسانی</h1><p>شرکت نمونه · نسخهٔ نمایشی</p></div>
+    <div class="actions">
+      <a class="btn primary" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>بازگشت به داشبورد</a>
+      <a class="btn" href="../../en/hr/guide.html" lang="en" hreflang="en">English</a><button class="btn" id="themeBtn" type="button"></button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="toc" id="toc" aria-label="فهرست مطالب">
+    <b>فهرست</b>
+    <a href="#glance">در یک نگاه</a>
+    <a href="#quick">شروع سریع</a>
+    <a href="#g-filters">فیلترها</a>
+    <a href="#g-kpis">کارت‌های شاخص</a>
+    <a href="#g-composition">ترکیب نیرو در واحدها</a>
+    <a href="#g-mix">روند سهم گروه‌ها</a>
+    <a href="#g-trend">نیرو، جذب و خروج</a>
+    <a href="#g-turnover">ترک خدمت و دلایل</a>
+    <a href="#g-insights">یافته‌های کلیدی</a>
+    <a href="#g-training">آموزش در برابر هدف</a>
+    <a href="#g-absence">نقشهٔ غیبت</a>
+    <a href="#g-excellence">مدل تعالی سازمانی</a>
+    <a href="#g-projects">پروژه‌های منابع انسانی</a>
+    <a href="#g-people">فهرست کارکنان</a>
+    <a href="#g-ftable">جدول اثر فیلترها</a>
+    <a href="#faq">پرسش‌های رایج</a>
+    <a href="#glossary">واژه‌نامه</a>
+  </nav>
+
+  <article>
+    <section id="glance">
+      <div class="hero">
+        <h2>در یک نگاه</h2>
+        <p class="lead">این داشبورد وضعیت نیروی انسانی «شرکت نمونه»، یک شرکت صنعتی با حدود <b data-v="hc"></b> نفر را در یک صفحه نشان می‌دهد: سه گروه نیروی مستقیم شرکت، نیروی کارفرما و نیروی پیمانکار کنار هم، پروژه‌های جاری واحد منابع انسانی، و شاخص‌های «نتایج کارکنان» در مدل تعالی سازمانی.</p>
+        <div class="chips"><span class="chip">مخاطب: مدیرعامل، مدیر منابع انسانی، مدیران واحدها</span><span class="chip">دورهٔ داده: سال ۱۴۰۴</span><span class="chip">به‌روزرسانی: ۲۵ اسفند ۱۴۰۴</span></div>
+      </div>
+      <p>داشبورد برای پاسخ به این پرسش‌ها طراحی شده است:</p>
+      <ul>
+        <li>چند نفر در شرکت کار می‌کنند و سهم هر گروه نیرو چقدر است؟ آیا وابستگی به نیروی پیمانکار در حال افزایش است؟</li>
+        <li>کدام واحد بیشترین ترک خدمت را دارد و افراد بیشتر به چه دلیلی می‌روند؟</li>
+        <li>برنامهٔ آموزش، به‌ویژه آموزش ایمنی، در کدام واحدها عقب است؟ غیبت در کجا و چه ماه‌هایی بالاست؟</li>
+        <li>پروژه‌های منابع انسانی طبق برنامه پیش می‌روند یا نه؟</li>
+        <li>امتیاز ما در معیار «نتایج کارکنان» مدل تعالی چقدر است و ضعیف‌ترین شاخص‌ها کدام‌اند؟</li>
+      </ul>
+      <figure><img src="shots/overview.png" alt="نمای کلی بالای داشبورد" loading="lazy"><figcaption>نمای بالای داشبورد: سربرگ، ستون فیلترها در سمت راست، کارت‌های شاخص و دو نمودار اول.</figcaption></figure>
+    </section>
+
+    <section id="quick">
+      <h2>شروع سریع</h2>
+      <ol class="steps">
+        <li><b>اول کارت‌ها را بخوانید.</b> شش کارت بالای صفحه تصویر کلی را می‌دهند. رنگ سبز یعنی وضعیت بهتر از پارسال یا هدف، و رنگ قرمز یعنی بدتر. مثلاً نرخ ترک خدمت امسال <b data-v="turn"></b> است، در برابر <b data-v="turnPrev"></b> پارسال.</li>
+        <li><b>سراغ «یافته‌های کلیدی» بروید.</b> داشبورد مهم‌ترین نکته‌ها را خودش به زبان ساده نوشته است؛ از همان‌جا معلوم می‌شود کدام نمودار را باید دقیق‌تر ببینید.</li>
+        <li><b>با فیلترها دقیق شوید.</b> از ستون فیلترها گروه نیرو، واحد یا دوره را عوض کنید. روی نوار هر واحد در نمودارها هم که کلیک کنید، همان واحد فیلتر می‌شود. با «پاک کردن همه» به حالت اول برمی‌گردید.</li>
+      </ol>
+      <div class="box ex"><span class="t">نکته</span>با بردن نشانگر ماوس روی هر نوار، خانه یا نقطه، جزئیات دقیق آن در یک کادر کوچک نمایش داده می‌شود. روی گوشی کافی است روی آن بزنید.</div>
+    </section>
+
+    <section id="g-filters">
+      <h2>فیلترها</h2>
+      <div class="figside"><div>
+      <p>ستون فیلترها در دسکتاپ سمت راست صفحه است و روی گوشی بالای صفحه قرار می‌گیرد (با دکمهٔ «نمایش» باز می‌شود). سه فیلتر دارید:</p>
+      <ul>
+        <li><b>گروه نیرو:</b> همهٔ گروه‌ها، نیروی مستقیم شرکت، نیروی کارفرما یا نیروی پیمانکار. عدد کنار هر گزینه، تعداد نفرات آن گروه در پایان دوره است.</li>
+        <li><b>واحد سازمانی:</b> یکی از نُه واحد شرکت. در نمودارهایی که واحدها را با هم مقایسه می‌کنند، واحد انتخاب‌شده پررنگ می‌ماند و بقیه کم‌رنگ می‌شوند تا مقایسه از دست نرود.</li>
+        <li><b>دورهٔ زمانی:</b> کل سال، نیمهٔ اول یا دوم، یا یکی از چهار فصل ۱۴۰۴. همهٔ مقایسه‌ها با همین دوره در سال ۱۴۰۳ انجام می‌شود.</li>
+      </ul>
+      </div><figure><img src="shots/filters.png" alt="ستون فیلترها" loading="lazy"><figcaption>ستون فیلترها با شمار نفرات هر گروه.</figcaption></figure></div>
+      <div class="box ex"><span class="t">مثال با عددهای همین داشبورد</span>اگر گروه «نیروی پیمانکار» را انتخاب کنید، تعداد نفرات به <b data-v="cHc"></b> نفر می‌رسد، نرخ ترک خدمت این گروه <b data-v="cTurn"></b> و رضایت آن‌ها <b data-v="cSat"></b> از ۱۰۰ است؛ هر سه از میانگین شرکت بدترند.</div>
+      <div class="box q"><span class="t">این بخش به چه سؤالی جواب می‌دهد؟</span>«همین عددها برای یک گروه، یک واحد یا یک فصل خاص چقدر است؟»</div>
+      <p>نشانی صفحه هم با فیلترها عوض می‌شود؛ پس می‌توانید نمای فیلترشده را با همکارتان به اشتراک بگذارید. جدول کامل اثر فیلترها را در بخش <a href="#g-ftable">جدول اثر فیلترها</a> ببینید.</p>
+      <a class="go" href="index.html#filters">مشاهده در داشبورد ←</a>
+    </section>
+
+    <section id="g-kpis">
+      <h2>کارت‌های شاخص</h2>
+      <p>شش کارت بالای صفحه مهم‌ترین عددهای دوره را نشان می‌دهند. زیر هر عدد، مقایسه با همین دوره در ۱۴۰۳ یا با هدف آمده است. فلش ▲ یا ▼ جهت تغییر را نشان می‌دهد و رنگ، خوب یا بد بودن آن را؛ مثلاً بالا رفتن نرخ غیبت با ▲ قرمز نمایش داده می‌شود.</p>
+      <figure><img src="shots/kpis.png" alt="کارت‌های شاخص" loading="lazy"><figcaption>کارت‌های شاخص در حالت بدون فیلتر (کل سال ۱۴۰۴).</figcaption></figure>
+      <h3>چطور بخوانیم</h3>
+      <ul>
+        <li><b>کل نیروی انسانی:</b> تعداد نفرات در پایان دوره، به‌همراه نوار سهم سه گروه.</li>
+        <li><b>نرخ ترک خدمت:</b> تعداد خروج تقسیم بر میانگین نفرات. برای دوره‌های کوتاه‌تر از یک سال، عدد سالانه‌شده نمایش داده می‌شود تا با هدف ۱۲٪ قابل مقایسه باشد.</li>
+        <li><b>جذب نیروی جدید:</b> تعداد استخدام‌های دوره در برابر پارسال.</li>
+        <li><b>سرانهٔ ساعت آموزش:</b> ساعت آموزش به ازای هر نفر، در برابر هدفی که به نسبت طول دوره محاسبه شده است.</li>
+        <li><b>نرخ غیبت:</b> درصد روزهای کاری که بر اثر غیبت بدون برنامه از دست رفته است.</li>
+        <li><b>رضایت کارکنان:</b> میانگین امتیاز نظرسنجی سالانهٔ آذر (از ۱۰۰).</li>
+      </ul>
+      <div class="box ex"><span class="t">مثال با عددهای همین داشبورد</span>در پایان ۱۴۰۴، <b data-v="hc"></b> نفر در شرکت کار می‌کنند (<b data-v="hcDiff"></b> نفر بیشتر از پایان ۱۴۰۳): <b data-v="gd"></b> نفر نیروی مستقیم، <b data-v="ge"></b> نفر نیروی کارفرما و <b data-v="gc"></b> نفر نیروی پیمانکار. در طول سال <b data-v="hires"></b> نفر جذب و <b data-v="exits"></b> نفر خارج شده‌اند و نرخ ترک خدمت به <b data-v="turn"></b> رسیده است. سرانهٔ آموزش <b data-v="train"></b> ساعت است، یعنی <b data-v="trainP"></b> هدف. نرخ غیبت <b data-v="abs"></b> و رضایت کارکنان <b data-v="sat"></b> از ۱۰۰ است (پارسال <b data-v="satPrev"></b>).</div>
+      <div class="box q"><span class="t">این بخش به چه سؤالی جواب می‌دهد؟</span>«وضع کلی نیروی انسانی ما خوب است یا بد، و نسبت به پارسال بهتر شده‌ایم یا بدتر؟»</div>
+      <a class="go" href="index.html#kpis">مشاهده در داشبورد ←</a>
+    </section>
+
+    <section id="g-composition">
+      <h2>ترکیب نیرو در واحدها</h2>
+      <p>برای هر واحد یک نوار افقی رسم شده که طول آن تعداد نفرات در پایان دوره است. هر نوار سه تکه دارد: آبی برای نیروی مستقیم، آبی روشن برای نیروی کارفرما و نارنجی برای نیروی پیمانکار. واحدها از بزرگ به کوچک مرتب شده‌اند.</p>
+      <figure><img src="shots/composition.png" alt="نمودار ترکیب نیرو در واحدها" loading="lazy"><figcaption>ترکیب نیرو در نُه واحد؛ تکهٔ نارنجی سهم نیروی پیمانکار است.</figcaption></figure>
+      <h3>چطور بخوانیم</h3>
+      <ul>
+        <li>عدد انتهای هر نوار، جمع نفرات آن واحد است. با بردن ماوس روی نوار، تعداد و درصد هر گروه را می‌بینید.</li>
+        <li>با کلیک روی نوار یک واحد، کل داشبورد روی همان واحد فیلتر می‌شود؛ کلیک دوباره فیلتر را برمی‌دارد.</li>
+        <li>اگر فیلتر گروه نیرو را انتخاب کنید، فقط تکهٔ همان گروه رسم می‌شود.</li>
+      </ul>
+      <div class="box ex"><span class="t">مثال با عددهای همین داشبورد</span>واحد تولید با <b data-v="prodTot"></b> نفر بزرگ‌ترین واحد است و <b data-v="prodC"></b> نفر از آن‌ها (<b data-v="prodCS"></b>) نیروی پیمانکارند؛ این سهم در کل شرکت <b data-v="gcS"></b> است.</div>
+      <div class="box q"><span class="t">این بخش به چه سؤالی جواب می‌دهد؟</span>«نیروی هر واحد از کجا تأمین می‌شود و کدام واحد بیشتر به پیمانکار وابسته است؟»</div>
+      <a class="go" href="index.html#composition">مشاهده در داشبورد ←</a>
+    </section>
+
+    <section id="g-mix">
+      <h2>روند سهم گروه‌های نیرو</h2>
+      <p>هر ستون یک ماه از ۱۴۰۴ است و کل ارتفاع آن ۱۰۰٪ نفرات همان ماه. ماه‌ها مثل تقویم از راست به چپ چیده شده‌اند: فروردین سمت راست و اسفند سمت چپ. عدد روی تکهٔ نارنجی ستون اول و آخر، سهم نیروی پیمانکار است.</p>
+      <figure><img src="shots/mix.png" alt="نمودار روند سهم گروه‌های نیرو" loading="lazy"><figcaption>سهم سه گروه نیرو در پایان هر ماه ۱۴۰۴.</figcaption></figure>
+      <h3>چطور بخوانیم</h3>
+      <ul>
+        <li>اگر تکهٔ نارنجی از راست به چپ بلندتر می‌شود، یعنی سهم پیمانکار در حال افزایش است.</li>
+        <li>این نمودار خودِ سهم گروه‌ها را نشان می‌دهد، پس فیلتر «گروه نیرو» فقط گروه انتخاب‌شده را پررنگ می‌کند. ماه‌های بیرون از دورهٔ انتخابی هم کم‌رنگ می‌شوند.</li>
+      </ul>
+      <div class="box ex"><span class="t">مثال با عددهای همین داشبورد</span>سهم نیروی پیمانکار از <b data-v="mixA"></b> در پایان ۱۴۰۳ به <b data-v="mixB"></b> در پایان اسفند ۱۴۰۴ رسیده است. بیشترِ این افزایش از جذب پیمانکار به جای نیروهای مستقیمِ خارج‌شده در واحد تولید می‌آید.</div>
+      <div class="box q"><span class="t">این بخش به چه سؤالی جواب می‌دهد؟</span>«آیا ترکیب نیروی ما آرام‌آرام به سمت پیمانکار می‌رود؟»</div>
+      <a class="go" href="index.html#mix">مشاهده در داشبورد ←</a>
+    </section>
+
+    <section id="g-trend">
+      <h2>روند تعداد نیرو، جذب و خروج</h2>
+      <p>این نمودار دو بخش دارد. در بخش بالا، خط آبی تعداد نفرات در پایان هر ماه ۱۴۰۴ است و خط‌چین خاکستری همین عدد در ۱۴۰۳. در بخش پایین، ستون سبز رو به بالا تعداد جذب و ستون قرمز رو به پایین تعداد خروج هر ماه است. دو بخش محور جدا دارند تا عددهای کوچک جذب و خروج زیر عدد بزرگ نفرات گم نشوند.</p>
+      <figure><img src="shots/trend.png" alt="نمودار روند نیرو، جذب و خروج" loading="lazy"><figcaption>نفرات، جذب و خروج ماهانه؛ ماه‌ها از راست به چپ.</figcaption></figure>
+      <h3>چطور بخوانیم</h3>
+      <ul>
+        <li>وقتی ستون سبز یک ماه از ستون قرمز بلندتر است، نفرات آن ماه زیاد شده است.</li>
+        <li>با انتخاب یک فصل یا نیمه در فیلتر دوره، ماه‌های آن دوره با زمینهٔ آبی کم‌رنگ مشخص می‌شوند.</li>
+        <li>با بردن ماوس روی هر ماه، همهٔ عددهای آن ماه را یک‌جا می‌بینید.</li>
+      </ul>
+      <div class="box ex"><span class="t">مثال با عددهای همین داشبورد</span>در ۱۴۰۴، <b data-v="hires"></b> نفر جذب و <b data-v="exits"></b> نفر خارج شده‌اند؛ یعنی خالص <b data-v="net"></b> نفر. بیشترین جذب در <b data-v="maxHireM"></b> بوده است (<b data-v="maxHire"></b> نفر)، چون واحد تولید پیش از نوروز برای فصل پرکار نیرو می‌گیرد. کمترین جذب هم در فروردین بوده است (<b data-v="farHire"></b> نفر).</div>
+      <div class="box q"><span class="t">این بخش به چه سؤالی جواب می‌دهد؟</span>«شرکت در طول سال بزرگ‌تر شده یا کوچک‌تر، و جذب و خروج در کدام ماه‌ها اوج گرفته است؟»</div>
+      <a class="go" href="index.html#trend">مشاهده در داشبورد ←</a>
+    </section>
+
+    <section id="g-turnover">
+      <h2>ترک خدمت و دلایل آن</h2>
+      <p>سمت راست این کارت، نرخ ترک خدمت سالانه‌شدهٔ هر واحد را نشان می‌دهد. خط‌چین عمودی هدف ۱۲٪ است و خط کوتاه تیره روی هر نوار، مقدار همان واحد در ۱۴۰۳. رنگ نوار وضعیت را می‌گوید: قرمز یعنی بیش از ۱٫۵ برابر هدف، نارنجی یعنی بالاتر از هدف و آبی یعنی در حد هدف. سمت چپ، دلیل خروج‌های همین دوره از زیاد به کم آمده است.</p>
+      <figure><img src="shots/turnover.png" alt="نمودار ترک خدمت و دلایل خروج" loading="lazy"><figcaption>نرخ ترک خدمت هر واحد در برابر هدف و پارسال، همراه با دلایل خروج.</figcaption></figure>
+      <div class="box ex"><span class="t">مثال با عددهای همین داشبورد</span>نرخ ترک خدمت تولید <b data-v="prodTurn"></b> است (پارسال <b data-v="prodTurnPrev"></b>)؛ یعنی حدود <b data-v="prodRatio"></b> برابر میانگین بقیهٔ واحدها که <b data-v="othersTurn"></b> است. در کل شرکت، رایج‌ترین دلیل خروج «<b data-v="topReason"></b>» با <b data-v="topReasonS"></b> خروج‌ها است. اگر فقط واحد تولید را فیلتر کنید، می‌بینید <b data-v="prodPay"></b> خروج‌های این واحد به دلیل حقوق و مزایا بوده است.</div>
+      <div class="box warn"><span class="t">دقت کنید</span>در واحدهای کوچک (کمتر از ۲۰ نفر) یکی دو خروج نرخ را خیلی بالا می‌برد؛ پیش از نتیجه‌گیری، تعداد خروج را در کادر راهنمای نوار ببینید.</div>
+      <div class="box q"><span class="t">این بخش به چه سؤالی جواب می‌دهد؟</span>«کدام واحد نیرویش را بیشتر از دست می‌دهد و چرا؟»</div>
+      <a class="go" href="index.html#turnover">مشاهده در داشبورد ←</a>
+    </section>
+
+    <section id="g-insights">
+      <h2>یافته‌های کلیدی</h2>
+      <p>این کارت چهار تا پنج نکتهٔ مهم را از دادهٔ فیلترشده بیرون می‌کشد و به زبان ساده می‌نویسد. با عوض کردن فیلترها، متن یافته‌ها هم دوباره محاسبه می‌شود. رنگ نشانهٔ کنار هر یافته، اهمیت آن را نشان می‌دهد: قرمز برای مشکل جدی، نارنجی برای هشدار و آبی برای نکتهٔ قابل توجه.</p>
+      <figure><img src="shots/insights.png" alt="کارت یافته‌های کلیدی" loading="lazy"><figcaption>یافته‌های کلیدی در حالت بدون فیلتر.</figcaption></figure>
+      <div class="box ex"><span class="t">مثال با عددهای همین داشبورد</span>یکی از یافته‌ها دو بخش جدا از داشبورد را به هم وصل می‌کند: پروژهٔ «<b data-v="lateName"></b>» <b data-v="lateDays"></b> روز تأخیر دارد و فقط <b data-v="lateProg"></b> پیشرفت کرده است، در حالی که بخشی از خروج‌های تولید به دلیل حقوق و مزایاست. یعنی تأخیر این پروژه مستقیماً روی مهم‌ترین مشکل سال اثر دارد.</div>
+      <div class="box q"><span class="t">این بخش به چه سؤالی جواب می‌دهد؟</span>«اگر فقط یک دقیقه وقت دارم، چه چیزی را باید بدانم؟»</div>
+      <a class="go" href="index.html#insights">مشاهده در داشبورد ←</a>
+    </section>
+
+    <section id="g-training">
+      <h2>آموزش در برابر هدف</h2>
+      <p>برای هر واحد، نوار رنگی سرانهٔ ساعت آموزش در دوره است و خط کوتاه تیره، هدف همان واحد. عدد کنار نوار، سرانهٔ واقعی و درصد تحقق هدف را نشان می‌دهد. واحدها از کمترین تحقق به بیشترین مرتب شده‌اند تا عقب‌مانده‌ها بالا دیده شوند. با دکمهٔ بالای کارت می‌توانید بین «همهٔ آموزش‌ها» و «فقط آموزش ایمنی» جابه‌جا شوید.</p>
+      <figure><img src="shots/training.png" alt="نمودار آموزش در برابر هدف" loading="lazy"><figcaption>سرانهٔ آموزش هر واحد در برابر هدف؛ سبز یعنی ۹۵٪ هدف و بیشتر.</figcaption></figure>
+      <div class="box ex"><span class="t">مثال با عددهای همین داشبورد</span>کمترین تحقق هدف آموزش در <b data-v="trLow"></b> است: <b data-v="trLowA"></b> از <b data-v="trLowT"></b> ساعت (<b data-v="trLowP"></b>). اگر «فقط آموزش ایمنی» را بزنید، می‌بینید آموزش ایمنی تولید فقط <b data-v="prodSafeP"></b> هدف است و سه واحد عملیاتی (تولید، تعمیرات و انبار) روی‌هم به <b data-v="opsSafeP"></b> هدف رسیده‌اند.</div>
+      <div class="box q"><span class="t">این بخش به چه سؤالی جواب می‌دهد؟</span>«برنامهٔ آموزش، به‌خصوص آموزش ایمنی، در کدام واحد عقب است؟»</div>
+      <a class="go" href="index.html#training">مشاهده در داشبورد ←</a>
+    </section>
+
+    <section id="g-absence">
+      <h2>نقشهٔ غیبت</h2>
+      <p>هر خانهٔ این جدول نرخ غیبت یک واحد در یک ماه است؛ یعنی درصد روزهای کاری که بر اثر غیبت بدون برنامه از دست رفته است. هرچه رنگ خانه تیره‌تر باشد، غیبت بیشتر است. ستون آخر میانگین دوره و ردیف آخر میانگین کل شرکت در هر ماه است. روی گوشی، جدول را می‌توانید به چپ و راست بکشید.</p>
+      <figure><img src="shots/absence.png" alt="جدول نقشهٔ غیبت" loading="lazy"><figcaption>نرخ غیبت به تفکیک واحد و ماه ۱۴۰۴.</figcaption></figure>
+      <div class="box ex"><span class="t">مثال با عددهای همین داشبورد</span>نرخ غیبت کل شرکت در ۱۴۰۴ <b data-v="abs"></b> است (هدف کمتر از ۳٪). تیره‌ترین خانه مربوط به <b data-v="absMaxD"></b> در <b data-v="absMaxM"></b> با <b data-v="absMaxV"></b> است و میانگین سالانهٔ تولید <b data-v="absProd"></b> است. الگوی فصلی هم پیداست: فروردین (بعد از تعطیلات نوروز) و ماه‌های گرم تابستان غیبت بیشتری دارند.</div>
+      <div class="box q"><span class="t">این بخش به چه سؤالی جواب می‌دهد؟</span>«غیبت در کدام واحد و کدام ماه‌ها مشکل‌ساز است؟»</div>
+      <a class="go" href="index.html#absence">مشاهده در داشبورد ←</a>
+    </section>
+
+    <section id="g-excellence">
+      <h2>نتایج کارکنان در مدل تعالی سازمانی</h2>
+      <p>در مدل تعالی سازمانی (مانند EFQM)، معیار «نتایج کارکنان» با دو دسته شاخص سنجیده می‌شود: <b>شاخص‌های ادراکی</b> که نظر خود کارکنان را از نظرسنجی می‌گیرند، و <b>شاخص‌های عملکردی</b> که از داده‌های سازمان می‌آیند. این بخش هشت شاخص را کنار هم می‌گذارد.</p>
+      <figure><img src="shots/excellence.png" alt="پنل نتایج کارکنان در مدل تعالی" loading="lazy"><figcaption>امتیاز کلی و هشت شاخص معیار «نتایج کارکنان».</figcaption></figure>
+      <h3>چطور بخوانیم</h3>
+      <ul>
+        <li>برای هر شاخص، مقدار فعلی، هدف، مقدار ۱۴۰۳ و روند (▲ بهتر یا ▼ بدتر) آمده است. برای شاخص‌هایی مثل غیبت و حوادث، کمتر بودن بهتر است و روند هم با همین منطق رنگ می‌گیرد.</li>
+        <li><b>امتیاز تحقق</b> هر شاخص، درصد رسیدن به هدف است و حداکثر ۱۰۰ می‌شود. امتیاز کلی «نتایج کارکنان» میانگین این هشت امتیاز است: ۹۰ و بیشتر «عالی»، ۷۵ تا ۹۰ «خوب»، ۶۰ تا ۷۵ «نیازمند بهبود» و کمتر از ۶۰ «ضعیف».</li>
+        <li>شاخص‌های ادراکی از نظرسنجی سالانهٔ آذر می‌آیند و با فیلتر دوره تغییر نمی‌کنند.</li>
+      </ul>
+      <div class="box ex"><span class="t">مثال با عددهای همین داشبورد</span>امتیاز نتایج کارکنان در ۱۴۰۴ <b data-v="score"></b> از ۱۰۰ است (پارسال <b data-v="scorePrev"></b>). ضعیف‌ترین شاخص‌ها «<b data-v="weak1"></b>» با <b data-v="weak1s"></b> امتیاز و «<b data-v="weak2"></b>» با <b data-v="weak2s"></b> امتیازند. پوشش آموزش ایمنی <b data-v="safeCov"></b> است، در حالی که هدف ۹۰٪ است. در مقابل، پوشش ارزیابی عملکرد با سامانهٔ جدید از <b data-v="apprPrev"></b> به <b data-v="appr"></b> رسیده است.</div>
+      <div class="box q"><span class="t">این بخش به چه سؤالی جواب می‌دهد؟</span>«در ارزیابی تعالی سازمانی، معیار نتایج کارکنان ما چه وضعی دارد و برای سال بعد روی کدام شاخص‌ها باید کار کنیم؟»</div>
+      <a class="go" href="index.html#excellence">مشاهده در داشبورد ←</a>
+    </section>
+
+    <section id="g-projects">
+      <h2>پروژه‌های جاری منابع انسانی</h2>
+      <p>هر ردیف یک پروژه است با مسئول، تاریخ شروع و پایان، و یک نوار پیشرفت. طول نوار رنگی، پیشرفت واقعی است و خط تیرهٔ عمودی روی نوار، جایی است که طبق برنامه تا تاریخ گزارش (۲۵ اسفند ۱۴۰۴) باید می‌رسیدیم.</p>
+      <figure><img src="shots/projects.png" alt="فهرست پروژه‌های منابع انسانی" loading="lazy"><figcaption>هفت پروژهٔ جاری با پیشرفت واقعی در برابر برنامه.</figcaption></figure>
+      <h3>وضعیت‌ها چطور تعیین می‌شوند</h3>
+      <ul>
+        <li><b>طبق برنامه:</b> پیشرفت واقعی حداکثر ۸ واحد درصد از برنامه عقب است.</li>
+        <li><b>در خطر:</b> بین ۸ تا ۲۰ واحد درصد عقب‌تر از برنامه.</li>
+        <li><b>تأخیر:</b> بیش از ۲۰ واحد درصد عقب، یا موعد پایان گذشته و پروژه تمام نشده است.</li>
+        <li><b>تکمیل‌شده:</b> پیشرفت ۱۰۰٪.</li>
+      </ul>
+      <div class="box ex"><span class="t">مثال با عددهای همین داشبورد</span>پروژهٔ «<b data-v="lateName"></b>» قرار بود ۳۰ بهمن تمام شود؛ اکنون <b data-v="lateDays"></b> روز از موعد گذشته و پیشرفت آن <b data-v="lateProg"></b> است. دو پروژه هم در خطرند: <b data-v="riskNames"></b>.</div>
+      <div class="box q"><span class="t">این بخش به چه سؤالی جواب می‌دهد؟</span>«پروژه‌های منابع انسانی کجای کارند و کدام یک نیاز به پیگیری فوری دارد؟»</div>
+      <p class="n" style="font-size:13px">پروژه‌ها در سطح کل شرکت تعریف شده‌اند و فیلترها روی این بخش اثر ندارند.</p>
+      <a class="go" href="index.html#projects">مشاهده در داشبورد ←</a>
+    </section>
+
+    <section id="g-people">
+      <h2>فهرست کارکنان</h2>
+      <p>این جدول همهٔ افرادی را نشان می‌دهد که در دورهٔ انتخابی دست‌کم یک روز در شرکت بوده‌اند، از جمله کسانی که در همین دوره رفته‌اند. ستون «ساعت آموزش در دوره» یک نوار کوچک دارد که میزان رسیدن هر نفر به هدف آموزشی‌اش را نشان می‌دهد.</p>
+      <figure><img src="shots/people.png" alt="جدول فهرست کارکنان" loading="lazy"><figcaption>بخش بالای جدول کارکنان با جست‌وجو و مرتب‌سازی.</figcaption></figure>
+      <h3>چطور کار کنیم</h3>
+      <ul>
+        <li><b>مرتب‌سازی:</b> روی عنوان هر ستون کلیک کنید؛ کلیک دوباره ترتیب را برعکس می‌کند.</li>
+        <li><b>جست‌وجو:</b> بخشی از نام، کد پرسنلی، سمت یا نام واحد را بنویسید.</li>
+        <li><b>وضعیت:</b> «فعال»، «تازه‌وارد» (استخدام در سه ماه آخر دوره) یا «خروج» همراه با دلیل آن.</li>
+        <li>روزهای غیبت ۱۰ و بیشتر با رنگ قرمز مشخص می‌شوند. ۲۵ ردیف اول نمایش داده می‌شود و با دکمهٔ پایین جدول، ردیف‌های بیشتری می‌آید.</li>
+      </ul>
+      <div class="box ex"><span class="t">مثال با عددهای همین داشبورد</span>در کل سال ۱۴۰۴، <b data-v="pplRows"></b> نفر در جدول هستند که <b data-v="exits"></b> نفرشان در طول سال خارج شده‌اند. اگر ستون «روز غیبت» را مرتب کنید، بیشترین غیبت را <b data-v="absTopName"></b> از واحد <b data-v="absTopDept"></b> با <b data-v="absTopDays"></b> روز دارد.</div>
+      <div class="box q"><span class="t">این بخش به چه سؤالی جواب می‌دهد؟</span>«پشت این عددها چه کسانی هستند و چه کسی نیاز به پیگیری دارد؟»</div>
+      <a class="go" href="index.html#people">مشاهده در داشبورد ←</a>
+    </section>
+
+    <section id="g-ftable">
+      <h2>جدول اثر فیلترها</h2>
+      <p>این جدول نشان می‌دهد هر فیلتر روی کدام بخش اثر دارد. <span class="y">✓</span> یعنی عددها دوباره محاسبه می‌شوند، <span class="h">پررنگ‌سازی</span> یعنی همهٔ موارد می‌مانند ولی مورد انتخاب‌شده برجسته می‌شود، و <span class="n">—</span> یعنی فیلتر اثری ندارد.</p>
+      <div class="tw"><table class="ftable">
+        <thead><tr><th>بخش</th><th>گروه نیرو</th><th>واحد سازمانی</th><th>دورهٔ زمانی</th></tr></thead>
+        <tbody>
+          <tr><td>کارت‌های شاخص</td><td class="c y">✓</td><td class="c y">✓</td><td class="c"><span class="y">✓</span> <span class="n">(به‌جز رضایت)</span></td></tr>
+          <tr><td>ترکیب نیرو در واحدها</td><td class="c y">✓</td><td class="c h">پررنگ‌سازی</td><td class="c y">✓</td></tr>
+          <tr><td>روند سهم گروه‌ها</td><td class="c h">پررنگ‌سازی</td><td class="c y">✓</td><td class="c h">پررنگ‌سازی</td></tr>
+          <tr><td>نیرو، جذب و خروج</td><td class="c y">✓</td><td class="c y">✓</td><td class="c h">پررنگ‌سازی</td></tr>
+          <tr><td>ترک خدمت و دلایل</td><td class="c y">✓</td><td class="c h">پررنگ‌سازی</td><td class="c y">✓</td></tr>
+          <tr><td>یافته‌های کلیدی</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+          <tr><td>آموزش در برابر هدف</td><td class="c y">✓</td><td class="c h">پررنگ‌سازی</td><td class="c y">✓</td></tr>
+          <tr><td>نقشهٔ غیبت</td><td class="c y">✓</td><td class="c h">پررنگ‌سازی</td><td class="c h">پررنگ‌سازی</td></tr>
+          <tr><td>نتایج کارکنان (مدل تعالی)</td><td class="c y">✓</td><td class="c y">✓</td><td class="c"><span class="y">✓</span> <span class="n">(به‌جز شاخص‌های سالانه)</span></td></tr>
+          <tr><td>پروژه‌های منابع انسانی</td><td class="c n">—</td><td class="c n">—</td><td class="c n">—</td></tr>
+          <tr><td>فهرست کارکنان</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="faq">
+      <h2>پرسش‌های رایج</h2>
+      <details><summary>«نیروی کارفرما» با «نیروی پیمانکار» چه فرقی دارد؟</summary><p>نیروی کارفرما کسانی‌اند که قراردادشان با شرکت مادر یا کارفرمای پروژه است ولی در شرکت نمونه کار می‌کنند. نیروی پیمانکار از طریق شرکت‌های پیمانکاری تأمین می‌شود. داشبورد این سه گروه را جدا نگه می‌دارد چون هزینه، ماندگاری و نیاز آموزشی آن‌ها متفاوت است.</p></details>
+      <details><summary>چرا نرخ ترک خدمت فصلی با عدد کل سال خیلی فرق دارد؟</summary><p>برای فصل‌ها و نیمه‌ها، نرخ سالانه‌شده نمایش داده می‌شود تا با هدف سالانهٔ ۱۲٪ قابل مقایسه باشد. در یک فصل با تعداد کم خروج، این عدد می‌تواند نوسان زیادی داشته باشد؛ تعداد خروج را هم کنارش ببینید.</p></details>
+      <details><summary>چرا رضایت کارکنان با تغییر دوره عوض نمی‌شود؟</summary><p>نظرسنجی رضایت و تعلق سازمانی سالی یک بار (آذر) انجام می‌شود. برای همین، این عدد و دو شاخص ادراکی مدل تعالی فقط با فیلتر گروه نیرو و واحد تغییر می‌کنند.</p></details>
+      <details><summary>امتیاز «نتایج کارکنان» همان امتیاز رسمی ارزیابی تعالی است؟</summary><p>نه. این امتیاز یک شاخص داخلی برای پایش است: میانگین درصد تحقق هشت شاخص. در ارزیابی رسمی، ارزیابان روند، هدف‌گذاری و مقایسه با سازمان‌های دیگر را هم می‌سنجند؛ ولی همین شاخص‌ها پایهٔ مستندات آن معیار هستند.</p></details>
+      <details><summary>داده‌ها از کجا می‌آیند و هر چند وقت به‌روز می‌شوند؟</summary><p>داده‌ها از سامانهٔ حضور و غیاب، حقوق و دستمزد، سامانهٔ آموزش و فهرست‌های نیروی پیمانکار خوانده می‌شوند و می‌توانند روزانه یا ماهانه به‌روز شوند.</p></details>
+      <details><summary>می‌توانم نمای فیلترشده را برای کسی بفرستم؟</summary><p>بله. فیلترها در نشانی صفحه ذخیره می‌شوند؛ نشانی را کپی کنید و بفرستید تا گیرنده همان نما را ببیند.</p></details>
+    </section>
+
+    <section id="glossary">
+      <h2>واژه‌نامه</h2>
+      <dl>
+        <dt>نرخ ترک خدمت</dt><dd>تعداد افرادی که در دوره از شرکت رفته‌اند، تقسیم بر میانگین تعداد نفرات همان دوره. برای دوره‌های کوتاه‌تر از یک سال به مقیاس سالانه برده می‌شود.</dd>
+        <dt>سالانه‌شده</dt><dd>عددی که برای یک دورهٔ کوتاه حساب شده و به نسبت ۱۲ ماه بزرگ شده است تا با هدف سالانه مقایسه شود.</dd>
+        <dt>نرخ ماندگاری</dt><dd>صد منهای نرخ ترک خدمت سالانه‌شده.</dd>
+        <dt>سرانهٔ ساعت آموزش</dt><dd>کل ساعت آموزش برگزارشده تقسیم بر میانگین نفرات. هدف هر واحد سالانه تعریف شده و برای دوره‌های کوتاه‌تر به همان نسبت کم می‌شود.</dd>
+        <dt>پوشش آموزش ایمنی</dt><dd>درصد کارکنان حاضر که در ۱۲ ماه گذشته دست‌کم سه‌چهارم ساعت آموزش ایمنی مقرر واحدشان را گذرانده‌اند.</dd>
+        <dt>نرخ غیبت</dt><dd>درصد روزهای کاری که بر اثر غیبت بدون برنامه (نه مرخصی برنامه‌ریزی‌شده) از دست رفته است.</dd>
+        <dt>شاخص ادراکی و عملکردی</dt><dd>در مدل تعالی، شاخص ادراکی نظر کارکنان را از نظرسنجی می‌سنجد و شاخص عملکردی از داده‌های داخلی سازمان به دست می‌آید.</dd>
+        <dt>پیشرفت برنامه‌ای</dt><dd>درصدی از پروژه که اگر کار به‌طور یکنواخت بین تاریخ شروع و پایان پیش می‌رفت، تا تاریخ گزارش باید انجام شده بود.</dd>
+      </dl>
+    </section>
+  </article>
+</div>
+<footer>طراحی و ساخت: فاطمه منصوری · نمونه‌کار</footer>
+
+<script>
+/* ===== داده‌های ساختگی (مشترک بین داشبورد و راهنما) ===== */
+const HR = (function () {
+  let s = 1404; const rnd = () => (s = s * 16807 % 2147483647) / 2147483647;
+  const pick = a => a[Math.floor(rnd() * a.length)];
+  const wpick = pairs => { let t = 0; for (const p of pairs) t += p[1]; let r = rnd() * t; for (const p of pairs) { r -= p[1]; if (r <= 0) return p[0]; } return pairs[pairs.length - 1][0]; };
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+  const MONTHS = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+  const GROUPS = [
+    { id: 'd', name: 'نیروی مستقیم شرکت', short: 'مستقیم' },
+    { id: 'e', name: 'نیروی کارفرما', short: 'کارفرما' },
+    { id: 'c', name: 'نیروی پیمانکار', short: 'پیمانکار' }
+  ];
+  const PERIODS = [
+    { id: 'y', name: 'کل سال ۱۴۰۴', m: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
+    { id: 'h1', name: 'نیمهٔ اول ۱۴۰۴', m: [0, 1, 2, 3, 4, 5] },
+    { id: 'h2', name: 'نیمهٔ دوم ۱۴۰۴', m: [6, 7, 8, 9, 10, 11] },
+    { id: 'q1', name: 'بهار ۱۴۰۴', m: [0, 1, 2] },
+    { id: 'q2', name: 'تابستان ۱۴۰۴', m: [3, 4, 5] },
+    { id: 'q3', name: 'پاییز ۱۴۰۴', m: [6, 7, 8] },
+    { id: 'q4', name: 'زمستان ۱۴۰۴', m: [9, 10, 11] }
+  ];
+  // ex03: احتمال ماهانهٔ خروج در ۱۴۰۳؛ ex04a→ex04b: از فروردین تا اسفند ۱۴۰۴
+  const DEPTS = [
+    { id: 'prod', name: 'تولید', base: [72, 28, 30], ex03: .012, ex04a: .017, ex04b: .029, grow: 1.0, cDrift: .40, trainT: 40, safeT: 16, genF: .92, safF: .52, fem: .08, abs: .041, sat: 63, sat04: 56, acc: .0032,
+      roles: [['اپراتور خط تولید', 10], ['تکنسین تولید', 4], ['کارگر تولید', 6], ['سرپرست شیفت', 1.2], ['کارشناس برنامه‌ریزی تولید', .8]] },
+    { id: 'mnt', name: 'نگهداری و تعمیرات', base: [30, 10, 12], ex03: .006, ex04a: .006, ex04b: .007, grow: .25, cDrift: .16, trainT: 44, safeT: 16, genF: 1.0, safF: .84, fem: .03, abs: .030, sat: 68, sat04: 67, acc: .0016,
+      roles: [['تکنسین مکانیک', 5], ['تکنسین برق', 4], ['کارشناس نگهداری و تعمیرات', 1.5], ['سرپرست تعمیرات', .6]] },
+    { id: 'qc', name: 'کنترل کیفیت', base: [22, 8, 3], ex03: .004, ex04a: .005, ex04b: .005, grow: .10, cDrift: .04, trainT: 40, safeT: 10, genF: 1.05, safF: .96, fem: .35, abs: .024, sat: 71, sat04: 72, acc: .0005,
+      roles: [['بازرس کیفیت', 5], ['کارشناس آزمایشگاه', 2], ['کارشناس تضمین کیفیت', 1]] },
+    { id: 'log', name: 'انبار و لجستیک', base: [18, 8, 14], ex03: .007, ex04a: .006, ex04b: .007, grow: .30, cDrift: .18, trainT: 32, safeT: 16, genF: .9, safF: .72, fem: .1, abs: .033, sat: 66, sat04: 65, acc: .0012,
+      roles: [['انباردار', 4], ['رانندهٔ لیفتراک', 3], ['کارشناس لجستیک', 1.5], ['کارگر انبار', 4]] },
+    { id: 'hse', name: 'ایمنی و بهداشت کار', base: [10, 4, 2], ex03: .004, ex04a: .004, ex04b: .004, grow: .05, cDrift: .02, trainT: 50, safeT: 24, genF: 1.1, safF: 1.05, fem: .3, abs: .020, sat: 72, sat04: 73, acc: .0004,
+      roles: [['کارشناس ایمنی', 3], ['افسر ایمنی', 2], ['کارشناس بهداشت حرفه‌ای', 1]] },
+    { id: 'sales', name: 'فروش و بازرگانی', base: [20, 6, 2], ex03: .006, ex04a: .007, ex04b: .007, grow: .10, cDrift: .02, trainT: 36, safeT: 4, genF: .95, safF: 1.0, fem: .45, abs: .019, sat: 73, sat04: 72, acc: 0,
+      roles: [['کارشناس فروش', 4], ['کارشناس بازرگانی', 2], ['کارشناس خدمات مشتریان', 2], ['مدیر فروش منطقه', .5]] },
+    { id: 'fin', name: 'مالی و اداری', base: [22, 8, 4], ex03: .004, ex04a: .005, ex04b: .005, grow: .05, cDrift: .02, trainT: 32, safeT: 4, genF: .9, safF: .95, fem: .55, abs: .021, sat: 70, sat04: 71, acc: 0,
+      roles: [['کارشناس مالی', 4], ['حسابدار', 3], ['کارمند اداری', 3], ['کارشناس خرید', 1.5]] },
+    { id: 'hr', name: 'منابع انسانی', base: [9, 3, 1], ex03: .004, ex04a: .004, ex04b: .004, grow: .03, cDrift: .0, trainT: 44, safeT: 4, genF: 1.1, safF: 1.0, fem: .65, abs: .018, sat: 75, sat04: 76, acc: 0,
+      roles: [['کارشناس جذب و استخدام', 1], ['کارشناس آموزش', 1], ['کارشناس حقوق و دستمزد', 1], ['کارشناس ارزیابی عملکرد', 1]] },
+    { id: 'it', name: 'فناوری اطلاعات', base: [9, 3, 3], ex03: .006, ex04a: .005, ex04b: .005, grow: .08, cDrift: .03, trainT: 48, safeT: 4, genF: 1.15, safF: .9, fem: .35, abs: .018, sat: 72, sat04: 73, acc: 0,
+      roles: [['کارشناس شبکه', 1], ['برنامه‌نویس', 1.5], ['کارشناس پشتیبانی', 1.5], ['تحلیلگر داده', .6]] }
+  ];
+  const DI = {}; DEPTS.forEach((d, i) => DI[d.id] = i);
+
+  const MALE = ['علی', 'محمد', 'حسین', 'رضا', 'مهدی', 'امیر', 'حمید', 'سعید', 'مجید', 'جواد', 'مصطفی', 'احمد', 'کاظم', 'یوسف', 'حسن', 'بهروز', 'فرهاد', 'سجاد', 'میلاد', 'وحید', 'پژمان', 'کامران', 'مسعود', 'داوود', 'ابراهیم', 'عباس', 'ناصر', 'هادی', 'محسن', 'بهزاد'];
+  const FEM = ['مریم', 'زهرا', 'سارا', 'نرگس', 'لیلا', 'الهام', 'مینا', 'شیما', 'نازنین', 'سمیه', 'مهسا', 'پریسا', 'آزاده', 'نسرین', 'الناز', 'ریحانه', 'سمانه', 'فرزانه', 'زینب', 'هانیه'];
+  const LAST = ['احمدی', 'محمدی', 'حسینی', 'رضایی', 'کریمی', 'موسوی', 'جعفری', 'صادقی', 'رحیمی', 'نوری', 'قاسمی', 'کاظمی', 'عباسی', 'اکبری', 'مرادی', 'حیدری', 'سلطانی', 'نجفی', 'شریفی', 'یزدانی', 'فرهادی', 'بهرامی', 'زارعی', 'طاهری', 'صالحی', 'کرمانی', 'شیرازی', 'ملکی', 'امینی', 'توکلی', 'باقری', 'فتحی', 'رستمی', 'نیک‌نام', 'دهقان', 'خسروی', 'ابراهیمی', 'اسدی', 'پورمحمدی', 'قربانی', 'میرزایی', 'عسگری', 'حاجی‌زاده', 'نادری', 'وکیلی', 'جلالی', 'کامرانی', 'سبحانی'];
+
+  const REASONS_PROD = [['حقوق و مزایا', 34], ['شرایط کار و نوبت‌کاری', 26], ['فرصت شغلی بهتر', 14], ['پایان قرارداد', 9], ['جابه‌جایی محل زندگی', 7], ['مهاجرت', 3], ['بازنشستگی', 3], ['عملکرد و انضباط', 4]];
+  const REASONS_OTHER = [['فرصت شغلی بهتر', 28], ['حقوق و مزایا', 18], ['پایان قرارداد', 12], ['جابه‌جایی محل زندگی', 12], ['مهاجرت', 10], ['بازنشستگی', 10], ['شرایط کار و نوبت‌کاری', 5], ['عملکرد و انضباط', 5]];
+  const REASONS = ['حقوق و مزایا', 'شرایط کار و نوبت‌کاری', 'فرصت شغلی بهتر', 'پایان قرارداد', 'جابه‌جایی محل زندگی', 'مهاجرت', 'بازنشستگی', 'عملکرد و انضباط'];
+
+  const pad = n => (n < 10 ? '0' : '') + n;
+  const people = []; let seq = 1000;
+  function mk(dept, g, hireM, hireDate) {
+    const fem = rnd() < dept.fem;
+    const p = {
+      code: 'HR-' + (seq += 1 + Math.floor(rnd() * 3)), name: pick(fem ? FEM : MALE) + ' ' + pick(LAST), fem,
+      dept: dept.id, di: DI[dept.id], g, role: wpick(dept.roles), hireM, hire: hireDate, exitM: null, reason: null,
+      gen: new Array(24).fill(0), saf: new Array(24).fill(0), abs: new Array(24).fill(0), acc: new Array(24).fill(0),
+      sat03: null, sat04: null, eng03: null, eng04: null, ev03: false, ev04: false
+    };
+    people.push(p); return p;
+  }
+  // جمعیت ابتدای ۱۴۰۳
+  const GY = { d: [1382, 1402], e: [1390, 1402], c: [1397, 1402] };
+  DEPTS.forEach(d => ['d', 'e', 'c'].forEach((g, gi) => {
+    for (let i = 0; i < d.base[gi]; i++) {
+      const [a, b] = GY[g]; const y = a + Math.floor(Math.pow(rnd(), .7) * (b - a + 1));
+      mk(d, g, -1, y + '/' + pad(1 + Math.floor(rnd() * 12)) + '/' + pad(1 + Math.floor(rnd() * 29)));
+    }
+  }));
+
+  const trainSeason = [.4, .9, 1.1, 1, .8, 1, 1.3, 1.3, 1.2, 1.1, 1.1, .7];
+  const absSeason = [1.45, 1, .9, 1.05, 1.15, .95, .9, .9, 1, 1.2, 1.05, .85];
+  const hireSeason = [.1, .7, .9, 1, .9, 1, 1, 1, 1, 1.1, 2.4, 5.0];
+  const gExit = { d: .85, e: 1.0, c: 1.35 };
+  const alive = (p, m) => p.hireM <= m && (p.exitM === null || p.exitM >= m); // حاضر در طول ماه
+  const activeEnd = (p, m) => p.hireM <= m && (p.exitM === null || p.exitM > m); // حاضر در پایان ماه
+  let prevExits = DEPTS.map(() => 0);
+
+  for (let m = 0; m < 24; m++) {
+    const mm = m % 12, y04 = m >= 12;
+    // ۱) جذب
+    DEPTS.forEach((d, di) => {
+      const fill = (d.id === 'prod' && y04) ? .86 : .93;
+      const exp = prevExits[di] * fill + d.grow * hireSeason[mm] * (y04 ? 1.1 : .9);
+      const n = Math.floor(exp) + (rnd() < exp - Math.floor(exp) ? 1 : 0);
+      const tot = d.base[0] + d.base[1] + d.base[2];
+      const cS = clamp(d.base[2] / tot + d.cDrift * m / 23, 0, .9);
+      const rest = 1 - cS, dS = d.base[0] / (d.base[0] + d.base[1]) * rest;
+      for (let i = 0; i < n; i++) {
+        const r = rnd(); const g = r < cS ? 'c' : (r < cS + dS ? 'd' : 'e');
+        mk(d, g, m, (1403 + Math.floor(m / 12)) + '/' + pad(mm + 1) + '/' + pad(1 + Math.floor(rnd() * 28)));
+      }
+    });
+    // ۲) خروج
+    const ex = DEPTS.map(() => 0);
+    for (const p of people) {
+      if (!(p.hireM < m && p.exitM === null)) continue;
+      const d = DEPTS[p.di];
+      let pr = y04 ? d.ex04a + (d.ex04b - d.ex04a) * (m - 12) / 11 : d.ex03;
+      pr *= gExit[p.g] * (mm === 0 ? 1.5 : mm === 1 ? 1.2 : 1) * (p.hireM >= 0 && m - p.hireM <= 3 ? 1.5 : 1);
+      if (rnd() < pr) {
+        p.exitM = m; ex[p.di]++;
+        let pool = (d.id === 'prod' ? REASONS_PROD : REASONS_OTHER);
+        if (p.g === 'c') pool = pool.map(x => [x[0], x[0] === 'پایان قرارداد' ? x[1] * 3 : x[1]]);
+        p.reason = wpick(pool);
+      }
+    }
+    prevExits = ex;
+    // ۳) فعالیت ماهانه
+    for (const p of people) {
+      if (!alive(p, m)) continue;
+      const d = DEPTS[p.di];
+      const genExp = (d.trainT - d.safeT) / 12 * d.genF * (p.g === 'c' ? .7 : p.g === 'e' ? .95 : 1) * trainSeason[mm];
+      if (rnd() < .4) p.gen[m] = Math.round(genExp / .4 * (.5 + rnd()));
+      const safExp = d.safeT / 12 * d.safF * (y04 ? 1 : 1.06) * (p.g === 'c' ? .85 : 1) * trainSeason[mm];
+      if (rnd() < .3) p.saf[m] = Math.round(safExp / .3 * (.5 + rnd()));
+      const rate = d.abs * (p.g === 'c' ? 1.25 : p.g === 'e' ? 1.05 : 1) * absSeason[mm] * (d.id === 'prod' && (mm === 3 || mm === 4) ? 1.3 : 1) * (d.id === 'prod' && y04 ? 1.1 : 1);
+      let a = 0; for (let k = 0; k < 24; k++) if (rnd() < rate) a++;
+      p.abs[m] = p.exitM === m ? Math.round(a / 2) : a;
+      if (rnd() < d.acc * (p.g === 'c' ? 1.4 : 1)) p.acc[m] = 1;
+    }
+    // ۴) نظرسنجی (آذر) و ارزیابی عملکرد (اسفند)
+    if (mm === 8) for (const p of people) {
+      if (!activeEnd(p, m)) continue;
+      const d = DEPTS[p.di];
+      const base = (y04 ? d.sat04 : d.sat) + (p.g === 'c' ? -7 : p.g === 'e' ? -3 : 0);
+      const sat = Math.round(clamp(base + (rnd() + rnd() + rnd() - 1.5) * 18, 20, 98));
+      const eng = Math.round(clamp(sat + 2 + (rnd() - .5) * 14, 20, 98));
+      if (y04) { p.sat04 = sat; p.eng04 = eng; } else { p.sat03 = sat; p.eng03 = eng; }
+    }
+    if (mm === 11) for (const p of people) {
+      if (!activeEnd(p, m) || m - p.hireM < 3) continue;
+      if (y04) p.ev04 = rnd() < ({ d: .93, e: .86, c: .52 })[p.g]; else p.ev03 = rnd() < ({ d: .64, e: .52, c: .2 })[p.g];
+    }
+  }
+
+  /* ---------- پروژه‌های منابع انسانی ---------- */
+  const DAYS = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
+  const dayNo = str => { const [y, mo, d] = str.split('/').map(Number); let n = (y - 1404) * 365; for (let i = 0; i < mo - 1; i++) n += DAYS[i]; return n + d; };
+  const REPORT = '1404/12/25';
+  const projects = [
+    { name: 'استقرار سامانهٔ ارزیابی عملکرد', desc: 'ارزیابی دوره‌ای همهٔ کارکنان در یک سامانهٔ یکپارچه', owner: 'مریم رضایی', role: 'کارشناس ارشد ارزیابی عملکرد', start: '1404/02/01', end: '1405/01/31', progress: 87, next: 'ارزیابی پایان سال واحدهای تولید و انبار' },
+    { name: 'طرح جانشین‌پروری مدیران میانی', desc: 'شناسایی و آماده‌سازی جانشین برای ۲۴ پست کلیدی', owner: 'حمید کریمی', role: 'رئیس توسعهٔ منابع انسانی', start: '1404/04/01', end: '1405/03/31', progress: 62, next: 'کانون ارزیابی دور دوم' },
+    { name: 'آموزش ایمنی کارکنان عملیاتی', desc: '۱۶ ساعت آموزش ایمنی برای هر نفر در تولید، انبار و تعمیرات', owner: 'سعید موسوی', role: 'سرپرست ایمنی و بهداشت کار', start: '1404/01/15', end: '1404/12/29', progress: 81, next: 'دوره‌های جبرانی نوبت‌کاری شب' },
+    { name: 'نظرسنجی رضایت و تعلق سازمانی ۱۴۰۴', desc: 'پرسش‌نامهٔ سالانه برای هر سه گروه نیرو', owner: 'لیلا صادقی', role: 'کارشناس توسعهٔ سازمانی', start: '1404/07/01', end: '1404/10/15', progress: 100, next: 'پیگیری اقدام‌های اصلاحی واحدها' },
+    { name: 'بازطراحی نظام حقوق و مزایا', desc: 'طبقه‌بندی مشاغل و ترمیم حقوق نیروهای خط تولید', owner: 'مجید جعفری', role: 'رئیس جبران خدمات', start: '1404/03/01', end: '1404/11/30', progress: 58, next: 'تأیید ساختار جدید در هیئت‌مدیره' },
+    { name: 'برنامهٔ جذب و آشنایی نیروهای جدید', desc: 'بستهٔ آشنایی سه‌ماهه و همراه کاری برای تازه‌واردها', owner: 'سارا نوری', role: 'کارشناس جذب و استخدام', start: '1404/06/01', end: '1405/02/31', progress: 72, next: 'اجرای آزمایشی در واحد تولید' },
+    { name: 'دیجیتالی‌کردن پرونده‌های پرسنلی', desc: 'اسکن و نمایه‌سازی پرونده‌ها و حذف بایگانی کاغذی', owner: 'امیر رحیمی', role: 'کارشناس سامانه‌های منابع انسانی', start: '1404/05/01', end: '1405/04/31', progress: 63, next: 'پرونده‌های نیروی پیمانکار' }
+  ];
+  const rep = dayNo(REPORT);
+  projects.forEach(p => {
+    const a = dayNo(p.start), b = dayNo(p.end);
+    p.planned = Math.round(clamp((rep - a) / (b - a), 0, 1) * 100);
+    p.gap = p.planned - p.progress;
+    p.overdue = rep > b && p.progress < 100 ? rep - b : 0;
+    p.status = p.progress >= 100 ? 'done' : (p.overdue > 0 || p.gap > 20) ? 'late' : p.gap > 8 ? 'risk' : 'ok';
+  });
+
+  /* ---------- محاسبات ---------- */
+  const TARGETS = { turnover: 12, absence: 3, sat: 70, eng: 72, retention: 88, safetyCov: 90, appraisal: 90, accident: 1.0 };
+  const periodOf = id => PERIODS.find(p => p.id === id) || PERIODS[0];
+  const match = (p, f) => (f.g === 'all' || p.g === f.g) && (f.dept === 'all' || p.dept === f.dept);
+
+  // آمار یک زیرمجموعه از افراد روی ماه‌های مطلق (۰..۲۳)
+  function stats(list, months) {
+    const L = months.length, last = months[L - 1], first = months[0];
+    let pm = 0, hires = 0, exits = 0, gen = 0, saf = 0, abs = 0, acc = 0, trT = 0, sfT = 0, hcEnd = 0, hcStart = 0;
+    const reasons = {};
+    for (const p of list) {
+      if (activeEnd(p, last)) hcEnd++;
+      if (activeEnd(p, first - 1) || (first === 0 && p.hireM < 0)) hcStart++;
+      for (const m of months) {
+        if (!alive(p, m)) continue;
+        pm++; gen += p.gen[m]; saf += p.saf[m]; abs += p.abs[m]; acc += p.acc[m];
+        const d = DEPTS[p.di]; trT += d.trainT / 12; sfT += d.safeT / 12;
+        if (p.hireM === m) hires++;
+        if (p.exitM === m) { exits++; reasons[p.reason] = (reasons[p.reason] || 0) + 1; }
+      }
+    }
+    const avg = pm / L || 0;
+    const turnover = avg ? exits / avg * 100 : 0;
+    return {
+      hcEnd, hcStart, hcAvg: avg, hires, exits, reasons, turnover, turnAnn: turnover * 12 / L,
+      trainPC: avg ? (gen + saf) / avg : 0, safePC: avg ? saf / avg : 0, trainTarget: avg ? trT / avg : 0, safeTarget: avg ? sfT / avg : 0,
+      absDays: abs, absRate: pm ? abs / (pm * 24) * 100 : 0, acc, accRate: avg ? acc / avg * 100 * 12 / L : 0
+    };
+  }
+  function survey(list, key) { let n = 0, t = 0; for (const p of list) if (p[key] !== null) { n++; t += p[key]; } return n ? t / n : null; }
+  function safetyCoverage(list, endM) { // درصد افراد حاضر که در ۱۲ ماه گذشته به هدف سالانهٔ آموزش ایمنی رسیده‌اند
+    let n = 0, ok = 0;
+    for (const p of list) {
+      if (!activeEnd(p, endM)) continue; n++;
+      let h = 0; for (let m = Math.max(0, endM - 11); m <= endM; m++) h += p.saf[m];
+      const tenure = p.hireM < 0 ? 12 : Math.min(12, endM - p.hireM + 1);
+      if (h >= DEPTS[p.di].safeT * tenure / 12 * .75) ok++;
+    }
+    return n ? ok / n * 100 : 0;
+  }
+  function appraisal(list, endM, key) { let n = 0, ok = 0; for (const p of list) { if (!activeEnd(p, endM) || endM - p.hireM < 3) continue; n++; if (p[key]) ok++; } return n ? ok / n * 100 : 0; }
+
+  function compute(f) {
+    const per = periodOf(f.period);
+    const cur = per.m.map(i => i + 12), prev = per.m.slice();
+    const list = people.filter(p => match(p, f));
+    const S = stats(list, cur), P = stats(list, prev);
+    const res = { f, per, cur, prev, list, S, P };
+    // تفکیک گروه‌ها (با فیلتر واحد)
+    const listDept = people.filter(p => f.dept === 'all' || p.dept === f.dept);
+    res.groupEnd = GROUPS.map(g => listDept.filter(p => p.g === g.id && activeEnd(p, cur[cur.length - 1])).length);
+    res.groupEndPrev = GROUPS.map(g => listDept.filter(p => p.g === g.id && activeEnd(p, prev[prev.length - 1])).length);
+    // ترکیب واحد × گروه در پایان دوره (با فیلتر گروه)
+    res.byDept = DEPTS.map(d => {
+      const dl = people.filter(p => p.dept === d.id && (f.g === 'all' || p.g === f.g));
+      const st = stats(dl, cur), sp = stats(dl, prev);
+      const comp = GROUPS.map(g => dl.filter(p => p.g === g.id && activeEnd(p, cur[cur.length - 1])).length);
+      const absM = Array.from({ length: 12 }, (_, i) => { const x = stats(dl, [12 + i]); return x.absRate; });
+      return { d, st, sp, comp, absM, absYear: stats(dl, cur).absRate };
+    });
+    // سری ماهانهٔ ۱۴۰۴
+    res.monthly = Array.from({ length: 12 }, (_, i) => {
+      const m = 12 + i, x = stats(list, [m]);
+      const mix = GROUPS.map(g => listDept.filter(p => p.g === g.id && activeEnd(p, m)).length);
+      return { i, hc: x.hcEnd, hires: x.hires, exits: x.exits, mix, absRate: x.absRate };
+    });
+    res.monthlyPrev = Array.from({ length: 12 }, (_, i) => list.filter(p => activeEnd(p, i)).length);
+    res.byDept.forEach(x => { const dl = people.filter(p => p.dept === x.d.id && (f.g === 'all' || p.g === f.g)); x.sat = survey(dl, 'sat04'); x.satPrev = survey(dl, 'sat03'); });
+    res.mixStart = GROUPS.map(g => listDept.filter(p => p.g === g.id && activeEnd(p, 11)).length);
+    // نظرسنجی
+    res.sat = survey(list, 'sat04'); res.satPrev = survey(list, 'sat03');
+    res.eng = survey(list, 'eng04'); res.engPrev = survey(list, 'eng03');
+    const endC = cur[cur.length - 1], endP = prev[prev.length - 1];
+    res.safeCov = safetyCoverage(list, endC); res.safeCovPrev = safetyCoverage(list, endP);
+    res.appr = appraisal(list, 23, 'ev04'); res.apprPrev = appraisal(list, 11, 'ev03');
+    // مدل تعالی: نتایج کارکنان
+    const L = cur.length;
+    const ind = [
+      { k: 'sat', name: 'رضایت کلی کارکنان', type: 'ادراکی', unit: 'از ۱۰۰', cur: res.sat, prev: res.satPrev, target: TARGETS.sat, hb: true, dec: 0, note: 'نظرسنجی سالانهٔ آذر' },
+      { k: 'eng', name: 'تعلق و مشارکت سازمانی', type: 'ادراکی', unit: 'از ۱۰۰', cur: res.eng, prev: res.engPrev, target: TARGETS.eng, hb: true, dec: 0, note: 'نظرسنجی سالانهٔ آذر' },
+      { k: 'ret', name: 'نرخ ماندگاری کارکنان', type: 'عملکردی', unit: '٪', cur: 100 - S.turnAnn, prev: 100 - P.turnAnn, target: TARGETS.retention, hb: true, dec: 1, note: 'سالانه‌شده' },
+      { k: 'train', name: 'سرانهٔ ساعت آموزش', type: 'عملکردی', unit: 'ساعت', cur: S.trainPC, prev: P.trainPC, target: S.trainTarget, hb: true, dec: 1, note: 'هدف متناسب با طول دوره' },
+      { k: 'safe', name: 'پوشش آموزش ایمنی', type: 'عملکردی', unit: '٪', cur: res.safeCov, prev: res.safeCovPrev, target: TARGETS.safetyCov, hb: true, dec: 0, note: '۱۲ ماه منتهی به پایان دوره' },
+      { k: 'abs', name: 'نرخ غیبت', type: 'عملکردی', unit: '٪', cur: S.absRate, prev: P.absRate, target: TARGETS.absence, hb: false, dec: 1, note: 'غیبت بدون برنامه' },
+      { k: 'appr', name: 'پوشش ارزیابی عملکرد', type: 'عملکردی', unit: '٪', cur: res.appr, prev: res.apprPrev, target: TARGETS.appraisal, hb: true, dec: 0, note: 'چرخهٔ سالانهٔ اسفند' },
+      { k: 'acc', name: 'حوادث کاری به ازای هر ۱۰۰ نفر', type: 'عملکردی', unit: 'مورد', cur: S.accRate, prev: P.accRate, target: TARGETS.accident, hb: false, dec: 2, note: 'سالانه‌شده' }
+    ];
+    ind.forEach(x => {
+      if (x.cur === null || isNaN(x.cur)) { x.score = null; return; }
+      const r = x.hb ? x.cur / x.target : (x.cur <= 0 ? 1 : x.target / x.cur);
+      x.score = Math.round(clamp(r, 0, 1) * 100);
+    });
+    const sc = ind.filter(x => x.score !== null);
+    res.ind = ind; res.score = sc.length ? sc.reduce((a, x) => a + x.score, 0) / sc.length : null;
+    // امتیاز پارسال
+    const ps = ind.filter(x => x.prev !== null && !isNaN(x.prev)).map(x => {
+      const tg = x.k === 'train' ? P.trainTarget : x.target;
+      const r = x.hb ? x.prev / tg : (x.prev <= 0 ? 1 : tg / x.prev); return clamp(r, 0, 1) * 100;
+    });
+    res.scorePrev = ps.length ? ps.reduce((a, b) => a + b, 0) / ps.length : null;
+    return res;
+  }
+
+  const DIG = '۰۱۲۳۴۵۶۷۸۹';
+  const faNum = str => String(str).replace(/\d/g, d => DIG[d]);
+  const fa = (n, dec = 0) => Number(n).toLocaleString('fa-IR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  const pct = (n, dec = 1) => fa(n, dec) + '٪';
+
+  return { MONTHS, GROUPS, DEPTS, PERIODS, people, projects, REPORT, TARGETS, compute, stats, activeEnd, alive, REASONS, fa, pct, faNum, periodOf, match };
+})();
+
+</script>
+<script>
+(function(){
+const {fa,pct,MONTHS,DEPTS}=HR;
+const R=HR.compute({g:'all',dept:'all',period:'y'}),S=R.S,P=R.P;
+const V={};
+const ge=R.groupEnd,gt=ge.reduce((a,b)=>a+b,0);
+V.hc=fa(S.hcEnd);V.hcDiff=fa(S.hcEnd-P.hcEnd);V.gd=fa(ge[0]);V.ge=fa(ge[1]);V.gc=fa(ge[2]);V.gcS=pct(ge[2]/gt*100,0);
+V.turn=pct(S.turnAnn);V.turnPrev=pct(P.turnAnn);V.exits=fa(S.exits);V.hires=fa(S.hires);
+V.train=fa(S.trainPC,1);V.trainP=pct(S.trainPC/S.trainTarget*100,0);V.abs=pct(S.absRate);V.sat=fa(R.sat,0);V.satPrev=fa(R.satPrev,0);
+const C=HR.compute({g:'c',dept:'all',period:'y'});V.cHc=fa(C.S.hcEnd);V.cTurn=pct(C.S.turnAnn);V.cSat=fa(C.sat,0);
+const prod=R.byDept.find(x=>x.d.id==='prod');const pt=prod.comp.reduce((a,b)=>a+b,0);
+V.prodTot=fa(pt);V.prodC=fa(prod.comp[2]);V.prodCS=pct(prod.comp[2]/pt*100,0);
+const t0=R.mixStart.reduce((a,b)=>a+b,0),m11=R.monthly[11],t1=m11.mix.reduce((a,b)=>a+b,0);
+V.mixA=pct(R.mixStart[2]/t0*100);V.mixB=pct(m11.mix[2]/t1*100);
+const net=S.hires-S.exits;V.net=(net>=0?'+':'−')+fa(Math.abs(net));
+let mi=0;R.monthly.forEach((m,i)=>{if(m.hires>R.monthly[mi].hires)mi=i;});V.maxHireM=MONTHS[mi];V.maxHire=fa(R.monthly[mi].hires);V.farHire=fa(R.monthly[0].hires);
+let oe=0,oa=0;R.byDept.filter(x=>x!==prod).forEach(x=>{oe+=x.st.exits;oa+=x.st.hcAvg;});const others=oe/oa*100;
+V.prodTurn=pct(prod.st.turnAnn);V.prodTurnPrev=pct(prod.sp.turnAnn);V.othersTurn=pct(others);V.prodRatio=fa(prod.st.turnAnn/others,1);
+const rs=Object.entries(S.reasons).sort((a,b)=>b[1]-a[1]),rn=rs.reduce((a,b)=>a+b[1],0);V.topReason=rs[0][0];V.topReasonS=pct(rs[0][1]/rn*100,0);
+V.prodPay=pct((prod.st.reasons['حقوق و مزایا']||0)/prod.st.exits*100,0);
+const tr=R.byDept.map(x=>({x,p:x.st.trainPC/x.st.trainTarget*100})).sort((a,b)=>a.p-b.p)[0];
+V.trLow=tr.x.d.name;V.trLowA=fa(tr.x.st.trainPC,1);V.trLowT=fa(tr.x.st.trainTarget,1);V.trLowP=pct(tr.p,0);
+V.prodSafeP=pct(prod.st.safePC/prod.st.safeTarget*100,0);
+const ops=R.byDept.filter(x=>['prod','mnt','log'].includes(x.d.id));V.opsSafeP=pct(ops.reduce((a,x)=>a+x.st.safePC*x.st.hcAvg,0)/ops.reduce((a,x)=>a+x.st.safeTarget*x.st.hcAvg,0)*100,0);
+let best={v:-1};R.byDept.forEach(x=>x.absM.forEach((v,i)=>{if(v>best.v)best={v,d:x.d.name,i};}));V.absMaxD=best.d;V.absMaxM=MONTHS[best.i];V.absMaxV=pct(best.v);V.absProd=pct(prod.st.absRate);
+V.score=fa(R.score,0);V.scorePrev=fa(R.scorePrev,0);
+const wk=R.ind.filter(x=>x.score!==null).sort((a,b)=>a.score-b.score);V.weak1=wk[0].name;V.weak1s=fa(wk[0].score);V.weak2=wk[1].name;V.weak2s=fa(wk[1].score);
+V.safeCov=pct(R.safeCov,0);V.appr=pct(R.appr,0);V.apprPrev=pct(R.apprPrev,0);
+const late=HR.projects.find(p=>p.status==='late');V.lateName=late.name;V.lateDays=fa(late.overdue);V.lateProg=pct(late.progress,0);
+V.riskNames=HR.projects.filter(p=>p.status==='risk').map(p=>'«'+p.name+'»').join(' و ');
+const rows=R.list.filter(p=>p.hireM<=23&&(p.exitM===null||p.exitM>=12));V.pplRows=fa(rows.length);
+let at=null,ad=-1;rows.forEach(p=>{let d=0;for(let m=12;m<24;m++)if(HR.alive(p,m))d+=p.abs[m];if(d>ad){ad=d;at=p;}});
+V.absTopName=at.name;V.absTopDept=DEPTS[at.di].name;V.absTopDays=fa(ad);
+document.querySelectorAll('[data-v]').forEach(el=>{const k=el.getAttribute('data-v');el.textContent=V[k]!==undefined?V[k]:'—';});
+
+/* تم */
+const mq=matchMedia('(prefers-color-scheme: dark)');const btn=document.getElementById('themeBtn');
+const isDark=()=>{const t=document.documentElement.getAttribute('data-theme');return t?t==='dark':mq.matches;};
+function lab(){btn.innerHTML=(isDark()?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>حالت تیره':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>حالت روشن');btn.title='تغییر به '+(isDark()?'حالت روشن':'حالت تیره');}
+btn.addEventListener('click',()=>{document.documentElement.setAttribute('data-theme',isDark()?'light':'dark');lab();});
+mq.addEventListener&&mq.addEventListener('change',lab);lab();
+
+/* فهرست فعال */
+const top=document.querySelector('.top');const setTop=()=>document.documentElement.style.setProperty('--toptop',top.offsetHeight+'px');setTop();addEventListener('resize',setTop);
+const links=[...document.querySelectorAll('.toc a')];const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+function act(){let cur=0;secs.forEach((s,i)=>{if(s&&s.getBoundingClientRect().top<150)cur=i;});links.forEach((a,i)=>a.classList.toggle('on',i===cur));const on=links[cur];if(innerWidth<=900&&on){const t=on.parentElement;t.scrollLeft=on.offsetLeft-t.clientWidth/2+on.offsetWidth/2;}}
+addEventListener('scroll',act,{passive:true});act();
+})();
+</script>
+</body>
+</html>

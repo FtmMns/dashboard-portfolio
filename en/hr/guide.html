@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HR Dashboard Guide</title>
+<link href="../../fonts/fonts.css" rel="stylesheet">
+<script>
+(function(){var q=new URLSearchParams(location.search).get('theme');if(q==='dark'||q==='light')document.documentElement.setAttribute('data-theme',q);})();
+</script>
+<style>
+:root{
+  --page:#f3f5f8;--panel:#ffffff;--panel2:#eef1f5;--line:#e2e6ec;--ink:#121826;--ink2:#4a5468;--muted:#8a93a5;
+  --blue:#2a78d6;--soft:#e3edfb;--deep:#0d366b;--orange:#eb6834;--green:#1baf7a;--red:#c23434;
+  --good-ink:#11845a;--bad-ink:#c23434;--warn-ink:#b9471a;
+  --shadow:0 1px 2px rgba(18,24,38,.06),0 4px 16px rgba(18,24,38,.05);
+  --orange-soft:#fdeee6;--green-soft:#e0f5ec;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --page:#0e1116;--panel:#161a21;--panel2:#1d222b;--line:#2a303b;--ink:#f1f3f7;--ink2:#c2c8d3;--muted:#8a93a5;
+  --blue:#3987e5;--soft:#1b2a3f;--deep:#9ec5f4;--orange:#d95926;--green:#199e70;--red:#e05a5a;
+  --good-ink:#3fcf98;--bad-ink:#ff7b7b;--warn-ink:#f08a5d;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+  --orange-soft:#3a271d;--green-soft:#173229;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --page:#0e1116;--panel:#161a21;--panel2:#1d222b;--line:#2a303b;--ink:#f1f3f7;--ink2:#c2c8d3;--muted:#8a93a5;
+  --blue:#3987e5;--soft:#1b2a3f;--deep:#9ec5f4;--orange:#d95926;--green:#199e70;--red:#e05a5a;
+  --good-ink:#3fcf98;--bad-ink:#ff7b7b;--warn-ink:#f08a5d;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+  --orange-soft:#3a271d;--green-soft:#173229;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0}
+body{background:var(--page);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--blue)}
+button{font:inherit;color:inherit}
+.top{position:sticky;top:0;z-index:20;background:var(--panel);border-bottom:1px solid var(--line)}
+.top-in{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.top h1{font-size:17px;margin:0;font-weight:700}
+.top p{margin:0;font-size:12.5px;color:var(--ink2)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.home{font-size:12.5px;color:var(--ink2);text-decoration:none;white-space:nowrap;margin-right:4px}
+.home:hover{color:var(--blue)}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:6px 12px;font-size:13px;cursor:pointer;text-decoration:none;color:var(--ink);white-space:nowrap;line-height:1.6}
+.btn:hover{border-color:var(--blue)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn svg{width:16px;height:16px}
+.btn[lang="fa"]{font-family:"IBM Plex Sans Arabic","IBM Plex Sans",system-ui,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 20px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:36px;align-items:start}
+.toc{position:sticky;top:78px;max-height:calc(100vh - 96px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:14px 10px}
+.toc b{display:block;font-size:12.5px;color:var(--muted);padding:0 10px 6px;font-weight:600}
+.toc a{display:block;padding:4px 10px;border-radius:8px;color:var(--ink2);text-decoration:none;font-size:13.5px;line-height:1.7}
+.toc a:hover{background:var(--panel2);color:var(--ink)}
+.toc a.on{background:var(--soft);color:var(--blue);font-weight:600}
+article{max-width:760px;min-width:0}
+section{scroll-margin-top:84px;padding-bottom:12px;margin-bottom:28px;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+h2{font-size:21px;margin:0 0 8px;line-height:1.5}
+h3{font-size:15.5px;margin:18px 0 6px}
+p{margin:8px 0}
+ul,ol{margin:6px 0;padding-left:22px}
+li{margin:3px 0}
+.lead{font-size:16px;color:var(--ink2)}
+.hero{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:20px 22px;margin-bottom:24px}
+.hero h2{font-size:23px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chip{background:var(--panel2);border-radius:999px;padding:2px 12px;font-size:12.5px;color:var(--ink2)}
+figure{margin:14px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+figure img{display:block;width:100%;height:auto}
+.figside{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:22px;align-items:start}
+.figside figure{margin-top:8px}
+figcaption{font-size:12.5px;color:var(--ink2);padding:8px 14px;border-top:1px solid var(--line);background:var(--panel2)}
+.box{border-radius:12px;padding:12px 16px;margin:12px 0;font-size:14.5px}
+.ex{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--blue)}
+.ex .t{font-weight:700;font-size:13px;color:var(--blue);display:block;margin-bottom:2px}
+.q{background:var(--green-soft);border-left:4px solid var(--green)}
+.q .t{font-weight:700;font-size:13px;color:var(--good-ink);display:block;margin-bottom:2px}
+.warn{background:var(--orange-soft);border-left:4px solid var(--orange)}
+.warn .t{font-weight:700;font-size:13px;color:var(--warn-ink);display:block;margin-bottom:2px}
+b[data-v]{font-variant-numeric:tabular-nums}
+.go{display:inline-flex;align-items:center;gap:4px;font-size:13.5px;text-decoration:none;font-weight:600;margin-top:4px}
+.go:hover{text-decoration:underline}
+.steps{counter-reset:s;list-style:none;padding:0}
+.steps li{counter-increment:s;position:relative;padding:10px 14px 10px 52px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:8px 0}
+.steps li::before{content:counter(s);position:absolute;left:14px;top:10px;width:26px;height:26px;border-radius:8px;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.tw{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--panel2);font-weight:600;font-size:12.5px;color:var(--ink2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.c{text-align:center;white-space:nowrap}
+.y{color:var(--good-ink);font-weight:700}.h{color:var(--blue);font-weight:600}.n{color:var(--muted)}
+.ftable td:first-child{white-space:nowrap;font-weight:600}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin:8px 0}
+summary{cursor:pointer;font-weight:600}
+details p{margin:8px 0 2px;color:var(--ink2)}
+dl{margin:8px 0}
+dt{font-weight:700;margin-top:12px}
+dd{margin:2px 0 0;color:var(--ink2)}
+footer{max-width:1180px;margin:0 auto;padding:18px 20px 28px;color:var(--muted);font-size:12.5px;text-align:center;border-top:1px solid var(--line)}
+@media (max-width:900px){
+  .wrap{grid-template-columns:minmax(0,1fr);gap:16px;padding:14px 16px}
+  .toc{position:sticky;top:var(--toptop,60px);z-index:10;max-height:none;display:flex;gap:6px;overflow-x:auto;padding:8px;border-radius:12px;scrollbar-width:none}
+  .toc::-webkit-scrollbar{display:none}
+  .toc b{display:none}
+  .toc a{white-space:nowrap;flex:none;background:var(--panel2);font-size:12.5px;padding:3px 10px}
+  section{scroll-margin-top:130px}
+  .top-in{padding:10px 16px}
+  .figside{grid-template-columns:minmax(0,1fr)}
+  .figside figure{max-width:240px;margin:8px auto}
+}
+@media (max-width:560px){
+  body{font-size:14.5px}
+  h2{font-size:19px}
+  .hero{padding:16px}
+  .hero h2{font-size:20px}
+  .top p{display:none}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div><h1>HR Dashboard Guide</h1><p>Sample Co. · Demo version</p></div>
+    <div class="actions">
+      <a class="home" href="../../index.html">← All dashboards</a>
+      <a class="btn primary" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>Back to dashboard</a>
+      <a class="btn" href="../../fa/hr/guide.html" lang="fa" hreflang="fa">فارسی</a><button class="btn" id="themeBtn" type="button"></button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="toc" id="toc" aria-label="Table of contents">
+    <b>Contents</b>
+    <a href="#glance">At a glance</a>
+    <a href="#quick">Quick start</a>
+    <a href="#g-filters">Filters</a>
+    <a href="#g-kpis">KPI cards</a>
+    <a href="#g-composition">Workforce composition</a>
+    <a href="#g-mix">Workforce mix over time</a>
+    <a href="#g-trend">Headcount, hires and exits</a>
+    <a href="#g-turnover">Turnover and reasons</a>
+    <a href="#g-insights">Key findings</a>
+    <a href="#g-training">Training vs. target</a>
+    <a href="#g-absence">Absence heatmap</a>
+    <a href="#g-excellence">Excellence model</a>
+    <a href="#g-projects">HR projects</a>
+    <a href="#g-people">Employee directory</a>
+    <a href="#g-ftable">Filter effects</a>
+    <a href="#faq">FAQ</a>
+    <a href="#glossary">Glossary</a>
+  </nav>
+
+  <article>
+    <section id="glance">
+      <div class="hero">
+        <h2>At a glance</h2>
+        <p class="lead">This dashboard shows the workforce of “Sample Co.”, an industrial company of about <b data-v="hc"></b> people, on a single page: the three workforce groups (direct employees, client staff and contractor staff) side by side, the HR department's ongoing projects, and the “People Results” indicators from the organizational excellence model.</p>
+        <div class="chips"><span class="chip">Audience: CEO, HR director, department heads</span><span class="chip">Data period: year 1404</span><span class="chip">Last updated: 25 Esfand 1404</span></div>
+      </div>
+      <p>The dashboard is designed to answer these questions:</p>
+      <ul>
+        <li>How many people work here, and what is each workforce group's share? Is our reliance on contractor staff growing?</li>
+        <li>Which department has the highest turnover, and why do people leave?</li>
+        <li>Where is the training plan, especially safety training, falling behind? Where and in which months is absence high?</li>
+        <li>Are the HR projects on schedule?</li>
+        <li>What is our score on the “People Results” criterion of the excellence model, and which indicators are weakest?</li>
+      </ul>
+      <figure><img src="shots/overview.png" alt="Overview of the top of the dashboard" loading="lazy"><figcaption>Top of the dashboard: header, filter panel on the left, KPI cards and the first two charts.</figcaption></figure>
+    </section>
+
+    <section id="quick">
+      <h2>Quick start</h2>
+      <ol class="steps">
+        <li><b>Read the cards first.</b> The six cards at the top give you the big picture. Green means better than last year or the target; red means worse. For example, this year's turnover rate is <b data-v="turn"></b>, against <b data-v="turnPrev"></b> last year.</li>
+        <li><b>Go to “Key findings”.</b> The dashboard writes up the most important points in plain language, which tells you which chart deserves a closer look.</li>
+        <li><b>Drill down with the filters.</b> Change the workforce group, department or period in the filter panel. Clicking a department's bar in any chart also filters by that department. “Clear all” takes you back to the starting view.</li>
+      </ol>
+      <div class="box ex"><span class="t">Tip</span>Hover over any bar, cell or point to see its exact details in a small tooltip. On a phone, just tap it.</div>
+    </section>
+
+    <section id="g-filters">
+      <h2>Filters</h2>
+      <div class="figside"><div>
+      <p>On desktop the filter panel sits on the left of the page; on a phone it moves to the top (open it with the “Show” button). There are three filters:</p>
+      <ul>
+        <li><b>Workforce group:</b> all groups, direct employees, client staff or contractor staff. The number next to each option is that group's headcount at the end of the period.</li>
+        <li><b>Department:</b> one of the company's nine departments. In charts that compare departments, the selected one stays highlighted and the rest are faded, so the comparison isn't lost.</li>
+        <li><b>Time period:</b> the full year, the first or second half, or one of the four seasons of 1404. Every comparison is made against the same period in 1403.</li>
+      </ul>
+      </div><figure><img src="shots/filters.png" alt="Filter panel" loading="lazy"><figcaption>The filter panel, with each group's headcount.</figcaption></figure></div>
+      <div class="box ex"><span class="t">Example using this dashboard's numbers</span>If you select “Contractor staff”, headcount drops to <b data-v="cHc"></b> people, this group's turnover rate is <b data-v="cTurn"></b> and its satisfaction is <b data-v="cSat"></b> out of 100; all three are worse than the company average.</div>
+      <div class="box q"><span class="t">What question does this answer?</span>“What do these same numbers look like for one group, one department or one season?”</div>
+      <p>The page URL updates with the filters, so you can share a filtered view with a colleague. See the full picture of which filter affects what in the <a href="#g-ftable">filter effects table</a>.</p>
+      <a class="go" href="index.html#filters">View in dashboard →</a>
+    </section>
+
+    <section id="g-kpis">
+      <h2>KPI cards</h2>
+      <p>The six cards at the top show the period's most important figures. Under each figure is a comparison with the same period in 1403 or with the target. The ▲ or ▼ arrow shows the direction of change and the color shows whether it is good or bad; for example, a rising absence rate is shown with a red ▲.</p>
+      <figure><img src="shots/kpis.png" alt="KPI cards" loading="lazy"><figcaption>KPI cards with no filters applied (full year 1404).</figcaption></figure>
+      <h3>How to read it</h3>
+      <ul>
+        <li><b>Total workforce:</b> headcount at the end of the period, with a bar showing the share of the three groups.</li>
+        <li><b>Turnover rate:</b> exits divided by average headcount. For periods shorter than a year, the annualized figure is shown so it can be compared with the 12% target.</li>
+        <li><b>New hires:</b> hires in the period compared with last year.</li>
+        <li><b>Training per capita:</b> training hours per person, against a target pro-rated to the length of the period.</li>
+        <li><b>Absence rate:</b> the share of working days lost to unplanned absence.</li>
+        <li><b>Satisfaction:</b> average score from the annual Azar survey (out of 100).</li>
+      </ul>
+      <div class="box ex"><span class="t">Example using this dashboard's numbers</span>At the end of 1404, <b data-v="hc"></b> people work at the company (<b data-v="hcDiff"></b> more than at the end of 1403): <b data-v="gd"></b> direct employees, <b data-v="ge"></b> client staff and <b data-v="gc"></b> contractor staff. Over the year, <b data-v="hires"></b> people were hired and <b data-v="exits"></b> left, bringing the turnover rate to <b data-v="turn"></b>. Training averages <b data-v="train"></b> hours per employee, or <b data-v="trainP"></b> of target. The absence rate is <b data-v="abs"></b> and employee satisfaction is <b data-v="sat"></b> out of 100 (last year: <b data-v="satPrev"></b>).</div>
+      <div class="box q"><span class="t">What question does this answer?</span>“Is our workforce in good shape overall, and are we better or worse off than last year?”</div>
+      <a class="go" href="index.html#kpis">View in dashboard →</a>
+    </section>
+
+    <section id="g-composition">
+      <h2>Workforce composition by department</h2>
+      <p>Each department gets a horizontal bar whose length is its headcount at the end of the period. Each bar has three segments: blue for direct employees, light blue for client staff and orange for contractor staff. Departments are sorted from largest to smallest.</p>
+      <figure><img src="shots/composition.png" alt="Workforce composition by department chart" loading="lazy"><figcaption>Workforce composition across the nine departments; the orange segment is the contractor share.</figcaption></figure>
+      <h3>How to read it</h3>
+      <ul>
+        <li>The number at the end of each bar is the department's total headcount. Hover over a bar to see the count and percentage for each group.</li>
+        <li>Clicking a department's bar filters the whole dashboard to that department; clicking it again removes the filter.</li>
+        <li>If you select a workforce group filter, only that group's segment is drawn.</li>
+      </ul>
+      <div class="box ex"><span class="t">Example using this dashboard's numbers</span>Production is the largest department with <b data-v="prodTot"></b> people, <b data-v="prodC"></b> of whom (<b data-v="prodCS"></b>) are contractor staff; across the company that share is <b data-v="gcS"></b>.</div>
+      <div class="box q"><span class="t">What question does this answer?</span>“Where does each department's workforce come from, and which department relies most on contractors?”</div>
+      <a class="go" href="index.html#composition">View in dashboard →</a>
+    </section>
+
+    <section id="g-mix">
+      <h2>Workforce mix over time</h2>
+      <p>Each column is one month of 1404, and its full height is 100% of that month's headcount. Months run left to right: Farvardin on the left and Esfand on the right. The figure on the orange segment of the first and last columns is the contractor share.</p>
+      <figure><img src="shots/mix.png" alt="Workforce mix over time chart" loading="lazy"><figcaption>Share of the three workforce groups at the end of each month of 1404.</figcaption></figure>
+      <h3>How to read it</h3>
+      <ul>
+        <li>If the orange segment grows from left to right, the contractor share is increasing.</li>
+        <li>This chart shows the group shares themselves, so the “Workforce group” filter only highlights the selected group. Months outside the selected period are faded.</li>
+      </ul>
+      <div class="box ex"><span class="t">Example using this dashboard's numbers</span>The contractor share went from <b data-v="mixA"></b> at the end of 1403 to <b data-v="mixB"></b> at the end of Esfand 1404. Most of this increase comes from hiring contractors to replace direct employees who left Production.</div>
+      <div class="box q"><span class="t">What question does this answer?</span>“Is our workforce mix gradually shifting toward contractors?”</div>
+      <a class="go" href="index.html#mix">View in dashboard →</a>
+    </section>
+
+    <section id="g-trend">
+      <h2>Headcount, hires and exits</h2>
+      <p>This chart has two parts. In the top part, the blue line is headcount at the end of each month of 1404 and the dashed gray line is the same figure for 1403. In the bottom part, the green column pointing up is the number of hires and the red column pointing down is the number of exits each month. The two parts have separate axes so the small hire and exit numbers aren't lost beneath the much larger headcount.</p>
+      <figure><img src="shots/trend.png" alt="Headcount, hires and exits chart" loading="lazy"><figcaption>Monthly headcount, hires and exits; months run left to right.</figcaption></figure>
+      <h3>How to read it</h3>
+      <ul>
+        <li>When a month's green column is taller than its red one, headcount grew that month.</li>
+        <li>When you choose a season or half-year in the period filter, the months in that period are marked with a light blue background.</li>
+        <li>Hover over any month to see all of its figures at once.</li>
+      </ul>
+      <div class="box ex"><span class="t">Example using this dashboard's numbers</span>In 1404, <b data-v="hires"></b> people were hired and <b data-v="exits"></b> left, a net change of <b data-v="net"></b> people. Hiring peaked in <b data-v="maxHireM"></b> (<b data-v="maxHire"></b> people), because Production staffs up before Nowruz for its busy season. Hiring was lowest in Farvardin (<b data-v="farHire"></b> people).</div>
+      <div class="box q"><span class="t">What question does this answer?</span>“Did the company grow or shrink over the year, and in which months did hiring and exits peak?”</div>
+      <a class="go" href="index.html#trend">View in dashboard →</a>
+    </section>
+
+    <section id="g-turnover">
+      <h2>Turnover and reasons for leaving</h2>
+      <p>The left side of this card shows each department's annualized turnover rate. The vertical dashed line is the 12% target, and the short dark mark on each bar is that department's 1403 rate. The bar color shows its status: red means more than 1.5× the target, orange means above target and blue means within target. The right side lists the reasons for this period's exits, from most to least common.</p>
+      <figure><img src="shots/turnover.png" alt="Turnover and reasons for leaving chart" loading="lazy"><figcaption>Each department's turnover rate against the target and last year, with the reasons for leaving.</figcaption></figure>
+      <div class="box ex"><span class="t">Example using this dashboard's numbers</span>Production's turnover rate is <b data-v="prodTurn"></b> (last year: <b data-v="prodTurnPrev"></b>), about <b data-v="prodRatio"></b>× the average of the other departments, which is <b data-v="othersTurn"></b>. Company-wide, the most common reason for leaving is “<b data-v="topReason"></b>”, at <b data-v="topReasonS"></b> of exits. If you filter to Production only, you'll see that <b data-v="prodPay"></b> of this department's exits were due to pay and benefits.</div>
+      <div class="box warn"><span class="t">Watch out</span>In small departments (fewer than 20 people), one or two exits push the rate up sharply; check the number of exits in the bar's tooltip before drawing conclusions.</div>
+      <div class="box q"><span class="t">What question does this answer?</span>“Which department is losing the most people, and why?”</div>
+      <a class="go" href="index.html#turnover">View in dashboard →</a>
+    </section>
+
+    <section id="g-insights">
+      <h2>Key findings</h2>
+      <p>This card pulls four or five important points from the filtered data and writes them up in plain language. When you change the filters, the findings are recalculated. The color of the icon next to each finding shows its importance: red for a serious problem, orange for a warning and blue for a point worth noting.</p>
+      <figure><img src="shots/insights.png" alt="Key findings card" loading="lazy"><figcaption>Key findings with no filters applied.</figcaption></figure>
+      <div class="box ex"><span class="t">Example using this dashboard's numbers</span>One finding links two separate parts of the dashboard: the “<b data-v="lateName"></b>” project is <b data-v="lateDays"></b> days late with only <b data-v="lateProg"></b> progress, while a large share of Production exits are due to pay and benefits. In other words, this project's delay directly affects the year's biggest problem.</div>
+      <div class="box q"><span class="t">What question does this answer?</span>“If I only have one minute, what do I need to know?”</div>
+      <a class="go" href="index.html#insights">View in dashboard →</a>
+    </section>
+
+    <section id="g-training">
+      <h2>Training vs. target</h2>
+      <p>For each department, the colored bar is training hours per employee in the period and the short dark mark is that department's target. The number beside the bar shows the actual hours per employee and the percentage of the target achieved. Departments are sorted from lowest to highest achievement so the ones lagging behind appear at the top. Use the toggle at the top of the card to switch between “All training” and “Safety training only”.</p>
+      <figure><img src="shots/training.png" alt="Training vs. target chart" loading="lazy"><figcaption>Training hours per employee by department against the target; green means 95% of target or more.</figcaption></figure>
+      <div class="box ex"><span class="t">Example using this dashboard's numbers</span>The lowest training achievement is in <b data-v="trLow"></b>: <b data-v="trLowA"></b> of <b data-v="trLowT"></b> hours (<b data-v="trLowP"></b>). If you select “Safety training only”, you'll see that Production's safety training is at only <b data-v="prodSafeP"></b> of target, and the three operational departments (Production, Maintenance and Warehouse) together have reached <b data-v="opsSafeP"></b> of target.</div>
+      <div class="box q"><span class="t">What question does this answer?</span>“Which department is behind on its training plan, especially safety training?”</div>
+      <a class="go" href="index.html#training">View in dashboard →</a>
+    </section>
+
+    <section id="g-absence">
+      <h2>Absence heatmap</h2>
+      <p>Each cell in this table is one department's absence rate in one month: the share of working days lost to unplanned absence. The darker the cell, the higher the absence. The last column is the period average and the last row is the company-wide average for each month. On a phone, you can swipe the table left and right.</p>
+      <figure><img src="shots/absence.png" alt="Absence heatmap table" loading="lazy"><figcaption>Absence rate by department and month of 1404.</figcaption></figure>
+      <div class="box ex"><span class="t">Example using this dashboard's numbers</span>The company-wide absence rate in 1404 is <b data-v="abs"></b> (target: below 3%). The darkest cell is <b data-v="absMaxD"></b> in <b data-v="absMaxM"></b> at <b data-v="absMaxV"></b>, and Production's annual average is <b data-v="absProd"></b>. There is a clear seasonal pattern too: Farvardin (after the Nowruz holidays) and the hot summer months have more absence.</div>
+      <div class="box q"><span class="t">What question does this answer?</span>“In which departments and months is absence a problem?”</div>
+      <a class="go" href="index.html#absence">View in dashboard →</a>
+    </section>
+
+    <section id="g-excellence">
+      <h2>People Results in the organizational excellence model</h2>
+      <p>In organizational excellence models (such as EFQM), the “People Results” criterion is measured with two kinds of indicator: <b>perception indicators</b>, which capture employees' own views through a survey, and <b>performance indicators</b>, which come from the organization's own data. This section puts eight indicators side by side.</p>
+      <figure><img src="shots/excellence.png" alt="People Results panel in the excellence model" loading="lazy"><figcaption>The overall score and the eight indicators of the “People Results” criterion.</figcaption></figure>
+      <h3>How to read it</h3>
+      <ul>
+        <li>For each indicator you see the current value, the target, the 1403 value and the trend (▲ better or ▼ worse). For indicators such as absence and accidents, lower is better, and the trend is colored with the same logic.</li>
+        <li>Each indicator's <b>achievement score</b> is the percentage of its target reached, capped at 100. The overall People Results score is the average of these eight scores: 90 or more is “Excellent”, 75–90 “Good”, 60–75 “Needs improvement” and below 60 “Weak”.</li>
+        <li>Perception indicators come from the annual Azar survey and do not change with the period filter.</li>
+      </ul>
+      <div class="box ex"><span class="t">Example using this dashboard's numbers</span>The People Results score for 1404 is <b data-v="score"></b> out of 100 (last year: <b data-v="scorePrev"></b>). The weakest indicators are “<b data-v="weak1"></b>” with <b data-v="weak1s"></b> points and “<b data-v="weak2"></b>” with <b data-v="weak2s"></b> points. Safety training coverage is <b data-v="safeCov"></b> against a 90% target. On the other hand, with the new system, performance appraisal coverage has risen from <b data-v="apprPrev"></b> to <b data-v="appr"></b>.</div>
+      <div class="box q"><span class="t">What question does this answer?</span>“How do we stand on the People Results criterion of an excellence assessment, and which indicators should we work on next year?”</div>
+      <a class="go" href="index.html#excellence">View in dashboard →</a>
+    </section>
+
+    <section id="g-projects">
+      <h2>Ongoing HR projects</h2>
+      <p>Each row is one project, with its owner, start and end dates, and a progress bar. The length of the colored bar is actual progress, and the dark vertical mark on the bar is where the project should be according to plan by the report date (25 Esfand 1404).</p>
+      <figure><img src="shots/projects.png" alt="List of HR projects" loading="lazy"><figcaption>Seven ongoing projects with actual vs. planned progress.</figcaption></figure>
+      <h3>How statuses are assigned</h3>
+      <ul>
+        <li><b>On track:</b> actual progress is at most 8 percentage points behind plan.</li>
+        <li><b>At risk:</b> between 8 and 20 percentage points behind plan.</li>
+        <li><b>Delayed:</b> more than 20 percentage points behind, or the deadline has passed and the project isn't finished.</li>
+        <li><b>Completed:</b> 100% progress.</li>
+      </ul>
+      <div class="box ex"><span class="t">Example using this dashboard's numbers</span>The “<b data-v="lateName"></b>” project was due to finish on 30 Bahman; it is now <b data-v="lateDays"></b> days past its deadline at <b data-v="lateProg"></b> progress. Two more projects are at risk: <b data-v="riskNames"></b>.</div>
+      <div class="box q"><span class="t">What question does this answer?</span>“Where do the HR projects stand, and which one needs urgent follow-up?”</div>
+      <p class="n" style="font-size:13px">Projects are defined company-wide, so the filters have no effect on this section.</p>
+      <a class="go" href="index.html#projects">View in dashboard →</a>
+    </section>
+
+    <section id="g-people">
+      <h2>Employee directory</h2>
+      <p>This table lists everyone who was with the company for at least one day during the selected period, including those who left during it. The “Training hrs (period)” column has a small bar showing how close each person is to their training target.</p>
+      <figure><img src="shots/people.png" alt="Employee directory table" loading="lazy"><figcaption>The top of the employee table, with search and sorting.</figcaption></figure>
+      <h3>How to use it</h3>
+      <ul>
+        <li><b>Sorting:</b> click any column header; click again to reverse the order.</li>
+        <li><b>Search:</b> type part of a name, employee ID, position or department.</li>
+        <li><b>Status:</b> “Active”, “New hire” (hired in the last three months of the period) or “Left”, together with the reason.</li>
+        <li>Absences of 10 days or more are highlighted in red. The first 25 rows are shown, and the button below the table loads more.</li>
+      </ul>
+      <div class="box ex"><span class="t">Example using this dashboard's numbers</span>For the full year 1404, the table holds <b data-v="pplRows"></b> people, <b data-v="exits"></b> of whom left during the year. Sort by “Absence days” and you'll see that <b data-v="absTopName"></b> from <b data-v="absTopDept"></b> has the most absence, with <b data-v="absTopDays"></b> days.</div>
+      <div class="box q"><span class="t">What question does this answer?</span>“Who is behind these numbers, and who needs follow-up?”</div>
+      <a class="go" href="index.html#people">View in dashboard →</a>
+    </section>
+
+    <section id="g-ftable">
+      <h2>Filter effects</h2>
+      <p>This table shows which sections each filter affects. <span class="y">✓</span> means the figures are recalculated, <span class="h">Highlight</span> means all items stay visible but the selected one is emphasized, and <span class="n">—</span> means the filter has no effect.</p>
+      <div class="tw"><table class="ftable">
+        <thead><tr><th>Section</th><th>Workforce group</th><th>Department</th><th>Time period</th></tr></thead>
+        <tbody>
+          <tr><td>KPI cards</td><td class="c y">✓</td><td class="c y">✓</td><td class="c"><span class="y">✓</span> <span class="n">(except satisfaction)</span></td></tr>
+          <tr><td>Workforce composition</td><td class="c y">✓</td><td class="c h">Highlight</td><td class="c y">✓</td></tr>
+          <tr><td>Workforce mix over time</td><td class="c h">Highlight</td><td class="c y">✓</td><td class="c h">Highlight</td></tr>
+          <tr><td>Headcount, hires and exits</td><td class="c y">✓</td><td class="c y">✓</td><td class="c h">Highlight</td></tr>
+          <tr><td>Turnover and reasons</td><td class="c y">✓</td><td class="c h">Highlight</td><td class="c y">✓</td></tr>
+          <tr><td>Key findings</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+          <tr><td>Training vs. target</td><td class="c y">✓</td><td class="c h">Highlight</td><td class="c y">✓</td></tr>
+          <tr><td>Absence heatmap</td><td class="c y">✓</td><td class="c h">Highlight</td><td class="c h">Highlight</td></tr>
+          <tr><td>People Results (excellence model)</td><td class="c y">✓</td><td class="c y">✓</td><td class="c"><span class="y">✓</span> <span class="n">(except annual indicators)</span></td></tr>
+          <tr><td>HR projects</td><td class="c n">—</td><td class="c n">—</td><td class="c n">—</td></tr>
+          <tr><td>Employee directory</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="faq">
+      <h2>Frequently asked questions</h2>
+      <details><summary>What is the difference between “client staff” and “contractor staff”?</summary><p>Client staff are people whose contracts are with the parent company or the project client but who work at Sample Co. Contractor staff are supplied through contracting firms. The dashboard keeps these three groups separate because their cost, retention and training needs differ.</p></details>
+      <details><summary>Why is the quarterly turnover rate so different from the full-year figure?</summary><p>For seasons and half-years, the annualized rate is shown so it can be compared with the annual 12% target. In a season with only a few exits, this figure can swing considerably, so look at the number of exits alongside it.</p></details>
+      <details><summary>Why doesn't employee satisfaction change when I change the period?</summary><p>The satisfaction and engagement survey runs once a year (in Azar). That is why this figure, and the two perception indicators in the excellence model, only change with the workforce group and department filters.</p></details>
+      <details><summary>Is the People Results score the same as the official excellence assessment score?</summary><p>No. This score is an internal monitoring indicator: the average target achievement across eight indicators. In a formal assessment, assessors also evaluate trends, target setting and comparisons with other organizations, but these same indicators form the basis of the evidence for that criterion.</p></details>
+      <details><summary>Where does the data come from, and how often is it updated?</summary><p>The data is read from the time and attendance system, payroll, the training system and the contractor staff lists, and can be refreshed daily or monthly.</p></details>
+      <details><summary>Can I send a filtered view to someone?</summary><p>Yes. The filters are stored in the page URL; copy the URL and send it, and the recipient will see the same view.</p></details>
+    </section>
+
+    <section id="glossary">
+      <h2>Glossary</h2>
+      <dl>
+        <dt>Turnover rate</dt><dd>The number of people who left the company during the period, divided by the average headcount for that period. For periods shorter than a year, it is scaled to an annual basis.</dd>
+        <dt>Annualized</dt><dd>A figure calculated for a short period and scaled up to 12 months so it can be compared with an annual target.</dd>
+        <dt>Retention rate</dt><dd>One hundred minus the annualized turnover rate.</dd>
+        <dt>Training hours per employee</dt><dd>Total training hours delivered divided by average headcount. Each department's target is set annually and reduced proportionally for shorter periods.</dd>
+        <dt>Safety training coverage</dt><dd>The percentage of current employees who have completed at least three-quarters of their department's required safety training hours in the past 12 months.</dd>
+        <dt>Absence rate</dt><dd>The percentage of working days lost to unplanned absence (not scheduled leave).</dd>
+        <dt>Perception and performance indicators</dt><dd>In the excellence model, a perception indicator measures employees' views through a survey, while a performance indicator is derived from the organization's internal data.</dd>
+        <dt>Planned progress</dt><dd>The share of a project that should have been completed by the report date if work had progressed evenly between the start and end dates.</dd>
+      </dl>
+    </section>
+  </article>
+</div>
+<footer>Designed and built by Fatemeh Mansouri · Portfolio project</footer>
+
+<script>
+/* ===== Synthetic data (shared by the dashboard and the guide) ===== */
+const HR = (function () {
+  let s = 1404; const rnd = () => (s = s * 16807 % 2147483647) / 2147483647;
+  const pick = a => a[Math.floor(rnd() * a.length)];
+  const wpick = pairs => { let t = 0; for (const p of pairs) t += p[1]; let r = rnd() * t; for (const p of pairs) { r -= p[1]; if (r <= 0) return p[0]; } return pairs[pairs.length - 1][0]; };
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+  const MONTHS = ['Farvardin', 'Ordibehesht', 'Khordad', 'Tir', 'Mordad', 'Shahrivar', 'Mehr', 'Aban', 'Azar', 'Dey', 'Bahman', 'Esfand'];
+  const MONTHS_S = ['Far', 'Ord', 'Kho', 'Tir', 'Mor', 'Sha', 'Meh', 'Aba', 'Aza', 'Dey', 'Bah', 'Esf'];
+  const GROUPS = [
+    { id: 'd', name: 'Direct employees', short: 'Direct' },
+    { id: 'e', name: 'Client staff', short: 'Client' },
+    { id: 'c', name: 'Contractor staff', short: 'Contractor' }
+  ];
+  const PERIODS = [
+    { id: 'y', name: 'Full year 1404', m: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
+    { id: 'h1', name: 'First half 1404', m: [0, 1, 2, 3, 4, 5] },
+    { id: 'h2', name: 'Second half 1404', m: [6, 7, 8, 9, 10, 11] },
+    { id: 'q1', name: 'Spring 1404', m: [0, 1, 2] },
+    { id: 'q2', name: 'Summer 1404', m: [3, 4, 5] },
+    { id: 'q3', name: 'Autumn 1404', m: [6, 7, 8] },
+    { id: 'q4', name: 'Winter 1404', m: [9, 10, 11] }
+  ];
+  // ex03: monthly exit probability in 1403; ex04a→ex04b: from Farvardin to Esfand 1404
+  const DEPTS = [
+    { id: 'prod', name: 'Production', base: [72, 28, 30], ex03: .012, ex04a: .017, ex04b: .029, grow: 1.0, cDrift: .40, trainT: 40, safeT: 16, genF: .92, safF: .52, fem: .08, abs: .041, sat: 63, sat04: 56, acc: .0032,
+      roles: [['Production line operator', 10], ['Production technician', 4], ['Production worker', 6], ['Shift supervisor', 1.2], ['Production planning specialist', .8]] },
+    { id: 'mnt', name: 'Maintenance', base: [30, 10, 12], ex03: .006, ex04a: .006, ex04b: .007, grow: .25, cDrift: .16, trainT: 44, safeT: 16, genF: 1.0, safF: .84, fem: .03, abs: .030, sat: 68, sat04: 67, acc: .0016,
+      roles: [['Mechanical technician', 5], ['Electrical technician', 4], ['Maintenance engineer', 1.5], ['Maintenance supervisor', .6]] },
+    { id: 'qc', name: 'Quality Control', base: [22, 8, 3], ex03: .004, ex04a: .005, ex04b: .005, grow: .10, cDrift: .04, trainT: 40, safeT: 10, genF: 1.05, safF: .96, fem: .35, abs: .024, sat: 71, sat04: 72, acc: .0005,
+      roles: [['Quality inspector', 5], ['Lab technician', 2], ['Quality assurance specialist', 1]] },
+    { id: 'log', name: 'Warehouse & Logistics', base: [18, 8, 14], ex03: .007, ex04a: .006, ex04b: .007, grow: .30, cDrift: .18, trainT: 32, safeT: 16, genF: .9, safF: .72, fem: .1, abs: .033, sat: 66, sat04: 65, acc: .0012,
+      roles: [['Storekeeper', 4], ['Forklift driver', 3], ['Logistics specialist', 1.5], ['Warehouse worker', 4]] },
+    { id: 'hse', name: 'Health & Safety', base: [10, 4, 2], ex03: .004, ex04a: .004, ex04b: .004, grow: .05, cDrift: .02, trainT: 50, safeT: 24, genF: 1.1, safF: 1.05, fem: .3, abs: .020, sat: 72, sat04: 73, acc: .0004,
+      roles: [['Safety specialist', 3], ['Safety officer', 2], ['Occupational health specialist', 1]] },
+    { id: 'sales', name: 'Sales & Commercial', base: [20, 6, 2], ex03: .006, ex04a: .007, ex04b: .007, grow: .10, cDrift: .02, trainT: 36, safeT: 4, genF: .95, safF: 1.0, fem: .45, abs: .019, sat: 73, sat04: 72, acc: 0,
+      roles: [['Sales specialist', 4], ['Commercial specialist', 2], ['Customer service specialist', 2], ['Regional sales manager', .5]] },
+    { id: 'fin', name: 'Finance & Admin', base: [22, 8, 4], ex03: .004, ex04a: .005, ex04b: .005, grow: .05, cDrift: .02, trainT: 32, safeT: 4, genF: .9, safF: .95, fem: .55, abs: .021, sat: 70, sat04: 71, acc: 0,
+      roles: [['Finance specialist', 4], ['Accountant', 3], ['Administrative clerk', 3], ['Purchasing specialist', 1.5]] },
+    { id: 'hr', name: 'Human Resources', base: [9, 3, 1], ex03: .004, ex04a: .004, ex04b: .004, grow: .03, cDrift: .0, trainT: 44, safeT: 4, genF: 1.1, safF: 1.0, fem: .65, abs: .018, sat: 75, sat04: 76, acc: 0,
+      roles: [['Recruitment specialist', 1], ['Training specialist', 1], ['Payroll specialist', 1], ['Performance appraisal specialist', 1]] },
+    { id: 'it', name: 'IT', base: [9, 3, 3], ex03: .006, ex04a: .005, ex04b: .005, grow: .08, cDrift: .03, trainT: 48, safeT: 4, genF: 1.15, safF: .9, fem: .35, abs: .018, sat: 72, sat04: 73, acc: 0,
+      roles: [['Network specialist', 1], ['Software developer', 1.5], ['IT support specialist', 1.5], ['Data analyst', .6]] }
+  ];
+  const DI = {}; DEPTS.forEach((d, i) => DI[d.id] = i);
+
+  const MALE = ['Ali', 'Mohammad', 'Hossein', 'Reza', 'Mahdi', 'Amir', 'Hamid', 'Saeed', 'Majid', 'Javad', 'Mostafa', 'Ahmad', 'Kazem', 'Yousef', 'Hassan', 'Behrouz', 'Farhad', 'Sajjad', 'Milad', 'Vahid', 'Pejman', 'Kamran', 'Masoud', 'Davoud', 'Ebrahim', 'Abbas', 'Naser', 'Hadi', 'Mohsen', 'Behzad'];
+  const FEM = ['Maryam', 'Zahra', 'Sara', 'Narges', 'Leila', 'Elham', 'Mina', 'Shima', 'Nazanin', 'Somayeh', 'Mahsa', 'Parisa', 'Azadeh', 'Nasrin', 'Elnaz', 'Reyhaneh', 'Samaneh', 'Farzaneh', 'Zeynab', 'Haniyeh'];
+  const LAST = ['Ahmadi', 'Mohammadi', 'Hosseini', 'Rezaei', 'Karimi', 'Mousavi', 'Jafari', 'Sadeghi', 'Rahimi', 'Nouri', 'Ghasemi', 'Kazemi', 'Abbasi', 'Akbari', 'Moradi', 'Heidari', 'Soltani', 'Najafi', 'Sharifi', 'Yazdani', 'Farhadi', 'Bahrami', 'Zarei', 'Taheri', 'Salehi', 'Kermani', 'Shirazi', 'Maleki', 'Amini', 'Tavakoli', 'Bagheri', 'Fathi', 'Rostami', 'Niknam', 'Dehghan', 'Khosravi', 'Ebrahimi', 'Asadi', 'Pourmohammadi', 'Ghorbani', 'Mirzaei', 'Asgari', 'Hajizadeh', 'Naderi', 'Vakili', 'Jalali', 'Kamrani', 'Sobhani'];
+
+  const REASONS_PROD = [['Pay & benefits', 34], ['Shifts & conditions', 26], ['Better job offer', 14], ['End of contract', 9], ['Relocation', 7], ['Emigration', 3], ['Retirement', 3], ['Performance issues', 4]];
+  const REASONS_OTHER = [['Better job offer', 28], ['Pay & benefits', 18], ['End of contract', 12], ['Relocation', 12], ['Emigration', 10], ['Retirement', 10], ['Shifts & conditions', 5], ['Performance issues', 5]];
+  const REASONS = ['Pay & benefits', 'Shifts & conditions', 'Better job offer', 'End of contract', 'Relocation', 'Emigration', 'Retirement', 'Performance issues'];
+
+  const pad = n => (n < 10 ? '0' : '') + n;
+  const people = []; let seq = 1000;
+  function mk(dept, g, hireM, hireDate) {
+    const fem = rnd() < dept.fem;
+    const p = {
+      code: 'HR-' + (seq += 1 + Math.floor(rnd() * 3)), name: pick(fem ? FEM : MALE) + ' ' + pick(LAST), fem,
+      dept: dept.id, di: DI[dept.id], g, role: wpick(dept.roles), hireM, hire: hireDate, exitM: null, reason: null,
+      gen: new Array(24).fill(0), saf: new Array(24).fill(0), abs: new Array(24).fill(0), acc: new Array(24).fill(0),
+      sat03: null, sat04: null, eng03: null, eng04: null, ev03: false, ev04: false
+    };
+    people.push(p); return p;
+  }
+  // headcount at the start of 1403
+  const GY = { d: [1382, 1402], e: [1390, 1402], c: [1397, 1402] };
+  DEPTS.forEach(d => ['d', 'e', 'c'].forEach((g, gi) => {
+    for (let i = 0; i < d.base[gi]; i++) {
+      const [a, b] = GY[g]; const y = a + Math.floor(Math.pow(rnd(), .7) * (b - a + 1));
+      mk(d, g, -1, y + '/' + pad(1 + Math.floor(rnd() * 12)) + '/' + pad(1 + Math.floor(rnd() * 29)));
+    }
+  }));
+
+  const trainSeason = [.4, .9, 1.1, 1, .8, 1, 1.3, 1.3, 1.2, 1.1, 1.1, .7];
+  const absSeason = [1.45, 1, .9, 1.05, 1.15, .95, .9, .9, 1, 1.2, 1.05, .85];
+  const hireSeason = [.1, .7, .9, 1, .9, 1, 1, 1, 1, 1.1, 2.4, 5.0];
+  const gExit = { d: .85, e: 1.0, c: 1.35 };
+  const alive = (p, m) => p.hireM <= m && (p.exitM === null || p.exitM >= m); // present during the month
+  const activeEnd = (p, m) => p.hireM <= m && (p.exitM === null || p.exitM > m); // present at month end
+  let prevExits = DEPTS.map(() => 0);
+
+  for (let m = 0; m < 24; m++) {
+    const mm = m % 12, y04 = m >= 12;
+    // 1) hires
+    DEPTS.forEach((d, di) => {
+      const fill = (d.id === 'prod' && y04) ? .86 : .93;
+      const exp = prevExits[di] * fill + d.grow * hireSeason[mm] * (y04 ? 1.1 : .9);
+      const n = Math.floor(exp) + (rnd() < exp - Math.floor(exp) ? 1 : 0);
+      const tot = d.base[0] + d.base[1] + d.base[2];
+      const cS = clamp(d.base[2] / tot + d.cDrift * m / 23, 0, .9);
+      const rest = 1 - cS, dS = d.base[0] / (d.base[0] + d.base[1]) * rest;
+      for (let i = 0; i < n; i++) {
+        const r = rnd(); const g = r < cS ? 'c' : (r < cS + dS ? 'd' : 'e');
+        mk(d, g, m, (1403 + Math.floor(m / 12)) + '/' + pad(mm + 1) + '/' + pad(1 + Math.floor(rnd() * 28)));
+      }
+    });
+    // 2) exits
+    const ex = DEPTS.map(() => 0);
+    for (const p of people) {
+      if (!(p.hireM < m && p.exitM === null)) continue;
+      const d = DEPTS[p.di];
+      let pr = y04 ? d.ex04a + (d.ex04b - d.ex04a) * (m - 12) / 11 : d.ex03;
+      pr *= gExit[p.g] * (mm === 0 ? 1.5 : mm === 1 ? 1.2 : 1) * (p.hireM >= 0 && m - p.hireM <= 3 ? 1.5 : 1);
+      if (rnd() < pr) {
+        p.exitM = m; ex[p.di]++;
+        let pool = (d.id === 'prod' ? REASONS_PROD : REASONS_OTHER);
+        if (p.g === 'c') pool = pool.map(x => [x[0], x[0] === 'End of contract' ? x[1] * 3 : x[1]]);
+        p.reason = wpick(pool);
+      }
+    }
+    prevExits = ex;
+    // 3) monthly activity
+    for (const p of people) {
+      if (!alive(p, m)) continue;
+      const d = DEPTS[p.di];
+      const genExp = (d.trainT - d.safeT) / 12 * d.genF * (p.g === 'c' ? .7 : p.g === 'e' ? .95 : 1) * trainSeason[mm];
+      if (rnd() < .4) p.gen[m] = Math.round(genExp / .4 * (.5 + rnd()));
+      const safExp = d.safeT / 12 * d.safF * (y04 ? 1 : 1.06) * (p.g === 'c' ? .85 : 1) * trainSeason[mm];
+      if (rnd() < .3) p.saf[m] = Math.round(safExp / .3 * (.5 + rnd()));
+      const rate = d.abs * (p.g === 'c' ? 1.25 : p.g === 'e' ? 1.05 : 1) * absSeason[mm] * (d.id === 'prod' && (mm === 3 || mm === 4) ? 1.3 : 1) * (d.id === 'prod' && y04 ? 1.1 : 1);
+      let a = 0; for (let k = 0; k < 24; k++) if (rnd() < rate) a++;
+      p.abs[m] = p.exitM === m ? Math.round(a / 2) : a;
+      if (rnd() < d.acc * (p.g === 'c' ? 1.4 : 1)) p.acc[m] = 1;
+    }
+    // 4) survey (Azar) and performance appraisal (Esfand)
+    if (mm === 8) for (const p of people) {
+      if (!activeEnd(p, m)) continue;
+      const d = DEPTS[p.di];
+      const base = (y04 ? d.sat04 : d.sat) + (p.g === 'c' ? -7 : p.g === 'e' ? -3 : 0);
+      const sat = Math.round(clamp(base + (rnd() + rnd() + rnd() - 1.5) * 18, 20, 98));
+      const eng = Math.round(clamp(sat + 2 + (rnd() - .5) * 14, 20, 98));
+      if (y04) { p.sat04 = sat; p.eng04 = eng; } else { p.sat03 = sat; p.eng03 = eng; }
+    }
+    if (mm === 11) for (const p of people) {
+      if (!activeEnd(p, m) || m - p.hireM < 3) continue;
+      if (y04) p.ev04 = rnd() < ({ d: .93, e: .86, c: .52 })[p.g]; else p.ev03 = rnd() < ({ d: .64, e: .52, c: .2 })[p.g];
+    }
+  }
+
+  /* ---------- HR projects ---------- */
+  const DAYS = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
+  const dayNo = str => { const [y, mo, d] = str.split('/').map(Number); let n = (y - 1404) * 365; for (let i = 0; i < mo - 1; i++) n += DAYS[i]; return n + d; };
+  const REPORT = '1404/12/25';
+  const projects = [
+    { name: 'Performance appraisal system rollout', desc: 'Periodic appraisal of all employees in one integrated system', owner: 'Maryam Rezaei', role: 'Senior Performance Appraisal Specialist', start: '1404/02/01', end: '1405/01/31', progress: 87, next: 'Year-end appraisals for Production and Warehouse' },
+    { name: 'Middle-management succession plan', desc: 'Identify and prepare successors for 24 key positions', owner: 'Hamid Karimi', role: 'Head of HR Development', start: '1404/04/01', end: '1405/03/31', progress: 62, next: 'Second-round assessment center' },
+    { name: 'Safety training for operational staff', desc: '16 hours of safety training per person in Production, Warehouse and Maintenance', owner: 'Saeed Mousavi', role: 'HSE Supervisor', start: '1404/01/15', end: '1404/12/29', progress: 81, next: 'Make-up sessions for night shifts' },
+    { name: '1404 satisfaction & engagement survey', desc: 'Annual questionnaire for all three workforce groups', owner: 'Leila Sadeghi', role: 'Organizational Development Specialist', start: '1404/07/01', end: '1404/10/15', progress: 100, next: 'Follow up on departments\' corrective actions' },
+    { name: 'Pay & benefits redesign', desc: 'Job classification and pay adjustment for production-line staff', owner: 'Majid Jafari', role: 'Head of Compensation', start: '1404/03/01', end: '1404/11/30', progress: 58, next: 'Board approval of the new pay structure' },
+    { name: 'New-hire onboarding program', desc: 'Three-month onboarding pack and a work buddy for every newcomer', owner: 'Sara Nouri', role: 'Recruitment Specialist', start: '1404/06/01', end: '1405/02/31', progress: 72, next: 'Pilot in the Production department' },
+    { name: 'Personnel file digitization', desc: 'Scan and index personnel files and retire the paper archive', owner: 'Amir Rahimi', role: 'HR Systems Specialist', start: '1404/05/01', end: '1405/04/31', progress: 63, next: 'Contractor staff files' }
+  ];
+  const rep = dayNo(REPORT);
+  projects.forEach(p => {
+    const a = dayNo(p.start), b = dayNo(p.end);
+    p.planned = Math.round(clamp((rep - a) / (b - a), 0, 1) * 100);
+    p.gap = p.planned - p.progress;
+    p.overdue = rep > b && p.progress < 100 ? rep - b : 0;
+    p.status = p.progress >= 100 ? 'done' : (p.overdue > 0 || p.gap > 20) ? 'late' : p.gap > 8 ? 'risk' : 'ok';
+  });
+
+  /* ---------- Calculations ---------- */
+  const TARGETS = { turnover: 12, absence: 3, sat: 70, eng: 72, retention: 88, safetyCov: 90, appraisal: 90, accident: 1.0 };
+  const periodOf = id => PERIODS.find(p => p.id === id) || PERIODS[0];
+  const match = (p, f) => (f.g === 'all' || p.g === f.g) && (f.dept === 'all' || p.dept === f.dept);
+
+  // statistics for a subset of people over absolute months (0..23)
+  function stats(list, months) {
+    const L = months.length, last = months[L - 1], first = months[0];
+    let pm = 0, hires = 0, exits = 0, gen = 0, saf = 0, abs = 0, acc = 0, trT = 0, sfT = 0, hcEnd = 0, hcStart = 0;
+    const reasons = {};
+    for (const p of list) {
+      if (activeEnd(p, last)) hcEnd++;
+      if (activeEnd(p, first - 1) || (first === 0 && p.hireM < 0)) hcStart++;
+      for (const m of months) {
+        if (!alive(p, m)) continue;
+        pm++; gen += p.gen[m]; saf += p.saf[m]; abs += p.abs[m]; acc += p.acc[m];
+        const d = DEPTS[p.di]; trT += d.trainT / 12; sfT += d.safeT / 12;
+        if (p.hireM === m) hires++;
+        if (p.exitM === m) { exits++; reasons[p.reason] = (reasons[p.reason] || 0) + 1; }
+      }
+    }
+    const avg = pm / L || 0;
+    const turnover = avg ? exits / avg * 100 : 0;
+    return {
+      hcEnd, hcStart, hcAvg: avg, hires, exits, reasons, turnover, turnAnn: turnover * 12 / L,
+      trainPC: avg ? (gen + saf) / avg : 0, safePC: avg ? saf / avg : 0, trainTarget: avg ? trT / avg : 0, safeTarget: avg ? sfT / avg : 0,
+      absDays: abs, absRate: pm ? abs / (pm * 24) * 100 : 0, acc, accRate: avg ? acc / avg * 100 * 12 / L : 0
+    };
+  }
+  function survey(list, key) { let n = 0, t = 0; for (const p of list) if (p[key] !== null) { n++; t += p[key]; } return n ? t / n : null; }
+  function safetyCoverage(list, endM) { // % of current staff who met the annual safety-training target over the last 12 months
+    let n = 0, ok = 0;
+    for (const p of list) {
+      if (!activeEnd(p, endM)) continue; n++;
+      let h = 0; for (let m = Math.max(0, endM - 11); m <= endM; m++) h += p.saf[m];
+      const tenure = p.hireM < 0 ? 12 : Math.min(12, endM - p.hireM + 1);
+      if (h >= DEPTS[p.di].safeT * tenure / 12 * .75) ok++;
+    }
+    return n ? ok / n * 100 : 0;
+  }
+  function appraisal(list, endM, key) { let n = 0, ok = 0; for (const p of list) { if (!activeEnd(p, endM) || endM - p.hireM < 3) continue; n++; if (p[key]) ok++; } return n ? ok / n * 100 : 0; }
+
+  function compute(f) {
+    const per = periodOf(f.period);
+    const cur = per.m.map(i => i + 12), prev = per.m.slice();
+    const list = people.filter(p => match(p, f));
+    const S = stats(list, cur), P = stats(list, prev);
+    const res = { f, per, cur, prev, list, S, P };
+    // group breakdown (department filter applied)
+    const listDept = people.filter(p => f.dept === 'all' || p.dept === f.dept);
+    res.groupEnd = GROUPS.map(g => listDept.filter(p => p.g === g.id && activeEnd(p, cur[cur.length - 1])).length);
+    res.groupEndPrev = GROUPS.map(g => listDept.filter(p => p.g === g.id && activeEnd(p, prev[prev.length - 1])).length);
+    // department × group mix at period end (group filter applied)
+    res.byDept = DEPTS.map(d => {
+      const dl = people.filter(p => p.dept === d.id && (f.g === 'all' || p.g === f.g));
+      const st = stats(dl, cur), sp = stats(dl, prev);
+      const comp = GROUPS.map(g => dl.filter(p => p.g === g.id && activeEnd(p, cur[cur.length - 1])).length);
+      const absM = Array.from({ length: 12 }, (_, i) => { const x = stats(dl, [12 + i]); return x.absRate; });
+      return { d, st, sp, comp, absM, absYear: stats(dl, cur).absRate };
+    });
+    // monthly series for 1404
+    res.monthly = Array.from({ length: 12 }, (_, i) => {
+      const m = 12 + i, x = stats(list, [m]);
+      const mix = GROUPS.map(g => listDept.filter(p => p.g === g.id && activeEnd(p, m)).length);
+      return { i, hc: x.hcEnd, hires: x.hires, exits: x.exits, mix, absRate: x.absRate };
+    });
+    res.monthlyPrev = Array.from({ length: 12 }, (_, i) => list.filter(p => activeEnd(p, i)).length);
+    res.byDept.forEach(x => { const dl = people.filter(p => p.dept === x.d.id && (f.g === 'all' || p.g === f.g)); x.sat = survey(dl, 'sat04'); x.satPrev = survey(dl, 'sat03'); });
+    res.mixStart = GROUPS.map(g => listDept.filter(p => p.g === g.id && activeEnd(p, 11)).length);
+    // survey
+    res.sat = survey(list, 'sat04'); res.satPrev = survey(list, 'sat03');
+    res.eng = survey(list, 'eng04'); res.engPrev = survey(list, 'eng03');
+    const endC = cur[cur.length - 1], endP = prev[prev.length - 1];
+    res.safeCov = safetyCoverage(list, endC); res.safeCovPrev = safetyCoverage(list, endP);
+    res.appr = appraisal(list, 23, 'ev04'); res.apprPrev = appraisal(list, 11, 'ev03');
+    // excellence model: People Results
+    const L = cur.length;
+    const ind = [
+      { k: 'sat', name: 'Overall employee satisfaction', type: 'Perception', unit: 'of 100', cur: res.sat, prev: res.satPrev, target: TARGETS.sat, hb: true, dec: 0, note: 'Annual survey (Azar)' },
+      { k: 'eng', name: 'Employee engagement', type: 'Perception', unit: 'of 100', cur: res.eng, prev: res.engPrev, target: TARGETS.eng, hb: true, dec: 0, note: 'Annual survey (Azar)' },
+      { k: 'ret', name: 'Employee retention rate', type: 'Performance', unit: '%', cur: 100 - S.turnAnn, prev: 100 - P.turnAnn, target: TARGETS.retention, hb: true, dec: 1, note: 'Annualized' },
+      { k: 'train', name: 'Training hours per employee', type: 'Performance', unit: 'hrs', cur: S.trainPC, prev: P.trainPC, target: S.trainTarget, hb: true, dec: 1, note: 'Target pro-rated to period length' },
+      { k: 'safe', name: 'Safety training coverage', type: 'Performance', unit: '%', cur: res.safeCov, prev: res.safeCovPrev, target: TARGETS.safetyCov, hb: true, dec: 0, note: '12 months to period end' },
+      { k: 'abs', name: 'Absence rate', type: 'Performance', unit: '%', cur: S.absRate, prev: P.absRate, target: TARGETS.absence, hb: false, dec: 1, note: 'Unplanned absence' },
+      { k: 'appr', name: 'Performance appraisal coverage', type: 'Performance', unit: '%', cur: res.appr, prev: res.apprPrev, target: TARGETS.appraisal, hb: true, dec: 0, note: 'Annual cycle (Esfand)' },
+      { k: 'acc', name: 'Work accidents per 100 employees', type: 'Performance', unit: 'cases', cur: S.accRate, prev: P.accRate, target: TARGETS.accident, hb: false, dec: 2, note: 'Annualized' }
+    ];
+    ind.forEach(x => {
+      if (x.cur === null || isNaN(x.cur)) { x.score = null; return; }
+      const r = x.hb ? x.cur / x.target : (x.cur <= 0 ? 1 : x.target / x.cur);
+      x.score = Math.round(clamp(r, 0, 1) * 100);
+    });
+    const sc = ind.filter(x => x.score !== null);
+    res.ind = ind; res.score = sc.length ? sc.reduce((a, x) => a + x.score, 0) / sc.length : null;
+    // last year's score
+    const ps = ind.filter(x => x.prev !== null && !isNaN(x.prev)).map(x => {
+      const tg = x.k === 'train' ? P.trainTarget : x.target;
+      const r = x.hb ? x.prev / tg : (x.prev <= 0 ? 1 : tg / x.prev); return clamp(r, 0, 1) * 100;
+    });
+    res.scorePrev = ps.length ? ps.reduce((a, b) => a + b, 0) / ps.length : null;
+    return res;
+  }
+
+  const faNum = str => String(str);
+  const fa = (n, dec = 0) => Number(n).toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  const pct = (n, dec = 1) => fa(n, dec) + '%';
+
+  return { MONTHS, MONTHS_S, GROUPS, DEPTS, PERIODS, people, projects, REPORT, TARGETS, compute, stats, activeEnd, alive, REASONS, fa, pct, faNum, periodOf, match };
+})();
+
+</script>
+<script>
+(function(){
+const {fa,pct,MONTHS,DEPTS}=HR;
+const R=HR.compute({g:'all',dept:'all',period:'y'}),S=R.S,P=R.P;
+const V={};
+const ge=R.groupEnd,gt=ge.reduce((a,b)=>a+b,0);
+V.hc=fa(S.hcEnd);V.hcDiff=fa(S.hcEnd-P.hcEnd);V.gd=fa(ge[0]);V.ge=fa(ge[1]);V.gc=fa(ge[2]);V.gcS=pct(ge[2]/gt*100,0);
+V.turn=pct(S.turnAnn);V.turnPrev=pct(P.turnAnn);V.exits=fa(S.exits);V.hires=fa(S.hires);
+V.train=fa(S.trainPC,1);V.trainP=pct(S.trainPC/S.trainTarget*100,0);V.abs=pct(S.absRate);V.sat=fa(R.sat,0);V.satPrev=fa(R.satPrev,0);
+const C=HR.compute({g:'c',dept:'all',period:'y'});V.cHc=fa(C.S.hcEnd);V.cTurn=pct(C.S.turnAnn);V.cSat=fa(C.sat,0);
+const prod=R.byDept.find(x=>x.d.id==='prod');const pt=prod.comp.reduce((a,b)=>a+b,0);
+V.prodTot=fa(pt);V.prodC=fa(prod.comp[2]);V.prodCS=pct(prod.comp[2]/pt*100,0);
+const t0=R.mixStart.reduce((a,b)=>a+b,0),m11=R.monthly[11],t1=m11.mix.reduce((a,b)=>a+b,0);
+V.mixA=pct(R.mixStart[2]/t0*100);V.mixB=pct(m11.mix[2]/t1*100);
+const net=S.hires-S.exits;V.net=(net>=0?'+':'−')+fa(Math.abs(net));
+let mi=0;R.monthly.forEach((m,i)=>{if(m.hires>R.monthly[mi].hires)mi=i;});V.maxHireM=MONTHS[mi];V.maxHire=fa(R.monthly[mi].hires);V.farHire=fa(R.monthly[0].hires);
+let oe=0,oa=0;R.byDept.filter(x=>x!==prod).forEach(x=>{oe+=x.st.exits;oa+=x.st.hcAvg;});const others=oe/oa*100;
+V.prodTurn=pct(prod.st.turnAnn);V.prodTurnPrev=pct(prod.sp.turnAnn);V.othersTurn=pct(others);V.prodRatio=fa(prod.st.turnAnn/others,1);
+const rs=Object.entries(S.reasons).sort((a,b)=>b[1]-a[1]),rn=rs.reduce((a,b)=>a+b[1],0);V.topReason=rs[0][0];V.topReasonS=pct(rs[0][1]/rn*100,0);
+V.prodPay=pct((prod.st.reasons['Pay & benefits']||0)/prod.st.exits*100,0);
+const tr=R.byDept.map(x=>({x,p:x.st.trainPC/x.st.trainTarget*100})).sort((a,b)=>a.p-b.p)[0];
+V.trLow=tr.x.d.name;V.trLowA=fa(tr.x.st.trainPC,1);V.trLowT=fa(tr.x.st.trainTarget,1);V.trLowP=pct(tr.p,0);
+V.prodSafeP=pct(prod.st.safePC/prod.st.safeTarget*100,0);
+const ops=R.byDept.filter(x=>['prod','mnt','log'].includes(x.d.id));V.opsSafeP=pct(ops.reduce((a,x)=>a+x.st.safePC*x.st.hcAvg,0)/ops.reduce((a,x)=>a+x.st.safeTarget*x.st.hcAvg,0)*100,0);
+let best={v:-1};R.byDept.forEach(x=>x.absM.forEach((v,i)=>{if(v>best.v)best={v,d:x.d.name,i};}));V.absMaxD=best.d;V.absMaxM=MONTHS[best.i];V.absMaxV=pct(best.v);V.absProd=pct(prod.st.absRate);
+V.score=fa(R.score,0);V.scorePrev=fa(R.scorePrev,0);
+const wk=R.ind.filter(x=>x.score!==null).sort((a,b)=>a.score-b.score);V.weak1=wk[0].name;V.weak1s=fa(wk[0].score);V.weak2=wk[1].name;V.weak2s=fa(wk[1].score);
+V.safeCov=pct(R.safeCov,0);V.appr=pct(R.appr,0);V.apprPrev=pct(R.apprPrev,0);
+const late=HR.projects.find(p=>p.status==='late');V.lateName=late.name;V.lateDays=fa(late.overdue);V.lateProg=pct(late.progress,0);
+V.riskNames=HR.projects.filter(p=>p.status==='risk').map(p=>'“'+p.name+'”').join(' and ');
+const rows=R.list.filter(p=>p.hireM<=23&&(p.exitM===null||p.exitM>=12));V.pplRows=fa(rows.length);
+let at=null,ad=-1;rows.forEach(p=>{let d=0;for(let m=12;m<24;m++)if(HR.alive(p,m))d+=p.abs[m];if(d>ad){ad=d;at=p;}});
+V.absTopName=at.name;V.absTopDept=DEPTS[at.di].name;V.absTopDays=fa(ad);
+document.querySelectorAll('[data-v]').forEach(el=>{const k=el.getAttribute('data-v');el.textContent=V[k]!==undefined?V[k]:'—';});
+
+/* theme */
+const mq=matchMedia('(prefers-color-scheme: dark)');const btn=document.getElementById('themeBtn');
+const isDark=()=>{const t=document.documentElement.getAttribute('data-theme');return t?t==='dark':mq.matches;};
+function lab(){btn.innerHTML=(isDark()?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>Dark mode':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Light mode');btn.title='Switch to '+(isDark()?'light mode':'dark mode');}
+btn.addEventListener('click',()=>{document.documentElement.setAttribute('data-theme',isDark()?'light':'dark');lab();});
+mq.addEventListener&&mq.addEventListener('change',lab);lab();
+
+/* active TOC entry */
+const top=document.querySelector('.top');const setTop=()=>document.documentElement.style.setProperty('--toptop',top.offsetHeight+'px');setTop();addEventListener('resize',setTop);
+const links=[...document.querySelectorAll('.toc a')];const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+function act(){let cur=0;secs.forEach((s,i)=>{if(s&&s.getBoundingClientRect().top<150)cur=i;});links.forEach((a,i)=>a.classList.toggle('on',i===cur));const on=links[cur];if(innerWidth<=900&&on){const t=on.parentElement;t.scrollLeft=on.offsetLeft-t.clientWidth/2+on.offsetWidth/2;}}
+addEventListener('scroll',act,{passive:true});act();
+})();
+</script>
+</body>
+</html>

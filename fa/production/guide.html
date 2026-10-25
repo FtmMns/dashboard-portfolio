@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>راهنمای داشبورد تولید</title>
+<link href="../../fonts/fonts.css" rel="stylesheet">
+<link href="../../fonts/vazirmatn.css" rel="stylesheet">
+<script>
+(function(){var t=null;try{t=new URLSearchParams(location.search).get('theme');}catch(e){}
+if(!t){try{t=localStorage.getItem('sample-theme');}catch(e){}}
+if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<style>
+:root{
+ --page:#f3f5f8;--panel:#ffffff;--panel-2:#eef1f5;--line:#e2e6ec;--ink:#121826;--ink-2:#4a5468;--muted:#8a93a5;
+ --blue:#2a78d6;--accent-soft:#e3edfb;--deep:#0d366b;--orange:#eb6834;--green:#1baf7a;--red:#c23434;--s3:#6da7ec;
+ --green-soft:#e1f5ec;--green-ink:#0d7a53;--red-soft:#f9e4e4;--red-ink:#a52a2a;--orange-soft:#fdeee6;--orange-ink:#b5461a;
+ --shadow:0 1px 2px rgba(18,24,38,.06),0 4px 16px rgba(18,24,38,.05);color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+ --page:#0e1116;--panel:#161a21;--panel-2:#1d222b;--line:#2a303b;--ink:#f1f3f7;--ink-2:#c2c8d3;--muted:#8d96a8;
+ --blue:#3987e5;--accent-soft:#1b2a40;--deep:#9ec5f4;--orange:#d95926;--green:#199e70;--red:#d64545;
+ --green-soft:#11302a;--green-ink:#63d2a8;--red-soft:#361c1e;--red-ink:#f19595;--orange-soft:#38231a;--orange-ink:#f3a37f;
+ --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);color-scheme:dark;}}
+:root[data-theme="dark"]{
+ --page:#0e1116;--panel:#161a21;--panel-2:#1d222b;--line:#2a303b;--ink:#f1f3f7;--ink-2:#c2c8d3;--muted:#8d96a8;
+ --blue:#3987e5;--accent-soft:#1b2a40;--deep:#9ec5f4;--orange:#d95926;--green:#199e70;--red:#d64545;
+ --green-soft:#11302a;--green-ink:#63d2a8;--red-soft:#361c1e;--red-ink:#f19595;--orange-soft:#38231a;--orange-ink:#f3a37f;
+ --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);color-scheme:dark;}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--page);color:var(--ink);font-family:"IBM Plex Sans Arabic",Vazirmatn,Tahoma,sans-serif;font-size:15px;line-height:1.95;-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}
+.vz{font-family:Vazirmatn,Tahoma,sans-serif}
+.mono{font-family:"IBM Plex Mono",Consolas,monospace;font-size:13px;direction:ltr;unicode-bidi:isolate}
+.sep{display:inline-block;width:1px;height:.95em;background:currentColor;opacity:.35;margin:0 8px;vertical-align:-.12em}
+.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap;padding:12px 24px;background:var(--panel);border-bottom:1px solid var(--line)}
+.top .t{display:flex;align-items:center;gap:10px;min-width:0}
+.top .t b{font-size:16px}
+.top .t span{font-size:13px;color:var(--ink-2)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:10px;padding:7px 13px;font:inherit;font-size:13px;font-weight:500;text-decoration:none;cursor:pointer;white-space:nowrap;line-height:1.6}
+.btn:hover{border-color:var(--blue);color:var(--blue)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn svg{width:16px;height:16px}
+.wrap{display:grid;grid-template-columns:230px minmax(0,780px);gap:40px;justify-content:center;padding:28px 24px 10px;max-width:1160px;margin:0 auto}
+nav.toc{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow:auto}
+.toc h2{font-size:12.5px;color:var(--muted);font-weight:600;margin:0 0 8px}
+.toc ol{list-style:none;margin:0;padding:0;border-right:2px solid var(--line)}
+.toc a{display:block;padding:4px 14px;margin-right:-2px;border-right:2px solid transparent;color:var(--ink-2);text-decoration:none;font-size:13.5px;line-height:1.7}
+.toc a:hover{color:var(--ink)}
+.toc a.on{color:var(--blue);border-right-color:var(--blue);font-weight:600}
+article{min-width:0}
+section{scroll-margin-top:84px;padding-bottom:18px;margin-bottom:26px;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+h1{font-size:27px;line-height:1.5;margin:0 0 6px}
+.lead{font-size:16px;color:var(--ink-2);margin:0 0 18px}
+h2.s{font-size:20.5px;margin:0 0 8px;line-height:1.5;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+h2.s .go{font-size:12.5px;font-weight:500;text-decoration:none;background:var(--accent-soft);color:var(--blue);border-radius:999px;padding:2px 12px;margin-inline-start:auto}
+h3{font-size:15.5px;margin:18px 0 4px}
+p{margin:0 0 10px}
+ul.l,ol.l{margin:0 0 12px;padding-right:22px}
+ul.l li,ol.l li{margin-bottom:5px}
+figure{margin:14px 0 16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px;box-shadow:var(--shadow)}
+figure img{display:block;width:100%;height:auto;border-radius:8px}
+figure.narrow img{max-width:470px;margin:0 auto}
+figcaption{font-size:12.8px;color:var(--ink-2);padding:8px 4px 0;text-align:center}
+.q{background:var(--accent-soft);border-radius:12px;padding:12px 16px;margin:14px 0 6px}
+.q b{display:block;color:var(--blue);font-size:13.5px;margin-bottom:2px}
+.ex{background:var(--panel);border:1px solid var(--line);border-right:4px solid var(--orange);border-radius:12px;padding:12px 16px;margin:10px 0}
+.ex b.h{display:block;font-size:13.5px;color:var(--orange-ink);margin-bottom:2px}
+.v{font-weight:700;color:var(--ink);white-space:nowrap}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:12px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.card b{display:block;margin-bottom:3px}
+.card p{font-size:13.5px;color:var(--ink-2);margin:0}
+.steps{counter-reset:s;list-style:none;padding:0;margin:12px 0}
+.steps li{counter-increment:s;position:relative;padding:12px 56px 12px 16px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px}
+.steps li::before{content:counter(s,persian);position:absolute;right:14px;top:12px;width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:700}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:12px 0;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:560px}
+th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--panel-2);font-weight:600;color:var(--ink-2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.c{text-align:center;white-space:nowrap}
+.y{color:var(--green-ink);font-weight:700}.n{color:var(--red-ink);font-weight:700}.h{color:var(--orange-ink);font-weight:600}
+.badge{display:inline-flex;align-items:center;font-size:12px;font-weight:600;border-radius:999px;padding:1px 10px;white-space:nowrap;line-height:1.7}
+.b-green{background:var(--green-soft);color:var(--green-ink)}.b-red{background:var(--red-soft);color:var(--red-ink)}.b-orange{background:var(--orange-soft);color:var(--orange-ink)}.b-grey{background:var(--panel-2);color:var(--ink-2)}
+.trk{display:inline-flex;gap:2px;direction:rtl;width:150px;vertical-align:middle}
+.trk i{flex:1;height:8px;border-radius:2px;border:1.5px solid var(--line)}
+.trk i.d{background:var(--blue);border-color:var(--blue)}
+.trk i.c{background:var(--orange);border-color:var(--orange);height:10px;margin-top:-1px}
+.trk i.x{border:0;background:var(--panel-2);height:3px;margin-top:2.5px}
+.sw{display:inline-block;width:14px;height:8px;border-radius:2px;vertical-align:middle;margin-left:6px}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600;font-size:14.5px}
+details p{margin:8px 0 2px;color:var(--ink-2);font-size:14px}
+dl.g{display:grid;grid-template-columns:150px 1fr;gap:0;margin:12px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+dl.g dt,dl.g dd{padding:9px 14px;border-bottom:1px solid var(--line);margin:0}
+dl.g dt{font-weight:600;background:var(--panel-2)}
+dl.g dd{font-size:14px;color:var(--ink-2)}
+dl.g dt:last-of-type,dl.g dd:last-of-type{border-bottom:0}
+footer{text-align:center;color:var(--muted);font-size:12.5px;padding:10px 16px 30px}
+@media (max-width:900px){
+ .wrap{grid-template-columns:minmax(0,1fr);gap:0;padding:0 16px 10px}
+ .top{position:static}
+ nav.toc{position:sticky;top:0;z-index:5;max-height:none;overflow-x:auto;overflow-y:hidden;background:var(--page);margin:0 -16px;padding:10px 16px;border-bottom:1px solid var(--line);scrollbar-width:none}
+ .toc h2{display:none}
+ .toc ol{display:flex;gap:6px;border:0;width:max-content}
+ .toc a{border:1px solid var(--line);border-radius:999px;padding:3px 12px;margin:0;background:var(--panel);white-space:nowrap;font-size:13px}
+ .toc a.on{border-color:var(--blue);background:var(--accent-soft)}
+ article{padding-top:20px}
+ section{scroll-margin-top:64px}
+ .cards{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:620px){
+ body{font-size:14.5px}
+ .top{padding:10px 16px}
+ .top .t span{display:none}
+ h1{font-size:22px}
+ h2.s{font-size:18.5px}
+ dl.g{grid-template-columns:minmax(0,1fr)}
+ dl.g dt{border-bottom:0}
+}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="t"><b>راهنمای داشبورد سفارش و مراحل تولید</b><span>کارگاه نمونه</span></div>
+ <div class="actions">
+  <a class="btn primary" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>بازگشت به داشبورد</a>
+  <a class="btn" href="../../en/production/guide.html" lang="en" hreflang="en">English</a><button class="btn" id="themeBtn" type="button"></button>
+ </div>
+</header>
+
+<div class="wrap">
+ <nav class="toc" aria-label="فهرست مطالب">
+  <h2>فهرست مطالب</h2>
+  <ol>
+   <li><a href="#glance">در یک نگاه</a></li>
+   <li><a href="#quick">شروع سریع</a></li>
+   <li><a href="#g-kpis">شاخص‌های اصلی</a></li>
+   <li><a href="#g-insights">یافته‌های مهم</a></li>
+   <li><a href="#g-volume">حجم سفارش ماهانه</a></li>
+   <li><a href="#g-flow">سفارش‌ها در هر مرحله</a></li>
+   <li><a href="#g-stagetime">روزهای هر مرحله</a></li>
+   <li><a href="#g-ontime">تحویل به‌موقع</a></li>
+   <li><a href="#g-leadtime">زمان تحویل</a></li>
+   <li><a href="#g-payment">پرداخت و مجوز استثنا</a></li>
+   <li><a href="#g-orders">فهرست سفارش‌ها</a></li>
+   <li><a href="#g-filters">فیلترها</a></li>
+   <li><a href="#faq">پرسش‌های رایج</a></li>
+   <li><a href="#glossary">واژه‌نامه</a></li>
+  </ol>
+ </nav>
+
+ <article>
+  <section id="glance">
+   <h1>داشبورد سفارش و مراحل تولید</h1>
+   <p class="lead">این داشبورد نشان می‌دهد هر سفارش کارگاه کجای خط تولید است، کدام مرحله کار را کند کرده، کدام سفارش‌ها از موعد عقب افتاده‌اند و چه مقدار از پول سفارش‌ها هنوز وصول نشده است.</p>
+   <figure><img src="shots/overview.png" alt="نمای کلی داشبورد سفارش و مراحل تولید" loading="lazy"><figcaption>نمای کلی داشبورد: فیلترها در سمت راست، شاخص‌ها در بالا و یافته‌ها و نمودارها در ادامه</figcaption></figure>
+   <p>هر سفارش از ثبت پیش‌فاکتور شروع می‌شود و تا ده مرحله را به ترتیب طی می‌کند: <b>برش لیزر، خم، فورج، جوش، تمیزکاری، رنگ، مونتاژ، بسته‌بندی، تسویه و ارسال</b>. سفارش‌های خدماتی (مثلاً فقط برش ورقِ خود مشتری) فقط بخشی از این مراحل را لازم دارند. پس از تسویه یا صدور «مجوز استثنا»، سفارش تأیید نهایی <b>«آمادهٔ ارسال»</b> می‌گیرد.</p>
+   <p>داده‌ها مربوط به سال ۱۴۰۴ است و وضعیت‌ها تا <b>۲۰ اسفند ۱۴۰۴</b> محاسبه شده‌اند. در مجموع <span class="v" data-v="total"></span> سفارش به ارزش <span class="v" data-v="totalValue"></span> ثبت شده است.</p>
+   <div class="cards">
+    <div class="card"><b>مدیر کارگاه</b><p>کدام مرحله گلوگاه است و صف کار کجا جمع شده؟</p></div>
+    <div class="card"><b>مدیر فروش</b><p>کدام سفارش‌ها از موعدی که به مشتری قول داده‌ایم عقب‌اند؟</p></div>
+    <div class="card"><b>مدیر مالی</b><p>چه مقدار طلب داریم، از چه کسانی، و چند سفارش بدون تسویه ارسال شده؟</p></div>
+   </div>
+  </section>
+
+  <section id="quick">
+   <h2 class="s">شروع سریع</h2>
+   <ol class="steps">
+    <li><b>شاخص‌ها و یافته‌ها را بخوانید.</b> ردیف کارت‌های بالا وضعیت امروز را می‌گوید و کادر «یافته‌های مهم» مهم‌ترین مشکلات را با عدد و نام بیان می‌کند.</li>
+    <li><b>با فیلترها دامنه را کوچک کنید.</b> مثلاً مشتری «<span data-v="exCust"></span>» را انتخاب کنید تا همهٔ نمودارها فقط سفارش‌های او را نشان دهند.</li>
+    <li><b>روی سفارش‌ها کلیک کنید.</b> در «فهرست سفارش‌ها» با کلیک روی هر ردیف، تاریخچهٔ کامل مراحل آن سفارش در پنل کناری باز می‌شود.</li>
+   </ol>
+   <p>نشانگر موس را روی هر میله، نقطه یا ردیف نمودار نگه دارید تا جزئیات آن در یک کادر کوچک نمایش داده شود. در گوشی، روی آن بزنید.</p>
+  </section>
+
+  <section id="g-kpis">
+   <h2 class="s">شاخص‌های اصلی <a class="go" href="index.html#kpis">مشاهده در داشبورد ←</a></h2>
+   <figure><img src="shots/kpis.png" alt="کارت‌های شاخص اصلی" loading="lazy"><figcaption>شش کارت شاخص؛ زیر هر عدد، تغییر آن نسبت به ۳۰ روز پیش آمده است</figcaption></figure>
+   <h3>چه چیزی را نشان می‌دهد؟</h3>
+   <ul class="l">
+    <li><b>سفارش‌های باز:</b> سفارش‌هایی که هنوز ارسال نشده‌اند.</li>
+    <li><b>در حال تولید:</b> سفارش‌هایی که در یکی از هشت مرحلهٔ تولیدی (برش تا بسته‌بندی) هستند.</li>
+    <li><b>آمادهٔ ارسال:</b> تأیید نهایی گرفته‌اند و فقط منتظر حمل‌اند.</li>
+    <li><b>عقب از موعد تحویل:</b> سفارش‌های بازی که تاریخ موعدشان گذشته است.</li>
+    <li><b>مطالبات سررسیدشده:</b> ماندهٔ پول سفارش‌هایی که به مرحلهٔ تسویه رسیده‌اند ولی کامل پرداخت نشده‌اند.</li>
+    <li><b>ارسال با مجوز استثنا:</b> تعداد سفارش‌هایی که بدون تسویهٔ کامل و با تأیید مدیر ارسال شده‌اند.</li>
+   </ul>
+   <h3>چطور بخوانیم؟</h3>
+   <p>علامت ▲ یعنی عدد نسبت به ۳۰ روز پیش بیشتر شده و ▼ یعنی کمتر. رنگ سبز یعنی تغییر به نفع کارگاه است و قرمز یعنی باید پیگیری شود؛ مثلاً بیشتر شدن «آمادهٔ ارسال» سبز است ولی بیشتر شدن «عقب از موعد» قرمز. برای «در حال تولید» خوب یا بد بودن تغییر روشن نیست، پس خاکستری نمایش داده می‌شود.</p>
+   <div class="ex"><b class="h">مثال با اعداد همین داشبورد</b>
+    الان <span class="v" data-v="open"></span> سفارش باز داریم (۳۰ روز پیش <span class="v" data-v="openPrev"></span> سفارش بود). <span class="v" data-v="prod"></span> سفارش در حال تولید، <span class="v" data-v="settle"></span> سفارش در انتظار تسویه و <span class="v" data-v="ready"></span> سفارش آمادهٔ ارسال است. <span class="v" data-v="overdue"></span> سفارش (<span class="v" data-v="overduePct"></span> سفارش‌های باز) از موعد گذشته‌اند. مطالبات سررسیدشده <span class="v" data-v="dueBal"></span> است و از ابتدای سال <span class="v" data-v="permits"></span> سفارش با مجوز استثنا ارسال شده که <span class="v" data-v="permits30"></span> مورد آن در ۳۰ روز اخیر بوده است.</div>
+   <div class="q"><b>این بخش به چه سؤالی جواب می‌دهد؟</b>«امروز کارگاه در چه وضعیتی است و نسبت به یک ماه پیش بهتر شده‌ایم یا بدتر؟»</div>
+  </section>
+
+  <section id="g-insights">
+   <h2 class="s">یافته‌های مهم <a class="go" href="index.html#insights">مشاهده در داشبورد ←</a></h2>
+   <figure class="narrow"><img src="shots/insights.png" alt="کادر یافته‌های مهم" loading="lazy" style="max-width:560px"><figcaption>یافته‌ها با هر تغییر فیلتر دوباره محاسبه می‌شوند</figcaption></figure>
+   <p>این کادر به‌جای شما نمودارها را مرور می‌کند و حداکثر پنج نکتهٔ مهم را به زبان ساده می‌نویسد. رنگ نشانهٔ هر نکته شدت آن را نشان می‌دهد: قرمز برای مشکل جدی، نارنجی برای هشدار و سبز برای خبر خوب. پیوند «مشاهده» شما را به نمودار مربوط می‌برد.</p>
+   <div class="ex"><b class="h">مثال با اعداد همین داشبورد</b>
+    مهم‌ترین یافته این است که مرحلهٔ <span class="v" data-v="bName"></span> گلوگاه کارگاه است: میانگین ماندن در آن <span class="v" data-v="bAvg"></span> روز است، یعنی <span class="v" data-v="bRatio"></span> برابر بقیهٔ مراحل. یافتهٔ دیگر این‌که سفارش‌های بزرگ (بالای ۵۰۰ میلیون تومان) فقط <span class="v" data-v="bigRate"></span> به‌موقع تحویل شده‌اند، در برابر <span class="v" data-v="smallRate"></span> برای سفارش‌های کوچک‌تر.</div>
+   <div class="q"><b>این بخش به چه سؤالی جواب می‌دهد؟</b>«اگر فقط یک دقیقه وقت دارم، به چه چیزی باید توجه کنم؟»</div>
+  </section>
+
+  <section id="g-volume">
+   <h2 class="s">حجم سفارش ماهانه <a class="go" href="index.html#volume">مشاهده در داشبورد ←</a></h2>
+   <figure class="narrow"><img src="shots/volume.png" alt="نمودار حجم سفارش ماهانه" loading="lazy" style="max-width:560px"><figcaption>ستون‌های انباشته: بخش تیره سفارش‌های تولیدی و بخش روشن سفارش‌های خدماتی</figcaption></figure>
+   <p>هر ستون یک ماه است و ماه‌ها از راست به چپ (فروردین در سمت راست) چیده شده‌اند. ارتفاع کل ستون تعداد سفارش‌های ثبت‌شده در آن ماه است و عدد بالای ستون همین تعداد را نشان می‌دهد. اگر فیلتر ماه را انتخاب کنید، نمودار همهٔ سال را نگه می‌دارد و فقط ماه انتخابی را پررنگ می‌کند تا مقایسه از دست نرود.</p>
+   <div class="ex"><b class="h">مثال با اعداد همین داشبورد</b>
+    <span class="v" data-v="volHi"></span> با <span class="v" data-v="volHiN"></span> سفارش (به ارزش <span class="v" data-v="volHiVal"></span>) پرکارترین ماه بوده و <span class="v" data-v="volLo"></span> با <span class="v" data-v="volLoN"></span> سفارش کم‌کارترین؛ الگوی آشنای بازار که پیش از نوروز شلوغ و بعد از تعطیلات آرام می‌شود.</div>
+   <div class="q"><b>این بخش به چه سؤالی جواب می‌دهد؟</b>«بار کاری کارگاه در کدام ماه‌ها بالا می‌رود و برای کدام فصل باید ظرفیت آماده کنیم؟»</div>
+  </section>
+
+  <section id="g-flow">
+   <h2 class="s">سفارش‌های باز در هر مرحله <a class="go" href="index.html#flow">مشاهده در داشبورد ←</a></h2>
+   <figure class="narrow"><img src="shots/flow.png" alt="نمودار سفارش‌های باز در هر مرحله" loading="lazy" style="max-width:560px"><figcaption>ده مرحله به ترتیب خط تولید؛ ردیف رنگی، گلوگاه کارگاه است</figcaption></figure>
+   <p>هر ردیف یکی از ده مرحله است و طول میله تعداد سفارش‌های بازی است که <b>همین الان</b> در آن مرحله‌اند. میله به سه رنگ تقسیم شده: آبی برای سفارش‌های «در مسیر»، نارنجی برای «در خطر تأخیر» و قرمز برای «گذشته از موعد». ردیفی که پس‌زمینهٔ کرم‌رنگ دارد مرحلهٔ گلوگاه است (بر اساس نمودار بعدی).</p>
+   <div class="ex"><b class="h">مثال با اعداد همین داشبورد</b>
+    از <span class="v" data-v="open"></span> سفارش باز، <span class="v" data-v="flowMaxN"></span> سفارش (<span class="v" data-v="flowMaxPct"></span>) در مرحلهٔ <span class="v" data-v="flowMax"></span> منتظرند؛ بیشترین صف کارگاه. <span class="v" data-v="flowMaxLate"></span> سفارش از این صف هم‌اکنون از موعد گذشته و <span class="v" data-v="flowMaxRisk"></span> سفارش در خطر تأخیر است.</div>
+   <div class="q"><b>این بخش به چه سؤالی جواب می‌دهد؟</b>«کار الان کجا گیر کرده است و نیروی کمکی را به کدام ایستگاه بفرستیم؟»</div>
+  </section>
+
+  <section id="g-stagetime">
+   <h2 class="s">میانگین روزهای ماندن در هر مرحله <a class="go" href="index.html#stagetime">مشاهده در داشبورد ←</a></h2>
+   <figure class="narrow"><img src="shots/stagetime.png" alt="نمودار میانگین روزهای هر مرحله" loading="lazy" style="max-width:560px"><figcaption>میلهٔ روشن نیمهٔ اول سال و میلهٔ تیره نیمهٔ دوم سال</figcaption></figure>
+   <p>برای هر مرحلهٔ تولیدی، میانگین تعداد روزهایی که سفارش‌ها در آن ماندند (از ورود تا خروج) نشان داده شده است. هر مرحله دو میله دارد تا ببینید وضعیت در نیمهٔ دوم سال بهتر شده یا بدتر. مرحله‌ای که بیشترین میانگین را دارد «گلوگاه» نام گرفته است. تسویه و ارسال در این نمودار نیامده‌اند، چون زمانشان به پرداخت مشتری و حمل‌ونقل بستگی دارد نه ظرفیت کارگاه.</p>
+   <div class="ex"><b class="h">مثال با اعداد همین داشبورد</b>
+    میانگین ماندن در مرحلهٔ <span class="v" data-v="bName"></span> <span class="v" data-v="bAvg"></span> روز است، در حالی که میانگین بقیهٔ مراحل <span class="v" data-v="othersAvg"></span> روز است. این عدد از <span class="v" data-v="bH1"></span> روز در نیمهٔ اول سال به <span class="v" data-v="bH2"></span> روز در نیمهٔ دوم رسیده؛ یعنی با بالا رفتن حجم کار، ظرفیت کابین رنگ جواب نمی‌دهد. بقیهٔ مراحل در دو نیمهٔ سال تقریباً ثابت مانده‌اند.</div>
+   <div class="q"><b>این بخش به چه سؤالی جواب می‌دهد؟</b>«کدام مرحله کندترین است و آیا با گذشت زمان کندتر شده است؟»</div>
+  </section>
+
+  <section id="g-ontime">
+   <h2 class="s">روند تحویل به‌موقع <a class="go" href="index.html#ontime">مشاهده در داشبورد ←</a></h2>
+   <figure class="narrow"><img src="shots/ontime.png" alt="نمودار روند تحویل به‌موقع" loading="lazy" style="max-width:560px"><figcaption>خط‌چین، هدف ۸۵ درصدی است؛ نقطه‌های نارنجی ماه‌های زیر هدف‌اند</figcaption></figure>
+   <p>برای هر ماه، سفارش‌هایی که موعد تحویلشان در آن ماه بوده در نظر گرفته می‌شوند و درصدی که تا آن موعد ارسال شده‌اند روی خط نشان داده می‌شود. ماه‌ها از راست به چپ‌اند. چون محور این نمودار «ماه موعد» است و نه «ماه ثبت»، فیلتر ماه روی آن اعمال نمی‌شود.</p>
+   <div class="ex"><b class="h">مثال با اعداد همین داشبورد</b>
+    نرخ تحویل به‌موقع در شش ماه اول سال <span class="v" data-v="otH1"></span> بود و در شش ماه دوم به <span class="v" data-v="otH2"></span> رسیده است. پایین‌ترین ماه <span class="v" data-v="otMinM"></span> با <span class="v" data-v="otMin"></span> است. این افت هم‌زمان با کند شدن مرحلهٔ <span class="v" data-v="bName"></span> و شلوغی پیش از نوروز رخ داده است.</div>
+   <div class="q"><b>این بخش به چه سؤالی جواب می‌دهد؟</b>«به قول‌هایی که به مشتری می‌دهیم چقدر عمل می‌کنیم و این وضعیت رو به بهبود است یا بدتر شدن؟»</div>
+  </section>
+
+  <section id="g-leadtime">
+   <h2 class="s">توزیع زمان تحویل <a class="go" href="index.html#leadtime">مشاهده در داشبورد ←</a></h2>
+   <figure class="narrow"><img src="shots/leadtime.png" alt="نمودار توزیع زمان تحویل" loading="lazy" style="max-width:560px"><figcaption>هر ستون یک بازهٔ زمانی است، از کوتاه‌ترین (راست) تا طولانی‌ترین (چپ)</figcaption></figure>
+   <p>برای سفارش‌های ارسال‌شده، تعداد روزهای بین ثبت سفارش و ارسال حساب شده و سفارش‌ها در بازه‌های زمانی دسته‌بندی شده‌اند. بخش تیرهٔ هر ستون سفارش‌های تولیدی و بخش روشن سفارش‌های خدماتی است. هرچه ستون‌ها به سمت چپ کشیده‌تر باشند، مشتری مدت بیشتری منتظر مانده است.</p>
+   <div class="ex"><b class="h">مثال با اعداد همین داشبورد</b>
+    میانهٔ زمان تحویل برای سفارش‌های تولیدی <span class="v" data-v="leadProd"></span> روز و برای سفارش‌های خدماتی <span class="v" data-v="leadServ"></span> روز است. <span class="v" data-v="leadLong"></span> سفارش بیش از شش هفته طول کشیده‌اند.</div>
+   <div class="q"><b>این بخش به چه سؤالی جواب می‌دهد؟</b>«به مشتری جدید برای سفارش تولیدی یا خدماتی چند روز زمان تحویل اعلام کنیم؟»</div>
+  </section>
+
+  <section id="g-payment">
+   <h2 class="s">وضعیت پرداخت و مجوزهای استثنا <a class="go" href="index.html#payment">مشاهده در داشبورد ←</a></h2>
+   <figure><img src="shots/payment.png" alt="بخش وضعیت پرداخت و مجوزهای استثنا" loading="lazy"><figcaption>سه ستون: وضعیت پرداخت، تمرکز مطالبات و مجوزهای استثنا</figcaption></figure>
+   <h3>چه چیزی را نشان می‌دهد؟</h3>
+   <ul class="l">
+    <li><b>وضعیت پرداخت:</b> نوار رنگی سهم سفارش‌های <span class="badge b-green">تسویه‌شده</span>، <span class="badge b-red">پرداخت‌نشده</span> و <span class="badge b-orange">مجوز استثنا</span> را نشان می‌دهد و زیر آن تعداد و مبلغ هر گروه آمده است.</li>
+    <li><b>تمرکز مطالبات سررسیدشده:</b> مشتری‌هایی که بیشترین طلب سررسیدشده را دارند، با مبلغ و سهم هر کدام. سه مشتری اول قرمز هستند.</li>
+    <li><b>مجوزهای استثنا:</b> تعداد مجوزهای صادرشده در هر ماه (سه ماه آخر سال نارنجی) و آخرین مجوزها همراه با دلیل، تاریخ و تأییدکننده.</li>
+   </ul>
+   <div class="ex"><b class="h">مثال با اعداد همین داشبورد</b>
+    <span class="v" data-v="payPaidN"></span> سفارش تسویه شده‌اند. <span class="v" data-v="payUnN"></span> سفارش هنوز پرداخت‌نشده‌اند (مانده <span class="v" data-v="payUnAmt"></span>) که البته بیشترشان هنوز در تولیدند و پرداختشان سررسید نشده است. <span class="v" data-v="payExN"></span> سفارش با مجوز استثنا ارسال شده‌اند و <span class="v" data-v="payExAmt"></span> از پولشان هنوز وصول نشده است.<br>
+    از <span class="v" data-v="dueTotal"></span> مطالبهٔ سررسیدشده، <span class="v" data-v="top3"></span> نزد سه مشتری است و بیشترین سهم را <span class="v" data-v="conc1"></span> با <span class="v" data-v="conc1Amt"></span> دارد.<br>
+    در دی تا اسفند <span class="v" data-v="permQ4"></span> مجوز استثنا صادر شده، در حالی که در فروردین تا خرداد <span class="v" data-v="permQ1"></span> مجوز صادر شده بود. رایج‌ترین دلیل: «<span data-v="permReason"></span>».</div>
+   <p>فیلتر «وضعیت پرداخت» روی این بخش اعمال نمی‌شود تا همیشه تصویر کامل پرداخت‌ها را ببینید؛ نمودار ماهانهٔ مجوزها هم همیشه کل سال را نشان می‌دهد.</p>
+   <div class="q"><b>این بخش به چه سؤالی جواب می‌دهد؟</b>«چه مقدار پول در دست مشتری‌هاست، پیگیری را از کدام مشتری شروع کنیم، و آیا در دادن مجوز استثنا زیاده‌روی کرده‌ایم؟»</div>
+  </section>
+
+  <section id="g-orders">
+   <h2 class="s">فهرست سفارش‌ها و پنل جزئیات <a class="go" href="index.html#orders">مشاهده در داشبورد ←</a></h2>
+   <figure><img src="shots/orders.png" alt="جدول فهرست سفارش‌ها" loading="lazy"><figcaption>هر ردیف یک سفارش؛ ستون «مراحل تولید» پیشرفت ده‌مرحله‌ای را نشان می‌دهد</figcaption></figure>
+   <h3>چطور بخوانیم؟</h3>
+   <p><b>نوار مراحل:</b> ده خانهٔ کوچک، به ترتیب از راست (برش لیزر) تا چپ (ارسال):</p>
+   <ul class="l">
+    <li><span class="trk"><i class="d"></i><i class="d"></i><i class="x"></i><i class="d"></i><i class="c"></i><i></i><i></i><i></i><i></i><i></i></span><br>آبی = مرحلهٔ انجام‌شده، نارنجی = مرحلهٔ فعلی، خانهٔ خالی = مرحلهٔ باقی‌مانده، خط کم‌رنگ = مرحله‌ای که این سفارش لازم ندارد.</li>
+    <li><b>موعد تحویل:</b> <span class="badge b-green">در مسیر</span> <span class="badge b-orange">در خطر تأخیر</span> <span class="badge b-red">۸ روز تأخیر</span> <span class="badge b-grey">به‌موقع ارسال شد</span></li>
+    <li><b>پرداخت:</b> <span class="badge b-green">تسویه‌شده</span> <span class="badge b-grey">پیش‌پرداخت</span> (هنوز به تسویه نرسیده) <span class="badge b-red">پرداخت‌نشده</span> (به تسویه رسیده ولی پول نیامده) <span class="badge b-orange">مجوز استثنا</span></li>
+   </ul>
+   <p>با کلیک روی عنوان هر ستون جدول مرتب می‌شود (کلیک دوباره ترتیب را برعکس می‌کند). ترتیب پیش‌فرض «فوریت موعد» است: اول سفارش‌های دیرکرده، بعد سفارش‌های در خطر. در کادر جست‌وجو می‌توانید شمارهٔ پیش‌فاکتور، نام مشتری، محصول، رنگ یا نام مرحله را بنویسید. دکمه‌های «باز / ارسال‌شده / همه» دامنهٔ جدول را تعیین می‌کنند. در گوشی، جدول به شکل کارت نمایش داده می‌شود و مرتب‌سازی از فهرست بالای آن انجام می‌شود.</p>
+   <figure class="narrow"><img src="shots/drawer.png" alt="پنل جزئیات سفارش" loading="lazy"><figcaption>پنل جزئیات: مشخصات سفارش و تاریخ ورود و خروج هر مرحله</figcaption></figure>
+   <div class="ex"><b class="h">مثال با اعداد همین داشبورد</b>
+    دیرکردترین سفارش باز، <span class="mono" data-v="worstId"></span> برای <span class="v" data-v="worstCust"></span> است: <span class="v" data-v="worstProd"></span> به ارزش <span class="v" data-v="worstTotal"></span> که <span class="v" data-v="worstDays"></span> روز از موعد گذشته و در مرحلهٔ <span class="v" data-v="worstStage"></span> مانده است. <span data-v="worstNote"></span></div>
+   <div class="q"><b>این بخش به چه سؤالی جواب می‌دهد؟</b>«سفارش فلان مشتری الان کجاست، از کی آن‌جاست و چرا دیر شده است؟»</div>
+  </section>
+
+  <section id="g-filters">
+   <h2 class="s">فیلترها <a class="go" href="index.html#filters">مشاهده در داشبورد ←</a></h2>
+   <figure class="narrow"><img src="shots/filters.png" alt="ستون فیلترها" loading="lazy" style="max-width:270px"><figcaption>ستون فیلترها؛ در گوشی با دکمهٔ «فیلترها» باز و بسته می‌شود</figcaption></figure>
+   <ul class="l">
+    <li><b>ماه ثبت سفارش:</b> فقط سفارش‌هایی که در آن ماه ثبت شده‌اند.</li>
+    <li><b>مشتری:</b> یک مشتری مشخص، یا همهٔ مشتریان <span class="vz">حقیقی</span> یا همهٔ مشتریان <span class="vz">حقوقی</span>.</li>
+    <li><b>نوع سفارش:</b> تولیدی (ساخت محصول کامل) یا خدماتی (انجام یک یا چند مرحله روی جنس مشتری).</li>
+    <li><b>وضعیت پرداخت:</b> تسویه‌شده، پرداخت‌نشده یا مجوز استثنا.</li>
+   </ul>
+   <p>دکمهٔ «پاک کردن همه» همهٔ فیلترها را برمی‌دارد. فیلترهای انتخابی در نشانی صفحه ذخیره می‌شوند، پس می‌توانید نشانی را برای همکارتان بفرستید تا دقیقاً همین نما را ببیند.</p>
+   <div class="tw"><table>
+    <thead><tr><th>بخش داشبورد</th><th>ماه ثبت</th><th>مشتری</th><th>نوع سفارش</th><th>وضعیت پرداخت</th></tr></thead>
+    <tbody>
+     <tr><td>شاخص‌های اصلی</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+     <tr><td>یافته‌های مهم</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+     <tr><td>حجم سفارش ماهانه</td><td class="c h">فقط برجسته‌سازی</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+     <tr><td>سفارش‌های باز در هر مرحله</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+     <tr><td>روزهای ماندن در هر مرحله</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+     <tr><td>روند تحویل به‌موقع</td><td class="c n">✗</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+     <tr><td>توزیع زمان تحویل</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+     <tr><td>وضعیت پرداخت و تمرکز مطالبات</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td><td class="c n">✗</td></tr>
+     <tr><td>نمودار ماهانهٔ مجوزهای استثنا</td><td class="c n">✗</td><td class="c y">✓</td><td class="c y">✓</td><td class="c n">✗</td></tr>
+     <tr><td>فهرست سفارش‌ها</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+    </tbody></table></div>
+   <div class="ex"><b class="h">مثال با اعداد همین داشبورد</b>
+    اگر مشتری «<span data-v="exCust"></span>» را انتخاب کنید، می‌بینید که او <span class="v" data-v="exN"></span> سفارش در سال داشته، <span class="v" data-v="exOpen"></span> سفارش او هنوز باز است و <span class="v" data-v="exDue"></span> مطالبهٔ سررسیدشده از او داریم؛ <span class="v" data-v="exPermits"></span> سفارش او هم با مجوز استثنا ارسال شده است.</div>
+   <div class="q"><b>این بخش به چه سؤالی جواب می‌دهد؟</b>«وضعیت یک مشتری، یک ماه یا یک نوع سفارش به‌تنهایی چگونه است؟»</div>
+  </section>
+
+  <section id="faq">
+   <h2 class="s">پرسش‌های رایج</h2>
+   <details open><summary>«عقب از موعد» با «در خطر تأخیر» چه فرقی دارد؟</summary><p>«عقب از موعد» یعنی تاریخ موعد گذشته و سفارش هنوز ارسال نشده است. «در خطر تأخیر» یعنی موعد هنوز نرسیده، ولی اگر مراحل باقی‌مانده با سرعت معمول انجام شوند، سفارش بعد از موعد آماده می‌شود. سفارش‌های در خطر بهترین فرصت برای جلوگیری از تأخیرند.</p></details>
+   <details><summary>«مطالبات سررسیدشده» با کل ماندهٔ سفارش‌ها چه فرقی دارد؟</summary><p>مشتری معمولاً بخشی از مبلغ را هنگام ثبت سفارش می‌پردازد و بقیه را پیش از ارسال. ماندهٔ سفارش‌هایی که هنوز در تولیدند طبیعی است و سررسید نشده. «مطالبات سررسیدشده» فقط ماندهٔ سفارش‌هایی را می‌شمارد که به مرحلهٔ تسویه رسیده‌اند یا با مجوز استثنا ارسال شده‌اند؛ یعنی پولی که باید تا الان وصول می‌شد.</p></details>
+   <details><summary>مقایسهٔ «نسبت به ۳۰ روز پیش» چطور حساب می‌شود؟</summary><p>همین شاخص برای ۳۰ روز پیش (۲۰ بهمن) و با همین فیلترها دوباره حساب می‌شود و اختلاف دو عدد نمایش داده می‌شود. برای مجوزهای استثنا، عدد مقایسه تعداد مجوزهای صادرشده در ۳۰ روز اخیر است.</p></details>
+   <details><summary>گلوگاه چطور تعیین می‌شود و چرا تسویه در آن حساب نمی‌شود؟</summary><p>از میان هشت مرحلهٔ تولیدی، مرحله‌ای که میانگین روزهای ماندن در آن بیشتر است گلوگاه نامیده می‌شود. زمان تسویه به پرداخت مشتری و زمان ارسال به حمل‌ونقل وابسته است و با افزایش نیرو یا دستگاه در کارگاه کوتاه نمی‌شود، برای همین جداگانه در بخش پرداخت بررسی می‌شود.</p></details>
+   <details><summary>چرا روند تحویل به‌موقع با فیلتر ماه تغییر نمی‌کند؟</summary><p>محور این نمودار ماه موعد تحویل است، نه ماه ثبت سفارش. اگر فیلتر ماه ثبت روی آن اعمال می‌شد، روند سال از هم می‌پاشید و نمی‌شد ماه‌ها را با هم مقایسه کرد.</p></details>
+   <details><summary>داده‌های داشبورد از کجا می‌آیند؟</summary><p>داده‌ها از فهرست پیش‌فاکتورها، ثبت ورود و خروج هر ایستگاه کاری و دفتر دریافت‌ها خوانده می‌شوند و داشبورد به‌طور خودکار به‌روز می‌شود.</p></details>
+  </section>
+
+  <section id="glossary">
+   <h2 class="s">واژه‌نامه</h2>
+   <dl class="g">
+    <dt>پیش‌فاکتور</dt><dd>سندی که پیش از شروع کار برای مشتری صادر می‌شود و شمارهٔ آن (مثل <span class="mono">PI-04-0646</span>) شناسهٔ سفارش در کل داشبورد است.</dd>
+    <dt>سفارش تولیدی</dt><dd>ساخت کامل یک محصول، مثل قفسه، درب یا بدنهٔ تابلو برق، که معمولاً بیشتر مراحل را طی می‌کند.</dd>
+    <dt>سفارش خدماتی</dt><dd>انجام یک یا چند مرحله روی جنس خود مشتری، مثل برش لیزر ورق یا رنگ پودری قطعات.</dd>
+    <dt>مرحلهٔ فعلی</dt><dd>مرحله‌ای که سفارش در تاریخ گزارش در آن قرار دارد.</dd>
+    <dt>گلوگاه</dt><dd>کندترین مرحلهٔ تولید که سرعت کل کارگاه را تعیین می‌کند.</dd>
+    <dt>موعد تحویل</dt><dd>تاریخی که هنگام ثبت سفارش به مشتری قول داده شده است.</dd>
+    <dt>تسویه</dt><dd>مرحلهٔ دریافت ماندهٔ پول پیش از ارسال.</dd>
+    <dt>مجوز استثنا</dt><dd>تأیید مدیر برای ارسال سفارش بدون تسویهٔ کامل، همراه با ثبت دلیل.</dd>
+    <dt>آمادهٔ ارسال</dt><dd>تأیید نهایی پس از تسویه یا مجوز استثنا؛ سفارش فقط منتظر حمل است.</dd>
+    <dt>مطالبات سررسیدشده</dt><dd>ماندهٔ پول سفارش‌هایی که به تسویه رسیده‌اند یا با مجوز استثنا ارسال شده‌اند.</dd>
+    <dt>زمان تحویل</dt><dd>تعداد روزهای بین ثبت سفارش و ارسال آن.</dd>
+    <dt>میانه</dt><dd>عدد وسط وقتی همهٔ مقدارها مرتب شوند؛ برخلاف میانگین، چند سفارش بسیار طولانی آن را بالا نمی‌برد.</dd>
+   </dl>
+  </section>
+ </article>
+</div>
+<footer>طراحی و ساخت: فاطمه منصوری · نمونه‌کار</footer>
+
+<script>
+/* ===== داده‌های ساختگی و محاسبات مشترک (عیناً در داشبورد و راهنما) ===== */
+const FA_MONTHS=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const MLEN=[31,31,31,31,31,31,30,30,30,30,30,29];
+const MSTART=[];(()=>{let c=1;for(const l of MLEN){MSTART.push(c);c+=l;}})();
+const YEAR_DAYS=365;
+const ASOF=MSTART[11]+19;               /* ۲۰ اسفند ۱۴۰۴ */
+const H2_START=MSTART[6];               /* اول مهر */
+const STAGES=['برش لیزر','خم','فورج','جوش','تمیزکاری','رنگ','مونتاژ','بسته‌بندی','تسویه','ارسال'];
+const PAINT=5,SETTLE=8,SHIP=9;
+const STD=[1.5,1.5,2,2.2,1.2,3,2,1,1,1.5];
+const PAY_LABEL={paid:'تسویه‌شده',unpaid:'پرداخت‌نشده',exception:'مجوز استثنا'};
+const OTYPE_LABEL={prod:'تولیدی',serv:'خدماتی'};
+
+function md(d){let y=1404;if(d>YEAR_DAYS){d-=YEAR_DAYS;y=1405;}let m=0;while(m<11&&d>=MSTART[m+1])m++;return{y,m,day:d-MSTART[m]+1};}
+const faNum=(n,f=0)=>Number(n).toLocaleString('fa-IR',{maximumFractionDigits:f,minimumFractionDigits:0});
+const faInt=n=>Math.round(n).toLocaleString('fa-IR');
+const faPct=(x,f=1)=>faNum(x*100,f)+'٪';
+const faYear=y=>y.toLocaleString('fa-IR',{useGrouping:false});
+function faDate(d,withYear){const t=md(d);return faInt(t.day)+' '+FA_MONTHS[t.m]+((withYear||t.y!==1404)?' '+faYear(t.y):'');}
+function moneyParts(t){if(Math.abs(t)>=1e9)return{v:faNum(t/1e9,Math.abs(t)>=1e10?1:2),u:'میلیارد تومان'};return{v:faInt(t/1e6),u:'میلیون تومان'};}
+function faMoney(t){const p=moneyParts(t);return p.v+' '+p.u;}
+
+const CUSTOMERS=[
+ {id:'c01',name:'شرکت ساختمانی کوهسار سپهر',kind:'حقوقی',w:2.4,prof:'bad',big:1.7},
+ {id:'c02',name:'پیمانکاری راه‌آوران شرق',kind:'حقوقی',w:1.6,prof:'bad',big:1.4},
+ {id:'c03',name:'تجهیزات برق آذرنور',kind:'حقوقی',w:2.5,prof:'good',big:1.1},
+ {id:'c04',name:'صنایع فلزی نوین‌پارت',kind:'حقوقی',w:2.0,prof:'good',big:1.0},
+ {id:'c05',name:'انبارسازی پویاترابر',kind:'حقوقی',w:2.0,prof:'slow',big:1.2},
+ {id:'c06',name:'فروشگاه‌های زنجیره‌ای دیباکالا',kind:'حقوقی',w:1.6,prof:'good',big:1.0},
+ {id:'c07',name:'تأسیسات آب‌گستر مینو',kind:'حقوقی',w:1.4,prof:'slow',big:1.0},
+ {id:'c08',name:'ماشین‌سازی پیشروصنعت',kind:'حقوقی',w:1.5,prof:'good',big:1.3},
+ {id:'c09',name:'مجتمع تجاری ارغوان',kind:'حقوقی',w:1.0,prof:'good',big:0.9},
+ {id:'c10',name:'دانش‌بنیان رادین‌تک',kind:'حقوقی',w:1.0,prof:'good',big:0.8},
+ {id:'c11',name:'ساختمانی بهسازان ری',kind:'حقوقی',w:1.2,prof:'slow',big:1.1},
+ {id:'c12',name:'حمل‌ونقل تیزروبار',kind:'حقوقی',w:0.8,prof:'good',big:0.9},
+ {id:'p01',name:'آقای حمید نوروزی',kind:'حقیقی',w:0.9,prof:'bad',big:0.9},
+ {id:'p02',name:'آقای مجید رحیمی',kind:'حقیقی',w:1.0,prof:'good',big:0.6},
+ {id:'p03',name:'خانم الهام صادقی',kind:'حقیقی',w:0.8,prof:'good',big:0.6},
+ {id:'p04',name:'آقای سعید کاظمی',kind:'حقیقی',w:1.0,prof:'slow',big:0.6},
+ {id:'p05',name:'آقای امیر حسینی',kind:'حقیقی',w:0.9,prof:'good',big:0.6},
+ {id:'p06',name:'خانم مریم اکبری',kind:'حقیقی',w:0.7,prof:'good',big:0.5},
+ {id:'p07',name:'آقای رضا مرادی',kind:'حقیقی',w:0.9,prof:'good',big:0.6},
+ {id:'p08',name:'آقای علی جعفری',kind:'حقیقی',w:0.8,prof:'slow',big:0.6},
+ {id:'p09',name:'آقای مهدی قاسمی',kind:'حقیقی',w:0.7,prof:'good',big:0.5},
+ {id:'p10',name:'خانم نرگس رضایی',kind:'حقیقی',w:0.6,prof:'good',big:0.5}
+];
+/* st: نیاز به ۸ مرحلهٔ تولیدی (برش، خم، فورج، جوش، تمیزکاری، رنگ، مونتاژ، بسته‌بندی) — تسویه و ارسال همیشه هست */
+const PRODUCTS={
+ prod:[
+  {n:'قفسهٔ فلزی انبار',u:'دستگاه',p:[4.5,7],q:[10,120],st:[1,1,0,1,1,1,1,1]},
+  {n:'درب ضدحریق',u:'لنگه',p:[18,28],q:[2,40],st:[1,1,0,1,1,1,1,1]},
+  {n:'بدنهٔ تابلو برق',u:'دستگاه',p:[9,15],q:[3,60],st:[1,1,0,1,1,1,1,1]},
+  {n:'شاسی دستگاه صنعتی',u:'دستگاه',p:[25,60],q:[1,12],st:[1,1,1,1,1,1,1,1]},
+  {n:'کابینت فلزی اداری',u:'دستگاه',p:[6,10],q:[5,80],st:[1,1,0,1,1,1,1,1]},
+  {n:'نردهٔ فرفورژه',u:'متر',p:[1.4,2.4],q:[30,400],st:[1,1,1,1,1,1,0,1]},
+  {n:'سینی کابل گالوانیزه',u:'شاخه',p:[0.6,1.1],q:[50,800],st:[1,1,0,0,0,0,0,1],galv:1},
+  {n:'براکت و اتصالات',u:'عدد',p:[0.08,0.25],q:[200,3000],st:[1,1,1,0,1,1,0,1]}
+ ],
+ serv:[
+  {n:'برش لیزر ورق مشتری',u:'ورق',p:[0.35,0.8],q:[10,300],st:[1,0,0,0,0,0,0,1],raw:1},
+  {n:'برش و خم ورق مشتری',u:'ورق',p:[0.6,1.2],q:[10,250],st:[1,1,0,0,0,0,0,1],raw:1},
+  {n:'رنگ پودری قطعات مشتری',u:'قطعه',p:[0.15,0.6],q:[40,900],st:[0,0,0,0,1,1,0,1]}
+ ]
+};
+const COLORS=['طوسی روشن RAL 7035','سفید RAL 9010','مشکی مات','کرم RAL 1015','آبی RAL 5015','سبز RAL 6005','قرمز RAL 3000'];
+const REASONS=['مشتری قدیمی با سابقهٔ خوش‌حسابی','چک مدت‌دار تحویل داده شد','پروژهٔ دولتی؛ پرداخت پس از تحویل','تعهد کتبی پرداخت تا ۳۰ روز','نیاز فوری مشتری برای افتتاح پروژه','مابه‌التفاوت جزئی؛ تسویه با سفارش بعدی'];
+
+function buildData(){
+ let s=1404;const rnd=()=>(s=s*16807%2147483647)/2147483647;
+ const ri=(a,b)=>a+Math.floor(rnd()*(b-a+1)),rf=(a,b)=>a+rnd()*(b-a),pick=a=>a[Math.floor(rnd()*a.length)];
+ const wpick=(arr)=>{const tot=arr.reduce((a,c)=>a+c.w,0);let r=rnd()*tot;for(const c of arr){r-=c.w;if(r<=0)return c;}return arr[arr.length-1];};
+ const WEIGHT=[0.55,0.85,0.95,1,0.95,1,1.05,1.1,1.1,1.2,1.4,1.55];
+ const cong=t=>t<150?rf(0,1):rf(0.5,1)*(1+(t-150)/28);
+ const orders=[];let seq=100;
+ for(let m=0;m<12;m++){
+  const span=m===11?(ASOF-MSTART[11]+1):MLEN[m];
+  const n=Math.round(30*WEIGHT[m]*span/MLEN[m]);
+  const days=[];for(let k=0;k<n;k++)days.push(MSTART[m]+ri(0,span-1));days.sort((a,b)=>a-b);
+  for(const d0 of days){
+   const cust=wpick(CUSTOMERS);
+   const otype=rnd()<(cust.kind==='حقیقی'?0.5:0.2)?'serv':'prod';
+   const prod=pick(PRODUCTS[otype]);
+   const rel=Math.pow(rnd(),1.8/cust.big);
+   const qty=Math.max(prod.q[0],Math.round((prod.q[0]+(prod.q[1]-prod.q[0])*rel)/(prod.q[1]>200?10:1))*(prod.q[1]>200?10:1));
+   const price=Math.round(rf(prod.p[0],prod.p[1])*1e6/1e4)*1e4;
+   const total=Math.round(qty*price/1e5)*1e5;
+   const sizeF=1+1.4*Math.pow(rel,1.3);
+   const promF=1+0.2*rel;
+   const req=prod.st.concat([1,1]).map(Boolean);
+   const color=prod.galv?'گالوانیزه (بدون رنگ)':(prod.raw?'—':pick(COLORS));
+   let lead=1.5;for(let i=0;i<10;i++)if(req[i])lead+=STD[i]*(i<8?(0.5+0.5*sizeF)*1.15:1);
+   lead=Math.ceil(lead+ri(4,7));
+   const due=d0+lead;
+   let deposit=Math.round(total*(cust.prof==='good'?rf(0.4,0.6):cust.prof==='slow'?rf(0.3,0.4):rf(0.2,0.3))/1e5)*1e5;
+   let payDay=null;
+   if(otype==='serv'&&rnd()<0.45){deposit=total;payDay=d0;}
+   else if(cust.prof==='good'&&rnd()<0.45)payDay=d0+ri(4,lead);
+   const hist=Array(10).fill(null);let cur=-1,shipDay=null,permit=null,rework=false;
+   let t=d0+Math.min(ri(1,3),ASOF-d0);
+   for(let i=0;i<10;i++){
+    if(!req[i])continue;
+    let dur;
+    if(i<8){
+     dur=i===PAINT?(2.2+rf(0,1.8))*(0.4+0.6*sizeF)+cong(t)*Math.sqrt(sizeF):STD[i]*rf(0.6,1.4)*sizeF;
+     dur=Math.max(1,Math.round(dur));
+     if(i===PAINT&&sizeF>1.6&&t>H2_START-20&&rnd()<0.55){dur+=ri(5,12);rework=true;}
+    }else if(i===SETTLE){
+     if(payDay==null){const ph=Math.pow(t/YEAR_DAYS,1.5);const lateP=cust.prof==='bad'?0.15+0.8*ph:cust.prof==='slow'?0.05+0.55*ph:0.03+0.2*ph;const pd=rnd()<lateP?(cust.prof==='bad'?ri(12,60):cust.prof==='slow'?ri(4,14):ri(4,8)):ri(0,2);payDay=t+pd;}
+     if(payDay<=t)dur=1;
+     else{
+      const wait=payDay-t;
+      const pEx=Math.min(0.9,0.03+0.95*Math.pow(t/YEAR_DAYS,2.5));
+      if(wait>2&&rnd()<pEx){dur=ri(1,2);permit={day:t+dur,reason:pick(REASONS),by:rnd()<0.6?'مدیر فروش':'مدیر کارخانه'};}
+      else dur=Math.max(1,wait);
+     }
+    }else dur=ri(1,4);
+    hist[i]={in:t,out:t+dur};
+    if(t+dur>ASOF){hist[i].out=null;cur=i;break;}
+    t+=dur;
+   }
+   if(cur===-1)shipDay=t;
+   const pay=(payDay!=null&&payDay<=ASOF)?'paid':permit?'exception':'unpaid';
+   seq+=ri(1,3);
+   orders.push({id:'PI-04-'+String(seq).padStart(4,'0'),d0,m,cust,otype,prod:prod.n,unit:prod.u,qty,price,total,color,req,due,rework,deposit,payDay,hist,cur,shipDay,permit,pay,sizeF,
+    remaining:pay==='paid'?0:total-deposit});
+  }
+ }
+ /* وضعیت موعد در تاریخ گزارش */
+ for(const o of orders){
+  if(o.shipDay!=null){o.dueState=o.shipDay<=o.due?'done_ok':'done_late';o.lateDays=Math.max(0,o.shipDay-o.due);}
+  else if(ASOF>o.due){o.dueState='late';o.lateDays=ASOF-o.due;}
+  else{
+   let est=0;for(let i=o.cur;i<10;i++){if(!o.req[i])continue;const b=i===PAINT?6.5:STD[i]*(i<8?o.sizeF:1);est+=i===o.cur?b*0.5:b;}
+   o.dueState=ASOF+est>o.due?'risk':'ok';o.lateDays=0;
+  }
+  o.reachedSettle=!!(o.hist[SETTLE]&&o.hist[SETTLE].in<=ASOF);
+  o.dueBal=o.reachedSettle?o.remaining:0;
+ }
+ return orders;
+}
+const ORDERS=buildData();
+
+function stateAt(o,T){
+ if(o.d0>T)return null;
+ if(o.shipDay!=null&&o.shipDay<=T)return 'done';
+ let st=-1;for(let i=0;i<10;i++){const h=o.hist[i];if(h&&h.in<=T)st=i;}
+ return st;
+}
+function snapshot(list,T){
+ const r={total:0,open:0,prod:0,settle:0,ready:0,overdue:0,dueBal:0,permits:0,done:0};
+ for(const o of list){
+  if(o.d0>T)continue;r.total++;
+  if(o.permit&&o.permit.day<=T)r.permits++;
+  if(o.hist[SETTLE]&&o.hist[SETTLE].in<=T&&!(o.payDay!=null&&o.payDay<=T))r.dueBal+=o.total-o.deposit;
+  const s=stateAt(o,T);
+  if(s==='done'){r.done++;continue;}
+  r.open++;if(s<=7)r.prod++;else if(s===SETTLE)r.settle++;else r.ready++;
+  if(T>o.due)r.overdue++;
+ }
+ return r;
+}
+const DEFAULT_F={month:-1,cust:'all',otype:'all',pay:'all'};
+function applyF(list,F,skip){
+ skip=skip||{};
+ return list.filter(o=>(skip.month||F.month<0||o.m===F.month)&&
+  (F.cust==='all'||(F.cust.startsWith('k:')?o.cust.kind===F.cust.slice(2):o.cust.id===F.cust))&&
+  (F.otype==='all'||o.otype===F.otype)&&
+  (skip.pay||F.pay==='all'||o.pay===F.pay));
+}
+const median=a=>{if(!a.length)return 0;const b=[...a].sort((x,y)=>x-y),k=b.length>>1;return b.length%2?b[k]:(b[k-1]+b[k])/2;};
+const LEAD_BINS=[[0,14,'۰ تا ۱۴'],[15,21,'۱۵ تا ۲۱'],[22,28,'۲۲ تا ۲۸'],[29,35,'۲۹ تا ۳۵'],[36,42,'۳۶ تا ۴۲'],[43,56,'۴۳ تا ۵۶'],[57,999,'۵۷ و بیشتر']];
+const BIG_ORDER=500e6;
+
+function compute(F){
+ const base=applyF(ORDERS,F),noMonth=applyF(ORDERS,F,{month:1}),noPay=applyF(ORDERS,F,{pay:1}),noMP=applyF(ORDERS,F,{month:1,pay:1});
+ const R={F,base,noMonth,noPay};
+ R.now=snapshot(base,ASOF);R.prev=snapshot(base,ASOF-30);
+ R.open=base.filter(o=>o.shipDay==null);
+ /* جریان مراحل */
+ R.flow=STAGES.map(()=>({ok:0,risk:0,late:0,n:0,value:0,orders:[]}));
+ for(const o of R.open){const f=R.flow[o.cur];f.n++;f.value+=o.total;f.orders.push(o);f[o.dueState==='late'?'late':o.dueState==='risk'?'risk':'ok']++;}
+ /* زمان هر مرحله */
+ R.stime=STAGES.map(()=>({sum:0,n:0,h1s:0,h1n:0,h2s:0,h2n:0,max:0}));
+ for(const o of base)for(let i=0;i<10;i++){const h=o.hist[i];if(!h||h.out==null)continue;const d=h.out-h.in,x=R.stime[i];x.sum+=d;x.n++;x.max=Math.max(x.max,d);if(h.in<H2_START){x.h1s+=d;x.h1n++;}else{x.h2s+=d;x.h2n++;}}
+ R.stime.forEach(x=>{x.avg=x.n?x.sum/x.n:0;x.h1=x.h1n?x.h1s/x.h1n:0;x.h2=x.h2n?x.h2s/x.h2n:0;});
+ let bi=-1;for(let i=0;i<8;i++)if(R.stime[i].n>=3&&(bi<0||R.stime[i].avg>R.stime[bi].avg))bi=i;R.bottleneck=bi;
+ const others=R.stime.slice(0,8).filter((x,i)=>i!==bi&&x.n>0);
+ R.othersAvg=others.length?others.reduce((a,x)=>a+x.sum,0)/others.reduce((a,x)=>a+x.n,0):0;
+ /* تحویل به‌موقع ماهانه (بر اساس ماه موعد) */
+ R.ontime=FA_MONTHS.map(()=>({n:0,ok:0}));
+ for(const o of noMonth){if(o.due>ASOF||o.due>YEAR_DAYS)continue;const x=R.ontime[md(o.due).m];x.n++;if(o.shipDay!=null&&o.shipDay<=o.due)x.ok++;}
+ R.ontime.forEach(x=>x.rate=x.n?x.ok/x.n:null);
+ const sumR=(a,b)=>{let n=0,k=0;for(let i=a;i<=b;i++){n+=R.ontime[i].n;k+=R.ontime[i].ok;}return n?k/n:null;};
+ R.ontimeH1=sumR(0,5);R.ontimeH2=sumR(6,11);R.ontimeYear=sumR(0,11);
+ /* زمان تحویل */
+ const done=base.filter(o=>o.shipDay!=null);R.done=done;
+ R.lead=LEAD_BINS.map(b=>({b,prod:0,serv:0}));
+ for(const o of done){const L=o.shipDay-o.d0;const k=LEAD_BINS.findIndex(b=>L>=b[0]&&L<=b[1]);R.lead[k][o.otype]++;}
+ R.leadMedProd=median(done.filter(o=>o.otype==='prod').map(o=>o.shipDay-o.d0));
+ R.leadMedServ=median(done.filter(o=>o.otype==='serv').map(o=>o.shipDay-o.d0));
+ R.leadNProd=done.filter(o=>o.otype==='prod').length;R.leadNServ=done.filter(o=>o.otype==='serv').length;
+ /* حجم ماهانه */
+ R.vol=FA_MONTHS.map(()=>({prod:0,serv:0,value:0}));
+ for(const o of noMonth){R.vol[o.m][o.otype]++;R.vol[o.m].value+=o.total;}
+ /* پرداخت */
+ const P={paid:{n:0,amt:0},unpaid:{n:0,amt:0,dueN:0,dueAmt:0},exception:{n:0,amt:0}};
+ for(const o of noPay){const x=P[o.pay];x.n++;x.amt+=o.pay==='paid'?o.total:o.remaining;if(o.pay==='unpaid'&&o.reachedSettle){x.dueN++;x.dueAmt+=o.remaining;}}
+ R.pay=P;R.payN=noPay.length;
+ const byC={};for(const o of noPay){if(!o.dueBal)continue;const k=o.cust.id;(byC[k]=byC[k]||{c:o.cust,amt:0,n:0});byC[k].amt+=o.dueBal;byC[k].n++;}
+ R.conc=Object.values(byC).sort((a,b)=>b.amt-a.amt);R.dueTotal=R.conc.reduce((a,x)=>a+x.amt,0);
+ R.top3Share=R.dueTotal?R.conc.slice(0,3).reduce((a,x)=>a+x.amt,0)/R.dueTotal:0;
+ R.permitsM=FA_MONTHS.map(()=>0);
+ R.permits=noMP.filter(o=>o.permit&&o.permit.day<=ASOF&&(F.month<0||o.m===F.month)).sort((a,b)=>b.permit.day-a.permit.day);
+ for(const o of noMP)if(o.permit&&o.permit.day<=ASOF&&o.permit.day<=YEAR_DAYS)R.permitsM[md(o.permit.day).m]++;
+ R.permQ1=R.permitsM.slice(0,3).reduce((a,b)=>a+b,0);R.permQ4=R.permitsM.slice(9,12).reduce((a,b)=>a+b,0);
+ R.reasonCount={};for(const o of R.permits)R.reasonCount[o.permit.reason]=(R.reasonCount[o.permit.reason]||0)+1;
+ /* سفارش‌های بزرگ دیرکرد */
+ R.bigLate=R.open.filter(o=>o.dueState==='late'&&o.total>=BIG_ORDER).sort((a,b)=>b.lateDays-a.lateDays);
+ R.lateOpen=R.open.filter(o=>o.dueState==='late');
+ const dueD=base.filter(o=>o.due<=ASOF),bg=dueD.filter(o=>o.total>=BIG_ORDER),sm=dueD.filter(o=>o.total<BIG_ORDER);
+ const okR=a=>a.length?a.filter(o=>o.shipDay!=null&&o.shipDay<=o.due).length/a.length:null;
+ R.bigN=bg.length;R.bigRate=okR(bg);R.smallRate=okR(sm);
+ return R;
+}
+
+</script>
+<script>
+(function(){
+ const R=compute(DEFAULT_F),n=R.now,p=R.prev,b=R.bottleneck,st=R.stime[b];
+ const tot=i=>R.vol[i].prod+R.vol[i].serv;let hi=0,lo=0;R.vol.forEach((m,i)=>{if(tot(i)>tot(hi))hi=i;if(tot(i)<tot(lo))lo=i;});
+ let fm=0;R.flow.forEach((f,i)=>{if(f.n>R.flow[fm].n)fm=i;});
+ const vm=R.ontime.map((m,i)=>i).filter(i=>R.ontime[i].rate!=null);let mn=vm[0];vm.forEach(i=>{if(R.ontime[i].rate<R.ontime[mn].rate)mn=i;});
+ const w=[...R.lateOpen].sort((a,c)=>c.lateDays-a.lateDays)[0];
+ const reason=Object.entries(R.reasonCount).sort((a,c)=>c[1]-a[1])[0];
+ const exC=R.conc[0].c,E=compute(Object.assign({},DEFAULT_F,{cust:exC.id}));
+ const V={
+  total:faInt(ORDERS.length),totalValue:faMoney(ORDERS.reduce((a,o)=>a+o.total,0)),
+  open:faInt(n.open),openPrev:faInt(p.open),prod:faInt(n.prod),settle:faInt(n.settle),ready:faInt(n.ready),overdue:faInt(n.overdue),overduePct:faPct(n.overdue/n.open),
+  dueBal:faMoney(n.dueBal),permits:faInt(n.permits),permits30:faInt(n.permits-p.permits),
+  bName:STAGES[b],bAvg:faNum(st.avg,1),bRatio:faNum(st.avg/R.othersAvg,1),othersAvg:faNum(R.othersAvg,1),bH1:faNum(st.h1,1),bH2:faNum(st.h2,1),
+  bigRate:faPct(R.bigRate,0),smallRate:faPct(R.smallRate,0),
+  volHi:FA_MONTHS[hi],volHiN:faInt(tot(hi)),volHiVal:faMoney(R.vol[hi].value),volLo:FA_MONTHS[lo],volLoN:faInt(tot(lo)),
+  flowMax:STAGES[fm],flowMaxN:faInt(R.flow[fm].n),flowMaxPct:faPct(R.flow[fm].n/R.open.length,0),flowMaxLate:faInt(R.flow[fm].late),flowMaxRisk:faInt(R.flow[fm].risk),
+  otH1:faPct(R.ontimeH1,0),otH2:faPct(R.ontimeH2,0),otMinM:FA_MONTHS[mn],otMin:faPct(R.ontime[mn].rate,0),
+  leadProd:faInt(R.leadMedProd),leadServ:faInt(R.leadMedServ),leadLong:faInt(R.done.filter(o=>o.shipDay-o.d0>42).length),
+  payPaidN:faInt(R.pay.paid.n),payUnN:faInt(R.pay.unpaid.n),payUnAmt:faMoney(R.pay.unpaid.amt),payExN:faInt(R.pay.exception.n),payExAmt:faMoney(R.pay.exception.amt),
+  dueTotal:faMoney(R.dueTotal),top3:faPct(R.top3Share,0),conc1:R.conc[0].c.name,conc1Amt:faMoney(R.conc[0].amt),
+  permQ1:faInt(R.permQ1),permQ4:faInt(R.permQ4),permReason:reason?reason[0]:'—',
+  worstId:w.id,worstCust:w.cust.name,worstProd:w.prod,worstTotal:faMoney(w.total),worstDays:faInt(w.lateDays),worstStage:STAGES[w.cur],worstNote:w.cur===SETTLE?`در پنل جزئیات می‌بینید که مراحل تولید تمام شده و سفارش از ${faDate(w.hist[w.cur].in)} در تسویه منتظر پرداخت مشتری است؛ یعنی تأخیر این سفارش از کارگاه نیست، از پرداخت است.`:`در پنل جزئیات می‌بینید که سفارش از ${faDate(w.hist[w.cur].in)} در این مرحله مانده است.`,
+  exCust:exC.name,exN:faInt(E.base.length),exOpen:faInt(E.now.open),exDue:faMoney(E.now.dueBal),exPermits:faInt(E.now.permits)
+ };
+ document.querySelectorAll('[data-v]').forEach(el=>{const k=el.dataset.v;if(V[k]!=null)el.textContent=V[k];});
+ /* theme */
+ const mq=matchMedia('(prefers-color-scheme: dark)'),btn=document.getElementById('themeBtn');
+ const isDark=()=>{const a=document.documentElement.getAttribute('data-theme');return a?a==='dark':mq.matches;};
+ const paint=()=>{btn.textContent=isDark()?'حالت تیره':'حالت روشن';btn.title='تغییر به '+(isDark()?'حالت روشن':'حالت تیره');};
+ btn.onclick=()=>{const t=isDark()?'light':'dark';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('sample-theme',t);}catch(e){}paint();};
+ mq.addEventListener&&mq.addEventListener('change',paint);paint();
+ /* toc highlight */
+ const links=[...document.querySelectorAll('.toc a')],secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+ const onScroll=()=>{let k=0;secs.forEach((s,i)=>{if(s&&s.getBoundingClientRect().top<140)k=i;});links.forEach((a,i)=>a.classList.toggle('on',i===k));
+  const on=links[k];if(on&&getComputedStyle(on.closest('nav')).position==='sticky'&&innerWidth<=900){const nav=on.closest('nav');const r=on.getBoundingClientRect(),nr=nav.getBoundingClientRect();if(r.left<nr.left||r.right>nr.right)nav.scrollLeft+= (r.left+r.width/2)-(nr.left+nr.width/2);}};
+ addEventListener('scroll',onScroll,{passive:true});onScroll();
+})();
+</script>
+</body>
+</html>

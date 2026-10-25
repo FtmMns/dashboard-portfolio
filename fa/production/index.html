@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>داشبورد سفارش و تولید</title>
+<link href="../../fonts/fonts.css" rel="stylesheet">
+<link href="../../fonts/vazirmatn.css" rel="stylesheet">
+<script>
+(function(){var t=null;try{t=new URLSearchParams(location.search).get('theme');}catch(e){}
+if(!t){try{t=localStorage.getItem('sample-theme');}catch(e){}}
+if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<style>
+:root{
+ --page:#f3f5f8;--panel:#ffffff;--panel-2:#eef1f5;--line:#e2e6ec;--ink:#121826;--ink-2:#4a5468;--muted:#8a93a5;
+ --blue:#2a78d6;--accent-soft:#e3edfb;--deep:#0d366b;--orange:#eb6834;--green:#1baf7a;--red:#c23434;
+ --s1:#cde2fb;--s2:#9ec5f4;--s3:#6da7ec;--s4:#3987e5;--s5:#256abf;--s6:#184f95;--s7:#0d366b;
+ --green-soft:#e1f5ec;--green-ink:#0d7a53;--red-soft:#f9e4e4;--red-ink:#a52a2a;--orange-soft:#fdeee6;--orange-ink:#b5461a;
+ --hot-band:#fdf1ea;--c-ok:#2a78d6;--c-prod:#184f95;--c-serv:#9ec5f4;--c-h1:#9ec5f4;--c-h2:#256abf;
+ --shadow:0 1px 2px rgba(18,24,38,.06),0 4px 16px rgba(18,24,38,.05);
+ color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+ --page:#0e1116;--panel:#161a21;--panel-2:#1d222b;--line:#2a303b;--ink:#f1f3f7;--ink-2:#c2c8d3;--muted:#8d96a8;
+ --blue:#3987e5;--accent-soft:#1b2a40;--deep:#9ec5f4;--orange:#d95926;--green:#199e70;--red:#d64545;
+ --green-soft:#11302a;--green-ink:#63d2a8;--red-soft:#361c1e;--red-ink:#f19595;--orange-soft:#38231a;--orange-ink:#f3a37f;
+ --hot-band:#2a1e19;--c-ok:#3987e5;--c-prod:#6da7ec;--c-serv:#256abf;--c-h1:#2f5687;--c-h2:#6da7ec;
+ --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);color-scheme:dark;}}
+:root[data-theme="dark"]{
+ --page:#0e1116;--panel:#161a21;--panel-2:#1d222b;--line:#2a303b;--ink:#f1f3f7;--ink-2:#c2c8d3;--muted:#8d96a8;
+ --blue:#3987e5;--accent-soft:#1b2a40;--deep:#9ec5f4;--orange:#d95926;--green:#199e70;--red:#d64545;
+ --green-soft:#11302a;--green-ink:#63d2a8;--red-soft:#361c1e;--red-ink:#f19595;--orange-soft:#38231a;--orange-ink:#f3a37f;
+ --hot-band:#2a1e19;--c-ok:#3987e5;--c-prod:#6da7ec;--c-serv:#256abf;--c-h1:#2f5687;--c-h2:#6da7ec;
+ --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);color-scheme:dark;}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--page);color:var(--ink);font-family:"IBM Plex Sans Arabic",Vazirmatn,Tahoma,sans-serif;font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.sep{display:inline-block;width:1px;height:.95em;background:currentColor;opacity:.35;margin:0 8px;vertical-align:-.12em}
+.vz{font-family:Vazirmatn,Tahoma,sans-serif}
+#fCust{font-family:Vazirmatn,Tahoma,sans-serif}
+.mono{font-family:"IBM Plex Mono",Consolas,monospace;font-size:12.5px;direction:ltr;unicode-bidi:isolate}
+button,select,input{font:inherit;color:inherit}
+a{color:var(--blue)}
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;padding:14px 24px;background:var(--panel);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.logo{width:40px;height:40px;border-radius:11px;background:var(--accent-soft);display:grid;place-items:center;flex:none}
+.logo svg{width:24px;height:24px}
+.top h1{margin:0;font-size:19px;font-weight:700;line-height:1.35}
+.top .sub{margin:2px 0 0;color:var(--ink-2);font-size:13px}
+.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.period{font-size:12.5px;color:var(--ink-2);background:var(--panel-2);border-radius:999px;padding:5px 12px;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:10px;padding:7px 13px;font-size:13px;font-weight:500;text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--blue);color:var(--blue)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{filter:brightness(1.07);color:#fff}
+.btn svg{width:16px;height:16px}
+/* layout */
+.layout{display:grid;grid-template-columns:248px minmax(0,1fr);gap:20px;padding:20px 24px 8px;max-width:1640px;margin:0 auto}
+main{display:flex;flex-direction:column;gap:20px;min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px 20px;min-width:0;scroll-margin-top:16px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.card-h{display:flex;justify-content:space-between;align-items:flex-start;gap:8px 12px;flex-wrap:wrap;margin-bottom:10px}
+.card h2{margin:0;font-size:15.5px;font-weight:700;line-height:1.4}
+.card .desc{margin:3px 0 0;color:var(--ink-2);font-size:12.5px}
+.note{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;color:var(--muted);background:var(--panel-2);border-radius:999px;padding:2px 10px;cursor:help;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--ink-2);margin:0 0 6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-left:6px;vertical-align:-1px}
+.legend .dash{width:16px;height:0;border-top:2px dashed var(--ink-2);border-radius:0;vertical-align:3px}
+.chart{width:100%;min-height:60px}
+#volume{display:flex;flex-direction:column}#volume .chart{flex:1 1 auto}
+.chart svg{display:block;direction:ltr;overflow:visible}
+.takeaway{margin:10px 0 0;padding:9px 12px;border-radius:10px;background:var(--panel-2);font-size:13px;color:var(--ink);display:flex;gap:8px;align-items:flex-start}
+.takeaway::before{content:"";flex:none;width:4px;align-self:stretch;border-radius:4px;background:var(--blue)}
+.takeaway.warn::before{background:var(--orange)}
+.empty{padding:30px 10px;text-align:center;color:var(--muted);font-size:13px}
+/* svg text */
+.t-axis{fill:var(--muted);font-size:11px}
+.t-lab{fill:var(--ink-2);font-size:12.5px}
+.t-lab.hot{fill:var(--orange-ink);font-weight:700}
+.t-val{fill:var(--ink);font-size:11.5px;font-weight:600}
+.t-small{fill:var(--ink-2);font-size:10.5px}
+.gl{stroke:var(--line);stroke-width:1}
+.axis{stroke:var(--muted);stroke-width:1}
+.band{fill:transparent}
+.band.hot{fill:var(--hot-band)}
+.row:hover .band,.hb:hover{fill:var(--panel-2)}
+.row:hover .band.hot{fill:var(--orange-soft)}
+.hb{fill:transparent}
+.nohit{pointer-events:none}
+/* filters rail */
+.rail{position:sticky;top:16px;align-self:start;scroll-margin-top:16px}
+.rail .card{padding:16px}
+.rail-toggle{display:none}
+.rail h2{font-size:14.5px;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.f{margin-bottom:14px}
+.f>label,.flabel{display:block;font-size:12.5px;color:var(--ink-2);margin-bottom:5px;font-weight:500}
+select{width:100%;border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:7px 10px;font-size:13px}
+select:focus,input:focus,button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.seg{display:flex;flex-wrap:wrap;gap:4px;background:var(--panel-2);border-radius:10px;padding:3px}
+.seg button{flex:1 1 auto;border:0;background:transparent;border-radius:8px;padding:5px 8px;font-size:12.5px;cursor:pointer;color:var(--ink-2);white-space:nowrap}
+.seg button.on{background:var(--panel);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(18,24,38,.12)}
+.clear{width:100%;border:1px dashed var(--line);background:transparent;border-radius:9px;padding:7px;font-size:12.5px;color:var(--ink-2);cursor:pointer}
+.clear:hover{color:var(--red-ink);border-color:var(--red)}
+.rail-meta{font-size:12px;color:var(--ink-2);margin:12px 0 0;padding-top:12px;border-top:1px solid var(--line)}
+.rail-meta b{color:var(--ink)}
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;scroll-margin-top:16px}
+.kpi-empty{grid-column:1/-1;background:var(--orange-soft);color:var(--orange-ink);border-radius:12px;padding:10px 14px;font-size:13px;font-weight:500}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:14px 16px;min-width:0}
+.kpi .k-l{font-size:12.5px;color:var(--ink-2);font-weight:500;display:flex;align-items:center;gap:6px}
+.kpi .k-l i{width:8px;height:8px;border-radius:50%;flex:none}
+.kpi .k-v{font-size:26px;font-weight:700;line-height:1.25;margin-top:6px;letter-spacing:-.3px}
+.kpi .k-v small{font-size:12.5px;font-weight:500;color:var(--ink-2);margin-right:4px;letter-spacing:0}
+.kpi .k-d{font-size:12px;margin-top:6px;font-weight:500}
+.kpi .k-s{font-size:11.5px;color:var(--muted);margin-top:2px}
+.up-bad,.down-bad{color:var(--red-ink)}.up-good,.down-good{color:var(--green-ink)}.flat{color:var(--muted)}
+/* insights */
+.ins{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.ins li{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:10px;background:var(--panel-2)}
+.ins .ic{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;margin-top:1px}
+.ins .ic.bad{background:var(--red-soft);color:var(--red-ink)}
+.ins .ic.warn{background:var(--orange-soft);color:var(--orange-ink)}
+.ins .ic.info{background:var(--accent-soft);color:var(--blue)}
+.ins .ic.good{background:var(--green-soft);color:var(--green-ink)}
+.ins b{display:block;font-size:13.5px;margin-bottom:1px}
+.ins p{margin:0;font-size:12.8px;color:var(--ink-2)}
+.ins a{font-size:12px;text-decoration:none;white-space:nowrap}
+/* payment */
+.pay-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr) minmax(0,1.15fr);gap:22px}
+.pay-grid>div{min-width:0}
+.pay-grid h3{font-size:13.5px;margin:0 0 10px;font-weight:600}
+.share{display:flex;height:16px;border-radius:6px;overflow:hidden;gap:2px;margin:4px 0 12px}
+.share span{display:block;height:100%;min-width:3px}
+.pstat{display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;align-items:baseline;padding:8px 0;border-top:1px solid var(--line);font-size:13px}
+.pstat:first-of-type{border-top:0}
+.pstat .sw{width:10px;height:10px;border-radius:3px;align-self:center}
+.pstat .n{font-weight:600;white-space:nowrap}
+.pstat .x{grid-column:2/4;font-size:12px;color:var(--ink-2)}
+.cbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;font-size:12.5px;margin-bottom:9px}
+.cbar .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cbar .am{font-weight:600;white-space:nowrap}
+.cbar .tr{grid-column:1/3;height:8px;background:var(--panel-2);border-radius:4px;overflow:hidden}
+.cbar .tr span{display:block;height:100%;border-radius:4px;background:var(--red)}
+.cbar.rest .tr span{background:var(--s3)}
+.plist{list-style:none;margin:8px 0 0;padding:0;font-size:12.3px}
+.plist li{padding:7px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 8px}
+.plist .r{grid-column:1/3;color:var(--ink-2)}
+.plist .who{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* table */
+.tbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.search{flex:1 1 220px;max-width:340px;position:relative}
+.search input{width:100%;border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:7px 34px 7px 10px;font-size:13px}
+.search svg{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted)}
+.tcount{font-size:12.5px;color:var(--ink-2);margin-inline-start:auto}
+.twrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:940px;font-size:13px}
+th{position:sticky;top:0;background:var(--panel-2);color:var(--ink-2);font-weight:600;font-size:12.3px;text-align:right;padding:9px 10px;white-space:nowrap;cursor:pointer;user-select:none;border-bottom:1px solid var(--line)}
+th.num,td.num{text-align:left}
+th .ar{display:inline-block;width:12px;color:var(--blue);font-size:10px}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr{cursor:pointer}
+tbody tr:hover td{background:var(--panel-2)}
+tbody tr:last-child td{border-bottom:0}
+.cname{font-weight:500;white-space:nowrap}
+.ckind{font-size:11.5px;color:var(--muted)}
+.amt{font-weight:600;white-space:nowrap}
+.mbar{height:4px;background:var(--panel-2);border-radius:3px;margin-top:4px;width:84px;margin-right:auto}
+.mbar span{display:block;height:100%;background:var(--s3);border-radius:3px}
+.trk{display:flex;gap:2px;direction:rtl;width:150px}
+.trk i{flex:1;height:8px;border-radius:2px;background:transparent;border:1.5px solid var(--line)}
+.trk i.d{background:var(--blue);border-color:var(--blue)}
+.trk i.c{background:var(--orange);border-color:var(--orange);height:10px;margin-top:-1px}
+.trk i.x{border:0;background:var(--panel-2);height:3px;margin-top:2.5px}
+.trk.done i.d{background:var(--s3);border-color:var(--s3)}
+.trk-l{font-size:11.5px;color:var(--ink-2);margin-top:4px;white-space:nowrap}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;border-radius:999px;padding:2px 9px;white-space:nowrap;line-height:1.6}
+.b-green{background:var(--green-soft);color:var(--green-ink)}
+.b-red{background:var(--red-soft);color:var(--red-ink)}
+.b-orange{background:var(--orange-soft);color:var(--orange-ink)}
+.b-grey{background:var(--panel-2);color:var(--ink-2)}
+.b-blue{background:var(--accent-soft);color:var(--blue)}
+.ddate{font-size:12.5px;white-space:nowrap;margin-bottom:3px}
+.more{display:flex;justify-content:center;margin-top:12px}
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(10,14,22,.35);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;bottom:0;left:0;width:min(460px,100vw);background:var(--panel);border-right:1px solid var(--line);box-shadow:0 0 40px rgba(0,0,0,.18);transform:translateX(-102%);transition:transform .25s ease;z-index:50;display:flex;flex-direction:column}
+.drawer.on{transform:none}
+.dh{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.dh h3{margin:0;font-size:16px}
+.dh p{margin:2px 0 0;font-size:12.5px;color:var(--ink-2)}
+.dx{border:1px solid var(--line);background:var(--panel);border-radius:9px;width:34px;height:34px;cursor:pointer;font-size:18px;line-height:1;flex:none}
+.db{overflow-y:auto;padding:16px 20px 28px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px;margin:12px 0 16px}
+.kv dt{color:var(--ink-2)}
+.kv dd{margin:0;font-weight:500}
+.permit{background:var(--orange-soft);border-radius:10px;padding:10px 12px;font-size:12.8px;margin-bottom:16px}
+.permit b{color:var(--orange-ink)}
+.db h4{font-size:13.5px;margin:4px 0 10px}
+.tl{list-style:none;margin:0;padding:0;max-width:380px}
+.tl li{display:grid;grid-template-columns:20px 1fr auto;gap:0 10px;position:relative;padding-bottom:12px}
+.tl li::before{content:"";position:absolute;right:9px;top:16px;bottom:-2px;width:2px;background:var(--line)}
+.tl li:last-child::before{display:none}
+.tl .dot{width:12px;height:12px;border-radius:50%;margin:5px 4px 0;border:2px solid var(--line);background:var(--panel);position:relative;z-index:1}
+.tl .d .dot{background:var(--blue);border-color:var(--blue)}
+.tl .c .dot{background:var(--orange);border-color:var(--orange);box-shadow:0 0 0 4px var(--orange-soft)}
+.tl .x .dot{width:8px;height:8px;margin:7px 6px 0;border-width:0;background:var(--line)}
+.tl .sn{font-weight:600;font-size:13px}
+.tl .x .sn{font-weight:400;color:var(--muted)}
+.tl .sd{font-size:12px;color:var(--ink-2);grid-column:2/4}
+.tl .dur{font-size:12px;font-weight:600;white-space:nowrap}
+.tl .c .dur{color:var(--orange-ink)}
+.tl .slow .dur{color:var(--red-ink)}
+/* tooltip */
+#tip{position:fixed;z-index:60;pointer-events:none;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:0 6px 24px rgba(18,24,38,.18);padding:9px 12px;font-size:12.5px;line-height:1.6;max-width:300px}
+#tip b{font-size:13px}
+#tip .tr{display:flex;align-items:center;gap:6px;color:var(--ink-2)}
+#tip .tr i{width:9px;height:9px;border-radius:2px;flex:none}
+#tip .tr span{margin-inline-start:auto;color:var(--ink);font-weight:600;padding-inline-start:12px}
+footer{text-align:center;color:var(--muted);font-size:12.5px;padding:18px 16px 28px}
+/* responsive */
+.msort{display:none;width:auto}
+@media (max-width:620px){
+ .msort{display:block;flex:1 1 100%}
+ .tcount{margin-inline-start:0}
+ .twrap{overflow:visible;border:0;border-radius:0}
+ table{min-width:0;display:block}
+ thead{display:none}
+ tbody{display:block}
+ tbody tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;padding:12px;border:1px solid var(--line);border-radius:12px;margin-bottom:10px}
+ tbody tr:hover td{background:transparent}
+ tbody tr:hover{background:var(--panel-2)}
+ td{display:block;padding:0;border:0!important;min-width:0}
+ td:nth-child(2){order:1}
+ td:nth-child(1){order:2;text-align:left}
+ td:nth-child(3){order:3}
+ td:nth-child(4){order:4}
+ td:nth-child(5){order:5;grid-column:1/-1}
+ td:nth-child(6){order:6;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+ td:nth-child(6) .ddate{margin:0}
+ td:nth-child(7){order:7;align-self:center;text-align:left}
+ .trk{width:100%}
+ .cname{white-space:normal}
+}
+
+@media (max-width:1320px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:1180px){
+ .layout{grid-template-columns:minmax(0,1fr)}
+ .rail{position:static}
+ .rail .card{padding:14px 16px}
+ .rail-body{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto;gap:12px;align-items:end}
+ .rail h2{display:none}
+ .rail .f{margin:0}
+ .rail-meta{grid-column:1/-1;margin:0;padding-top:10px}
+ .clear{width:auto;padding:7px 14px}
+}
+@media (max-width:900px){.grid2{grid-template-columns:minmax(0,1fr)}.pay-grid{grid-template-columns:minmax(0,1fr)}.rail-body{grid-template-columns:repeat(2,minmax(0,1fr))}.clear{grid-column:1/-1}}
+@media (max-width:620px){
+ .top{padding:12px 16px}.top h1{font-size:17px}
+ .layout{padding:12px 16px 4px;gap:14px}
+ main{gap:14px}
+ .card{padding:14px}
+ .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .kpi{padding:12px}
+ .kpi .k-v{font-size:22px}
+ .rail-toggle{display:flex;width:100%;justify-content:space-between;align-items:center;border:0;background:transparent;font-weight:600;font-size:14px;padding:0;cursor:pointer}
+ .rail-toggle .cnt{font-size:12px;font-weight:500;color:var(--blue)}
+ .rail-body{display:none;grid-template-columns:minmax(0,1fr);margin-top:12px}
+ .rail.open .rail-body{display:grid}
+ .period{display:none}
+ .search{max-width:none}
+}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="brand">
+  <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 20V9l5 3V9l5 3V5h4v15"/><path d="M8 16h1M12 16h1M16 16h1"/></svg></div>
+  <div><h1>داشبورد سفارش و مراحل تولید</h1><p class="sub">کارگاه نمونه<span class="sep"></span>پیگیری هر سفارش از پیش‌فاکتور تا آمادهٔ ارسال</p></div>
+ </div>
+ <div class="actions">
+  <span class="period">سال ۱۴۰۴<span class="sep"></span>وضعیت تا ۲۰ اسفند</span>
+  <a class="btn primary" href="guide.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 7h6M9 11h5"/></svg>راهنمای داشبورد</a>
+  <a class="btn" href="../../en/production/index.html" lang="en" hreflang="en">English</a><button class="btn" id="themeBtn" type="button"></button>
+ </div>
+</header>
+
+<div class="layout">
+ <aside class="rail" id="filters">
+  <div class="card">
+   <button class="rail-toggle" id="railToggle" type="button" aria-expanded="false"><span>فیلترها</span><span class="cnt" id="fcnt"></span></button>
+   <h2><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>فیلترها</h2>
+   <div class="rail-body">
+    <div class="f"><label for="fMonth">ماه ثبت سفارش</label><select id="fMonth"></select></div>
+    <div class="f"><label for="fCust">مشتری</label><select id="fCust"></select></div>
+    <div class="f"><span class="flabel">نوع سفارش</span><div class="seg" id="fOtype"></div></div>
+    <div class="f"><label for="fPay">وضعیت پرداخت</label><select id="fPay"></select></div>
+    <button class="clear" id="clearAll" type="button">پاک کردن همه</button>
+    <p class="rail-meta" id="fsum"></p>
+   </div>
+  </div>
+ </aside>
+
+ <main>
+  <section class="kpis" id="kpis" aria-label="شاخص‌های اصلی"></section>
+
+  <div class="grid2">
+   <section class="card" id="insights">
+    <div class="card-h"><div><h2>یافته‌های مهم</h2><p class="desc">نکته‌هایی که از داده‌های فیلترشده به‌طور خودکار استخراج شده‌اند</p></div></div>
+    <ul class="ins" id="insList"></ul>
+   </section>
+   <section class="card" id="volume">
+    <div class="card-h"><div><h2>حجم سفارش ماهانه</h2><p class="desc">تعداد سفارش‌های ثبت‌شده در هر ماه، به تفکیک تولیدی و خدماتی</p></div><span class="note" data-tipt="این نمودار همیشه کل سال را نشان می‌دهد تا فصل‌های پرکار و کم‌کار دیده شوند؛ ماه انتخاب‌شده پررنگ می‌شود.">ⓘ فیلتر ماه: فقط برجسته‌سازی</span></div>
+    <div class="legend"><span><i style="background:var(--c-prod)"></i>تولیدی</span><span><i style="background:var(--c-serv)"></i>خدماتی</span></div>
+    <div class="chart" id="volChart"></div>
+    <p class="takeaway" id="volTake"></p>
+   </section>
+  </div>
+
+  <div class="grid2">
+   <section class="card" id="flow">
+    <div class="card-h"><div><h2>سفارش‌های باز در هر مرحله</h2><p class="desc">هر سفارش باز الان کجای خط تولید است و چند تا از موعد عقب‌اند</p></div></div>
+    <div class="legend"><span><i style="background:var(--c-ok)"></i>در مسیر</span><span><i style="background:var(--orange)"></i>در خطر تأخیر</span><span><i style="background:var(--red)"></i>گذشته از موعد</span></div>
+    <div class="chart" id="flowChart"></div>
+    <p class="takeaway warn" id="flowTake"></p>
+   </section>
+   <section class="card" id="stagetime">
+    <div class="card-h"><div><h2>میانگین روزهای ماندن در هر مرحله</h2><p class="desc">مقایسهٔ نیمهٔ اول و دوم سال برای مرحله‌های تولید (مرحله‌های تکمیل‌شده)</p></div><span class="note" data-tipt="تسویه به پرداخت مشتری و ارسال به حمل‌ونقل وابسته است، نه ظرفیت کارگاه؛ تسویه در بخش «وضعیت پرداخت» بررسی شده است.">ⓘ بدون تسویه و ارسال</span></div>
+    <div class="legend"><span><i style="background:var(--c-h1)"></i>نیمهٔ اول (فروردین تا شهریور)</span><span><i style="background:var(--c-h2)"></i>نیمهٔ دوم (مهر تا اسفند)</span></div>
+    <div class="chart" id="stChart"></div>
+    <p class="takeaway warn" id="stTake"></p>
+   </section>
+  </div>
+
+  <div class="grid2">
+   <section class="card" id="ontime">
+    <div class="card-h"><div><h2>روند تحویل به‌موقع</h2><p class="desc">درصد سفارش‌هایی که تا موعد قول‌داده‌شده ارسال شدند، بر اساس ماه موعد</p></div><span class="note" data-tipt="محور این نمودار ماه موعد تحویل است، نه ماه ثبت؛ برای دیدن روند کامل سال، فیلتر ماه روی آن اعمال نمی‌شود.">ⓘ فیلتر ماه اعمال نمی‌شود</span></div>
+    <div class="legend"><span><i style="background:var(--blue)"></i>نرخ تحویل به‌موقع</span><span><i class="dash"></i>هدف ۸۵٪</span></div>
+    <div class="chart" id="otChart"></div>
+    <p class="takeaway" id="otTake"></p>
+   </section>
+   <section class="card" id="leadtime">
+    <div class="card-h"><div><h2>توزیع زمان تحویل</h2><p class="desc">چند روز از ثبت سفارش تا ارسال طول کشیده است (سفارش‌های ارسال‌شده)</p></div></div>
+    <div class="legend"><span><i style="background:var(--c-prod)"></i>تولیدی</span><span><i style="background:var(--c-serv)"></i>خدماتی</span></div>
+    <div class="chart" id="ltChart"></div>
+    <p class="takeaway" id="ltTake"></p>
+   </section>
+  </div>
+
+  <section class="card" id="payment">
+   <div class="card-h"><div><h2>وضعیت پرداخت و مجوزهای استثنا</h2><p class="desc">چه مقدار پول هنوز وصول نشده، دست کدام مشتری‌هاست و چند سفارش بدون تسویه ارسال شده است</p></div><span class="note" data-tipt="برای این‌که تصویر کامل پرداخت‌ها دیده شود، فیلتر وضعیت پرداخت روی این بخش اعمال نمی‌شود. نمودار ماهانهٔ مجوزها هم همیشه کل سال را نشان می‌دهد.">ⓘ فیلتر پرداخت اعمال نمی‌شود</span></div>
+   <div class="pay-grid">
+    <div><h3>سفارش‌ها بر اساس وضعیت پرداخت</h3><div id="payStat"></div></div>
+    <div><h3>تمرکز مطالبات سررسیدشده</h3><div id="payConc"></div></div>
+    <div><h3>مجوزهای استثنا در هر ماه</h3><div class="chart" id="permChart"></div><div id="permList"></div></div>
+   </div>
+   <p class="takeaway warn" id="payTake"></p>
+  </section>
+
+  <section class="card" id="orders">
+   <div class="card-h"><div><h2>فهرست سفارش‌ها</h2><p class="desc">برای دیدن تاریخچهٔ مراحل هر سفارش، روی ردیف آن کلیک کنید. با کلیک روی عنوان ستون‌ها مرتب کنید.</p></div></div>
+   <div class="tbar">
+    <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="جست‌وجو: شمارهٔ پیش‌فاکتور، مشتری، محصول، رنگ…" aria-label="جست‌وجو در سفارش‌ها"></div>
+    <div class="seg" id="tScope" style="flex:none"></div>
+    <select id="mSort" class="msort" aria-label="مرتب‌سازی"><option value="due">مرتب‌سازی: فوریت موعد</option><option value="total">مرتب‌سازی: بیشترین مبلغ</option><option value="prog">مرتب‌سازی: پیشرفت تولید</option><option value="cust">مرتب‌سازی: نام مشتری</option><option value="id">مرتب‌سازی: شمارهٔ پیش‌فاکتور</option></select><span class="tcount" id="tcount"></span>
+   </div>
+   <div class="twrap"><table><thead><tr id="thead"></tr></thead><tbody id="tbody"></tbody></table></div>
+   <div class="more"><button class="btn" id="moreBtn" type="button"></button></div>
+  </section>
+ </main>
+</div>
+<footer>طراحی و ساخت: فاطمه منصوری · نمونه‌کار</footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" role="dialog" aria-label="جزئیات سفارش"><div class="dh" id="dHead"></div><div class="db" id="dBody"></div></aside>
+<div id="tip" hidden></div>
+
+<script>
+/* ===== داده‌های ساختگی و محاسبات مشترک (عیناً در داشبورد و راهنما) ===== */
+const FA_MONTHS=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const MLEN=[31,31,31,31,31,31,30,30,30,30,30,29];
+const MSTART=[];(()=>{let c=1;for(const l of MLEN){MSTART.push(c);c+=l;}})();
+const YEAR_DAYS=365;
+const ASOF=MSTART[11]+19;               /* ۲۰ اسفند ۱۴۰۴ */
+const H2_START=MSTART[6];               /* اول مهر */
+const STAGES=['برش لیزر','خم','فورج','جوش','تمیزکاری','رنگ','مونتاژ','بسته‌بندی','تسویه','ارسال'];
+const PAINT=5,SETTLE=8,SHIP=9;
+const STD=[1.5,1.5,2,2.2,1.2,3,2,1,1,1.5];
+const PAY_LABEL={paid:'تسویه‌شده',unpaid:'پرداخت‌نشده',exception:'مجوز استثنا'};
+const OTYPE_LABEL={prod:'تولیدی',serv:'خدماتی'};
+
+function md(d){let y=1404;if(d>YEAR_DAYS){d-=YEAR_DAYS;y=1405;}let m=0;while(m<11&&d>=MSTART[m+1])m++;return{y,m,day:d-MSTART[m]+1};}
+const faNum=(n,f=0)=>Number(n).toLocaleString('fa-IR',{maximumFractionDigits:f,minimumFractionDigits:0});
+const faInt=n=>Math.round(n).toLocaleString('fa-IR');
+const faPct=(x,f=1)=>faNum(x*100,f)+'٪';
+const faYear=y=>y.toLocaleString('fa-IR',{useGrouping:false});
+function faDate(d,withYear){const t=md(d);return faInt(t.day)+' '+FA_MONTHS[t.m]+((withYear||t.y!==1404)?' '+faYear(t.y):'');}
+function moneyParts(t){if(Math.abs(t)>=1e9)return{v:faNum(t/1e9,Math.abs(t)>=1e10?1:2),u:'میلیارد تومان'};return{v:faInt(t/1e6),u:'میلیون تومان'};}
+function faMoney(t){const p=moneyParts(t);return p.v+' '+p.u;}
+
+const CUSTOMERS=[
+ {id:'c01',name:'شرکت ساختمانی کوهسار سپهر',kind:'حقوقی',w:2.4,prof:'bad',big:1.7},
+ {id:'c02',name:'پیمانکاری راه‌آوران شرق',kind:'حقوقی',w:1.6,prof:'bad',big:1.4},
+ {id:'c03',name:'تجهیزات برق آذرنور',kind:'حقوقی',w:2.5,prof:'good',big:1.1},
+ {id:'c04',name:'صنایع فلزی نوین‌پارت',kind:'حقوقی',w:2.0,prof:'good',big:1.0},
+ {id:'c05',name:'انبارسازی پویاترابر',kind:'حقوقی',w:2.0,prof:'slow',big:1.2},
+ {id:'c06',name:'فروشگاه‌های زنجیره‌ای دیباکالا',kind:'حقوقی',w:1.6,prof:'good',big:1.0},
+ {id:'c07',name:'تأسیسات آب‌گستر مینو',kind:'حقوقی',w:1.4,prof:'slow',big:1.0},
+ {id:'c08',name:'ماشین‌سازی پیشروصنعت',kind:'حقوقی',w:1.5,prof:'good',big:1.3},
+ {id:'c09',name:'مجتمع تجاری ارغوان',kind:'حقوقی',w:1.0,prof:'good',big:0.9},
+ {id:'c10',name:'دانش‌بنیان رادین‌تک',kind:'حقوقی',w:1.0,prof:'good',big:0.8},
+ {id:'c11',name:'ساختمانی بهسازان ری',kind:'حقوقی',w:1.2,prof:'slow',big:1.1},
+ {id:'c12',name:'حمل‌ونقل تیزروبار',kind:'حقوقی',w:0.8,prof:'good',big:0.9},
+ {id:'p01',name:'آقای حمید نوروزی',kind:'حقیقی',w:0.9,prof:'bad',big:0.9},
+ {id:'p02',name:'آقای مجید رحیمی',kind:'حقیقی',w:1.0,prof:'good',big:0.6},
+ {id:'p03',name:'خانم الهام صادقی',kind:'حقیقی',w:0.8,prof:'good',big:0.6},
+ {id:'p04',name:'آقای سعید کاظمی',kind:'حقیقی',w:1.0,prof:'slow',big:0.6},
+ {id:'p05',name:'آقای امیر حسینی',kind:'حقیقی',w:0.9,prof:'good',big:0.6},
+ {id:'p06',name:'خانم مریم اکبری',kind:'حقیقی',w:0.7,prof:'good',big:0.5},
+ {id:'p07',name:'آقای رضا مرادی',kind:'حقیقی',w:0.9,prof:'good',big:0.6},
+ {id:'p08',name:'آقای علی جعفری',kind:'حقیقی',w:0.8,prof:'slow',big:0.6},
+ {id:'p09',name:'آقای مهدی قاسمی',kind:'حقیقی',w:0.7,prof:'good',big:0.5},
+ {id:'p10',name:'خانم نرگس رضایی',kind:'حقیقی',w:0.6,prof:'good',big:0.5}
+];
+/* st: نیاز به ۸ مرحلهٔ تولیدی (برش، خم، فورج، جوش، تمیزکاری، رنگ، مونتاژ، بسته‌بندی) — تسویه و ارسال همیشه هست */
+const PRODUCTS={
+ prod:[
+  {n:'قفسهٔ فلزی انبار',u:'دستگاه',p:[4.5,7],q:[10,120],st:[1,1,0,1,1,1,1,1]},
+  {n:'درب ضدحریق',u:'لنگه',p:[18,28],q:[2,40],st:[1,1,0,1,1,1,1,1]},
+  {n:'بدنهٔ تابلو برق',u:'دستگاه',p:[9,15],q:[3,60],st:[1,1,0,1,1,1,1,1]},
+  {n:'شاسی دستگاه صنعتی',u:'دستگاه',p:[25,60],q:[1,12],st:[1,1,1,1,1,1,1,1]},
+  {n:'کابینت فلزی اداری',u:'دستگاه',p:[6,10],q:[5,80],st:[1,1,0,1,1,1,1,1]},
+  {n:'نردهٔ فرفورژه',u:'متر',p:[1.4,2.4],q:[30,400],st:[1,1,1,1,1,1,0,1]},
+  {n:'سینی کابل گالوانیزه',u:'شاخه',p:[0.6,1.1],q:[50,800],st:[1,1,0,0,0,0,0,1],galv:1},
+  {n:'براکت و اتصالات',u:'عدد',p:[0.08,0.25],q:[200,3000],st:[1,1,1,0,1,1,0,1]}
+ ],
+ serv:[
+  {n:'برش لیزر ورق مشتری',u:'ورق',p:[0.35,0.8],q:[10,300],st:[1,0,0,0,0,0,0,1],raw:1},
+  {n:'برش و خم ورق مشتری',u:'ورق',p:[0.6,1.2],q:[10,250],st:[1,1,0,0,0,0,0,1],raw:1},
+  {n:'رنگ پودری قطعات مشتری',u:'قطعه',p:[0.15,0.6],q:[40,900],st:[0,0,0,0,1,1,0,1]}
+ ]
+};
+const COLORS=['طوسی روشن RAL 7035','سفید RAL 9010','مشکی مات','کرم RAL 1015','آبی RAL 5015','سبز RAL 6005','قرمز RAL 3000'];
+const REASONS=['مشتری قدیمی با سابقهٔ خوش‌حسابی','چک مدت‌دار تحویل داده شد','پروژهٔ دولتی؛ پرداخت پس از تحویل','تعهد کتبی پرداخت تا ۳۰ روز','نیاز فوری مشتری برای افتتاح پروژه','مابه‌التفاوت جزئی؛ تسویه با سفارش بعدی'];
+
+function buildData(){
+ let s=1404;const rnd=()=>(s=s*16807%2147483647)/2147483647;
+ const ri=(a,b)=>a+Math.floor(rnd()*(b-a+1)),rf=(a,b)=>a+rnd()*(b-a),pick=a=>a[Math.floor(rnd()*a.length)];
+ const wpick=(arr)=>{const tot=arr.reduce((a,c)=>a+c.w,0);let r=rnd()*tot;for(const c of arr){r-=c.w;if(r<=0)return c;}return arr[arr.length-1];};
+ const WEIGHT=[0.55,0.85,0.95,1,0.95,1,1.05,1.1,1.1,1.2,1.4,1.55];
+ const cong=t=>t<150?rf(0,1):rf(0.5,1)*(1+(t-150)/28);
+ const orders=[];let seq=100;
+ for(let m=0;m<12;m++){
+  const span=m===11?(ASOF-MSTART[11]+1):MLEN[m];
+  const n=Math.round(30*WEIGHT[m]*span/MLEN[m]);
+  const days=[];for(let k=0;k<n;k++)days.push(MSTART[m]+ri(0,span-1));days.sort((a,b)=>a-b);
+  for(const d0 of days){
+   const cust=wpick(CUSTOMERS);
+   const otype=rnd()<(cust.kind==='حقیقی'?0.5:0.2)?'serv':'prod';
+   const prod=pick(PRODUCTS[otype]);
+   const rel=Math.pow(rnd(),1.8/cust.big);
+   const qty=Math.max(prod.q[0],Math.round((prod.q[0]+(prod.q[1]-prod.q[0])*rel)/(prod.q[1]>200?10:1))*(prod.q[1]>200?10:1));
+   const price=Math.round(rf(prod.p[0],prod.p[1])*1e6/1e4)*1e4;
+   const total=Math.round(qty*price/1e5)*1e5;
+   const sizeF=1+1.4*Math.pow(rel,1.3);
+   const promF=1+0.2*rel;
+   const req=prod.st.concat([1,1]).map(Boolean);
+   const color=prod.galv?'گالوانیزه (بدون رنگ)':(prod.raw?'—':pick(COLORS));
+   let lead=1.5;for(let i=0;i<10;i++)if(req[i])lead+=STD[i]*(i<8?(0.5+0.5*sizeF)*1.15:1);
+   lead=Math.ceil(lead+ri(4,7));
+   const due=d0+lead;
+   let deposit=Math.round(total*(cust.prof==='good'?rf(0.4,0.6):cust.prof==='slow'?rf(0.3,0.4):rf(0.2,0.3))/1e5)*1e5;
+   let payDay=null;
+   if(otype==='serv'&&rnd()<0.45){deposit=total;payDay=d0;}
+   else if(cust.prof==='good'&&rnd()<0.45)payDay=d0+ri(4,lead);
+   const hist=Array(10).fill(null);let cur=-1,shipDay=null,permit=null,rework=false;
+   let t=d0+Math.min(ri(1,3),ASOF-d0);
+   for(let i=0;i<10;i++){
+    if(!req[i])continue;
+    let dur;
+    if(i<8){
+     dur=i===PAINT?(2.2+rf(0,1.8))*(0.4+0.6*sizeF)+cong(t)*Math.sqrt(sizeF):STD[i]*rf(0.6,1.4)*sizeF;
+     dur=Math.max(1,Math.round(dur));
+     if(i===PAINT&&sizeF>1.6&&t>H2_START-20&&rnd()<0.55){dur+=ri(5,12);rework=true;}
+    }else if(i===SETTLE){
+     if(payDay==null){const ph=Math.pow(t/YEAR_DAYS,1.5);const lateP=cust.prof==='bad'?0.15+0.8*ph:cust.prof==='slow'?0.05+0.55*ph:0.03+0.2*ph;const pd=rnd()<lateP?(cust.prof==='bad'?ri(12,60):cust.prof==='slow'?ri(4,14):ri(4,8)):ri(0,2);payDay=t+pd;}
+     if(payDay<=t)dur=1;
+     else{
+      const wait=payDay-t;
+      const pEx=Math.min(0.9,0.03+0.95*Math.pow(t/YEAR_DAYS,2.5));
+      if(wait>2&&rnd()<pEx){dur=ri(1,2);permit={day:t+dur,reason:pick(REASONS),by:rnd()<0.6?'مدیر فروش':'مدیر کارخانه'};}
+      else dur=Math.max(1,wait);
+     }
+    }else dur=ri(1,4);
+    hist[i]={in:t,out:t+dur};
+    if(t+dur>ASOF){hist[i].out=null;cur=i;break;}
+    t+=dur;
+   }
+   if(cur===-1)shipDay=t;
+   const pay=(payDay!=null&&payDay<=ASOF)?'paid':permit?'exception':'unpaid';
+   seq+=ri(1,3);
+   orders.push({id:'PI-04-'+String(seq).padStart(4,'0'),d0,m,cust,otype,prod:prod.n,unit:prod.u,qty,price,total,color,req,due,rework,deposit,payDay,hist,cur,shipDay,permit,pay,sizeF,
+    remaining:pay==='paid'?0:total-deposit});
+  }
+ }
+ /* وضعیت موعد در تاریخ گزارش */
+ for(const o of orders){
+  if(o.shipDay!=null){o.dueState=o.shipDay<=o.due?'done_ok':'done_late';o.lateDays=Math.max(0,o.shipDay-o.due);}
+  else if(ASOF>o.due){o.dueState='late';o.lateDays=ASOF-o.due;}
+  else{
+   let est=0;for(let i=o.cur;i<10;i++){if(!o.req[i])continue;const b=i===PAINT?6.5:STD[i]*(i<8?o.sizeF:1);est+=i===o.cur?b*0.5:b;}
+   o.dueState=ASOF+est>o.due?'risk':'ok';o.lateDays=0;
+  }
+  o.reachedSettle=!!(o.hist[SETTLE]&&o.hist[SETTLE].in<=ASOF);
+  o.dueBal=o.reachedSettle?o.remaining:0;
+ }
+ return orders;
+}
+const ORDERS=buildData();
+
+function stateAt(o,T){
+ if(o.d0>T)return null;
+ if(o.shipDay!=null&&o.shipDay<=T)return 'done';
+ let st=-1;for(let i=0;i<10;i++){const h=o.hist[i];if(h&&h.in<=T)st=i;}
+ return st;
+}
+function snapshot(list,T){
+ const r={total:0,open:0,prod:0,settle:0,ready:0,overdue:0,dueBal:0,permits:0,done:0};
+ for(const o of list){
+  if(o.d0>T)continue;r.total++;
+  if(o.permit&&o.permit.day<=T)r.permits++;
+  if(o.hist[SETTLE]&&o.hist[SETTLE].in<=T&&!(o.payDay!=null&&o.payDay<=T))r.dueBal+=o.total-o.deposit;
+  const s=stateAt(o,T);
+  if(s==='done'){r.done++;continue;}
+  r.open++;if(s<=7)r.prod++;else if(s===SETTLE)r.settle++;else r.ready++;
+  if(T>o.due)r.overdue++;
+ }
+ return r;
+}
+const DEFAULT_F={month:-1,cust:'all',otype:'all',pay:'all'};
+function applyF(list,F,skip){
+ skip=skip||{};
+ return list.filter(o=>(skip.month||F.month<0||o.m===F.month)&&
+  (F.cust==='all'||(F.cust.startsWith('k:')?o.cust.kind===F.cust.slice(2):o.cust.id===F.cust))&&
+  (F.otype==='all'||o.otype===F.otype)&&
+  (skip.pay||F.pay==='all'||o.pay===F.pay));
+}
+const median=a=>{if(!a.length)return 0;const b=[...a].sort((x,y)=>x-y),k=b.length>>1;return b.length%2?b[k]:(b[k-1]+b[k])/2;};
+const LEAD_BINS=[[0,14,'۰ تا ۱۴'],[15,21,'۱۵ تا ۲۱'],[22,28,'۲۲ تا ۲۸'],[29,35,'۲۹ تا ۳۵'],[36,42,'۳۶ تا ۴۲'],[43,56,'۴۳ تا ۵۶'],[57,999,'۵۷ و بیشتر']];
+const BIG_ORDER=500e6;
+
+function compute(F){
+ const base=applyF(ORDERS,F),noMonth=applyF(ORDERS,F,{month:1}),noPay=applyF(ORDERS,F,{pay:1}),noMP=applyF(ORDERS,F,{month:1,pay:1});
+ const R={F,base,noMonth,noPay};
+ R.now=snapshot(base,ASOF);R.prev=snapshot(base,ASOF-30);
+ R.open=base.filter(o=>o.shipDay==null);
+ /* جریان مراحل */
+ R.flow=STAGES.map(()=>({ok:0,risk:0,late:0,n:0,value:0,orders:[]}));
+ for(const o of R.open){const f=R.flow[o.cur];f.n++;f.value+=o.total;f.orders.push(o);f[o.dueState==='late'?'late':o.dueState==='risk'?'risk':'ok']++;}
+ /* زمان هر مرحله */
+ R.stime=STAGES.map(()=>({sum:0,n:0,h1s:0,h1n:0,h2s:0,h2n:0,max:0}));
+ for(const o of base)for(let i=0;i<10;i++){const h=o.hist[i];if(!h||h.out==null)continue;const d=h.out-h.in,x=R.stime[i];x.sum+=d;x.n++;x.max=Math.max(x.max,d);if(h.in<H2_START){x.h1s+=d;x.h1n++;}else{x.h2s+=d;x.h2n++;}}
+ R.stime.forEach(x=>{x.avg=x.n?x.sum/x.n:0;x.h1=x.h1n?x.h1s/x.h1n:0;x.h2=x.h2n?x.h2s/x.h2n:0;});
+ let bi=-1;for(let i=0;i<8;i++)if(R.stime[i].n>=3&&(bi<0||R.stime[i].avg>R.stime[bi].avg))bi=i;R.bottleneck=bi;
+ const others=R.stime.slice(0,8).filter((x,i)=>i!==bi&&x.n>0);
+ R.othersAvg=others.length?others.reduce((a,x)=>a+x.sum,0)/others.reduce((a,x)=>a+x.n,0):0;
+ /* تحویل به‌موقع ماهانه (بر اساس ماه موعد) */
+ R.ontime=FA_MONTHS.map(()=>({n:0,ok:0}));
+ for(const o of noMonth){if(o.due>ASOF||o.due>YEAR_DAYS)continue;const x=R.ontime[md(o.due).m];x.n++;if(o.shipDay!=null&&o.shipDay<=o.due)x.ok++;}
+ R.ontime.forEach(x=>x.rate=x.n?x.ok/x.n:null);
+ const sumR=(a,b)=>{let n=0,k=0;for(let i=a;i<=b;i++){n+=R.ontime[i].n;k+=R.ontime[i].ok;}return n?k/n:null;};
+ R.ontimeH1=sumR(0,5);R.ontimeH2=sumR(6,11);R.ontimeYear=sumR(0,11);
+ /* زمان تحویل */
+ const done=base.filter(o=>o.shipDay!=null);R.done=done;
+ R.lead=LEAD_BINS.map(b=>({b,prod:0,serv:0}));
+ for(const o of done){const L=o.shipDay-o.d0;const k=LEAD_BINS.findIndex(b=>L>=b[0]&&L<=b[1]);R.lead[k][o.otype]++;}
+ R.leadMedProd=median(done.filter(o=>o.otype==='prod').map(o=>o.shipDay-o.d0));
+ R.leadMedServ=median(done.filter(o=>o.otype==='serv').map(o=>o.shipDay-o.d0));
+ R.leadNProd=done.filter(o=>o.otype==='prod').length;R.leadNServ=done.filter(o=>o.otype==='serv').length;
+ /* حجم ماهانه */
+ R.vol=FA_MONTHS.map(()=>({prod:0,serv:0,value:0}));
+ for(const o of noMonth){R.vol[o.m][o.otype]++;R.vol[o.m].value+=o.total;}
+ /* پرداخت */
+ const P={paid:{n:0,amt:0},unpaid:{n:0,amt:0,dueN:0,dueAmt:0},exception:{n:0,amt:0}};
+ for(const o of noPay){const x=P[o.pay];x.n++;x.amt+=o.pay==='paid'?o.total:o.remaining;if(o.pay==='unpaid'&&o.reachedSettle){x.dueN++;x.dueAmt+=o.remaining;}}
+ R.pay=P;R.payN=noPay.length;
+ const byC={};for(const o of noPay){if(!o.dueBal)continue;const k=o.cust.id;(byC[k]=byC[k]||{c:o.cust,amt:0,n:0});byC[k].amt+=o.dueBal;byC[k].n++;}
+ R.conc=Object.values(byC).sort((a,b)=>b.amt-a.amt);R.dueTotal=R.conc.reduce((a,x)=>a+x.amt,0);
+ R.top3Share=R.dueTotal?R.conc.slice(0,3).reduce((a,x)=>a+x.amt,0)/R.dueTotal:0;
+ R.permitsM=FA_MONTHS.map(()=>0);
+ R.permits=noMP.filter(o=>o.permit&&o.permit.day<=ASOF&&(F.month<0||o.m===F.month)).sort((a,b)=>b.permit.day-a.permit.day);
+ for(const o of noMP)if(o.permit&&o.permit.day<=ASOF&&o.permit.day<=YEAR_DAYS)R.permitsM[md(o.permit.day).m]++;
+ R.permQ1=R.permitsM.slice(0,3).reduce((a,b)=>a+b,0);R.permQ4=R.permitsM.slice(9,12).reduce((a,b)=>a+b,0);
+ R.reasonCount={};for(const o of R.permits)R.reasonCount[o.permit.reason]=(R.reasonCount[o.permit.reason]||0)+1;
+ /* سفارش‌های بزرگ دیرکرد */
+ R.bigLate=R.open.filter(o=>o.dueState==='late'&&o.total>=BIG_ORDER).sort((a,b)=>b.lateDays-a.lateDays);
+ R.lateOpen=R.open.filter(o=>o.dueState==='late');
+ const dueD=base.filter(o=>o.due<=ASOF),bg=dueD.filter(o=>o.total>=BIG_ORDER),sm=dueD.filter(o=>o.total<BIG_ORDER);
+ const okR=a=>a.length?a.filter(o=>o.shipDay!=null&&o.shipDay<=o.due).length/a.length:null;
+ R.bigN=bg.length;R.bigRate=okR(bg);R.smallRate=okR(sm);
+ return R;
+}
+
+</script>
+<script>
+/* ===================== داشبورد ===================== */
+const $=s=>document.querySelector(s);
+const F=Object.assign({},DEFAULT_F);
+let R=null,TIPS=[];
+const tipA=h=>`data-tip="${TIPS.push(h)-1}"`;
+function txt(x,y,s,o){o=o||{};const a=o.a==='left'?'end':o.a==='middle'?'middle':'start';return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" direction="rtl" text-anchor="${a}" class="${o.cls||'t-axis'}"${o.st?` style="${o.st}"`:''}>${s}</text>`;}
+const svg=(w,h,inner)=>`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${inner}</svg>`;
+const trow=(col,label,val)=>`<div class="tr"><i style="background:${col}"></i>${label}<span>${val}</span></div>`;
+function niceMax(v){if(v<=0)return 4;const raw=v/5,p=Math.pow(10,Math.floor(Math.log10(raw)));const st=[1,2,2.5,5,10].find(k=>k*p>=raw-1e-9)*p;return Math.ceil(v/st-1e-9)*st;}
+function ticks(mx){const raw=mx/5,p=Math.pow(10,Math.floor(Math.log10(raw)));const st=[1,2,2.5,5,10].find(k=>k*p>=raw-1e-9)*p;const t=[];for(let v=0;v<=mx+1e-9;v+=st)t.push(v);return t;}
+
+/* ---------- filters ---------- */
+function initFilters(){
+ const fm=$('#fMonth');fm.innerHTML='<option value="-1">همهٔ ماه‌ها</option>'+FA_MONTHS.map((m,i)=>`<option value="${i}">${m}</option>`).join('');
+ const og=k=>CUSTOMERS.filter(c=>c.kind===k).map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+ $('#fCust').innerHTML='<option value="all">همهٔ مشتریان</option><option value="k:حقوقی">همهٔ مشتریان حقوقی</option><option value="k:حقیقی">همهٔ مشتریان حقیقی</option>'+
+  `<optgroup label="حقوقی">${og('حقوقی')}</optgroup><optgroup label="حقیقی">${og('حقیقی')}</optgroup>`;
+ $('#fOtype').innerHTML=[['all','همه'],['prod','تولیدی'],['serv','خدماتی']].map(([v,l])=>`<button type="button" data-v="${v}">${l}</button>`).join('');
+ $('#fPay').innerHTML='<option value="all">همهٔ وضعیت‌ها</option>'+Object.entries(PAY_LABEL).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+ /* URL */
+ const q=new URLSearchParams(location.search);
+ if(q.has('month')){const m=+q.get('month');if(m>=1&&m<=12)F.month=m-1;}
+ if(q.has('cust')){const c=q.get('cust');if(c==='k:حقوقی'||c==='k:حقیقی'||CUSTOMERS.some(x=>x.id===c))F.cust=c;}
+ if(q.has('otype')&&['prod','serv'].includes(q.get('otype')))F.otype=q.get('otype');
+ if(q.has('pay')&&PAY_LABEL[q.get('pay')])F.pay=q.get('pay');
+ fm.onchange=()=>{F.month=+fm.value;update();};
+ $('#fCust').onchange=e=>{F.cust=e.target.value;update();};
+ $('#fPay').onchange=e=>{F.pay=e.target.value;update();};
+ $('#fOtype').onclick=e=>{const b=e.target.closest('button');if(!b)return;F.otype=b.dataset.v;update();};
+ $('#clearAll').onclick=()=>{Object.assign(F,DEFAULT_F);update();};
+ $('#railToggle').onclick=()=>{const r=$('#filters');r.classList.toggle('open');$('#railToggle').setAttribute('aria-expanded',r.classList.contains('open'));};
+}
+function syncFilterUI(){
+ $('#fMonth').value=F.month;$('#fCust').value=F.cust;$('#fPay').value=F.pay;
+ document.querySelectorAll('#fOtype button').forEach(b=>b.classList.toggle('on',b.dataset.v===F.otype));
+ const n=(F.month>=0)+(F.cust!=='all')+(F.otype!=='all')+(F.pay!=='all');
+ $('#fcnt').textContent=n?faInt(n)+' فیلتر فعال':'بدون فیلتر';
+ $('#clearAll').disabled=!n;$('#clearAll').style.opacity=n?1:.55;
+ $('#fsum').innerHTML=`<b>${faInt(R.base.length)}</b> سفارش از ${faInt(ORDERS.length)} سفارش سال<span class="sep"></span>ارزش ${faMoney(R.base.reduce((a,o)=>a+o.total,0))}`;
+ const q=new URLSearchParams(location.search);
+ ['month','cust','otype','pay'].forEach(k=>q.delete(k));
+ if(F.month>=0)q.set('month',F.month+1);if(F.cust!=='all')q.set('cust',F.cust);if(F.otype!=='all')q.set('otype',F.otype);if(F.pay!=='all')q.set('pay',F.pay);
+ const s=q.toString();try{history.replaceState(null,'',location.pathname+(s?'?'+s:'')+location.hash);}catch(e){}
+}
+
+/* ---------- KPI ---------- */
+function deltaHtml(d,goodWhenUp,fmt,suffix){
+ if(Math.abs(d)<1e-9)return `<div class="k-d flat">— بدون تغییر ${suffix}</div>`;
+ const up=d>0,cls=goodWhenUp==null?'flat':(up===goodWhenUp?(up?'up-good':'down-good'):(up?'up-bad':'down-bad'));
+ return `<div class="k-d ${cls}">${up?'▲':'▼'} ${fmt(Math.abs(d))} ${suffix}</div>`;
+}
+function renderKPIs(){
+ const n=R.now,p=R.prev,since='نسبت به ۳۰ روز پیش';
+ const dueP=moneyParts(n.dueBal);
+ const cards=[
+  {l:'سفارش‌های باز',c:'var(--blue)',v:faInt(n.open),u:'سفارش',d:deltaHtml(n.open-p.open,false,faInt,since),s:`از ${faInt(n.total)} سفارش ثبت‌شده`},
+  {l:'در حال تولید',c:'var(--s5)',v:faInt(n.prod),u:'سفارش',d:deltaHtml(n.prod-p.prod,null,faInt,since),s:`${faInt(n.settle)} سفارش دیگر در انتظار تسویه`},
+  {l:'آمادهٔ ارسال',c:'var(--green)',v:faInt(n.ready),u:'سفارش',d:deltaHtml(n.ready-p.ready,true,faInt,since),s:'تأیید نهایی گرفته، منتظر حمل'},
+  {l:'عقب از موعد تحویل',c:'var(--red)',v:faInt(n.overdue),u:'سفارش',d:deltaHtml(n.overdue-p.overdue,false,faInt,since),s:n.open?`${faPct(n.overdue/n.open)} سفارش‌های باز`:'سفارش بازی نیست'},
+  {l:'مطالبات سررسیدشده',c:'var(--orange)',v:dueP.v,u:dueP.u,d:deltaHtml(n.dueBal-p.dueBal,false,x=>{const m=moneyParts(x);return m.v+' '+m.u.replace(' تومان','');},since),s:'ماندهٔ سفارش‌هایی که به تسویه رسیده‌اند'},
+  {l:'ارسال با مجوز استثنا',c:'var(--orange)',v:faInt(n.permits),u:'سفارش',d:deltaHtml(n.permits-p.permits,false,faInt,'در ۳۰ روز اخیر'),s:'بدون تسویهٔ کامل، با تأیید مدیر'}
+ ];
+ $('#kpis').innerHTML=(R.base.length?'':'<div class="kpi-empty">با این ترکیب فیلترها سفارشی پیدا نشد. یکی از فیلترها را بردارید یا «پاک کردن همه» را بزنید.</div>')+cards.map(c=>`<div class="kpi"><div class="k-l"><i style="background:${c.c}"></i>${c.l}</div><div class="k-v">${c.v}<small>${c.u}</small></div>${c.d}<div class="k-s">${c.s}</div></div>`).join('');
+}
+
+/* ---------- flow ---------- */
+function drawFlow(){
+ const el=$('#flowChart'),W=el.clientWidth;
+ if(!R.open.length){el.innerHTML='<div class="empty">با این فیلترها سفارش بازی وجود ندارد.</div>';$('#flowTake').textContent='همهٔ سفارش‌های این گروه ارسال شده‌اند.';return;}
+ const rh=31,top=2,H=top+STAGES.length*rh+2,labW=W<420?76:92,valW=W<420?64:78,x0=W-labW,span=x0-10-valW;
+ const maxN=Math.max(1,...R.flow.map(f=>f.n));let s='';
+ R.flow.forEach((f,i)=>{
+  const y=top+i*rh,hot=i===R.bottleneck;
+  const tp=`<b>${STAGES[i]}</b>${hot?' <span class="badge b-orange">گلوگاه</span>':''}<div>${faInt(f.n)} سفارش باز<span class="sep"></span>${faMoney(f.value)}</div>`+trow('var(--c-ok)','در مسیر',faInt(f.ok))+trow('var(--orange)','در خطر تأخیر',faInt(f.risk))+trow('var(--red)','گذشته از موعد',faInt(f.late))+
+   (f.orders.length?`<div style="margin-top:4px;color:var(--muted);font-size:11.5px">${f.orders.slice(0,3).map(o=>o.id).join('، ')}${f.orders.length>3?' و …':''}</div>`:'');
+  s+=`<g class="row" ${tipA(tp)}><rect class="band${hot?' hot':''}" x="0" y="${y}" width="${W}" height="${rh-2}" rx="7"/>`;
+  s+=txt(W-8,y+rh/2+3,STAGES[i],{cls:hot?'t-lab hot':'t-lab'});
+  let x=x0;
+  for(const [k,c] of [['ok','var(--c-ok)'],['risk','var(--orange)'],['late','var(--red)']]){const w=f[k]/maxN*span;if(w>0){s+=`<rect class="nohit" x="${(x-w).toFixed(1)}" y="${y+7}" width="${Math.max(w-2,2).toFixed(1)}" height="${rh-16}" rx="3" style="fill:${c}"/>`;x-=w;}}
+  s+=txt(x-6,y+rh/2+3,f.n?faInt(f.n)+' سفارش':'—',{cls:f.n?'t-val':'t-axis'});
+  s+='</g>';
+ });
+ el.innerHTML=svg(W,H,s);
+ let mi=0;R.flow.forEach((f,i)=>{if(f.n>R.flow[mi].n)mi=i;});
+ const f=R.flow[mi],tot=R.open.length;
+ $('#flowTake').textContent=`${faInt(f.n)} سفارش از ${faInt(tot)} سفارش باز (${faPct(f.n/tot,0)}) در مرحلهٔ ${STAGES[mi]} هستند؛ بیشترین صف کارگاه.`+(R.lateOpen.length?` ${faInt(R.lateOpen.length)} سفارش باز از موعد گذشته‌اند.`:'');
+}
+
+/* ---------- stage time ---------- */
+function drawStageTime(){
+ const el=$('#stChart'),W=el.clientWidth,rows=8;
+ const st=R.stime.slice(0,8);
+ if(!st.some(x=>x.n)){el.innerHTML='<div class="empty">هنوز مرحله‌ای در این گروه کامل نشده است.</div>';$('#stTake').textContent='داده‌ای برای مقایسه نیست.';return;}
+ const rh=38.5,top=2,H=top+rows*rh+22,labW=W<420?76:92,valW=34,x0=W-labW,span=x0-10-valW;
+ const mx=niceMax(Math.max(...st.map(x=>Math.max(x.h1,x.h2))));let s='';
+ for(const tv of ticks(mx)){const xx=x0-span*tv/mx;s+=`<line class="gl" x1="${xx}" x2="${xx}" y1="${top}" y2="${top+rows*rh}"/>`+txt(xx,top+rows*rh+15,faNum(tv,1),{a:'middle'});}
+ s+=txt(10,top+rows*rh+15,'روز',{a:'left'});
+ st.forEach((x,i)=>{
+  const y=top+i*rh,hot=i===R.bottleneck;
+  const tp=`<b>${STAGES[i]}</b>${hot?' <span class="badge b-orange">گلوگاه</span>':''}`+trow('var(--c-h1)','نیمهٔ اول',x.h1n?faNum(x.h1,1)+' روز':'—')+trow('var(--c-h2)','نیمهٔ دوم',x.h2n?faNum(x.h2,1)+' روز':'—')+
+   `<div style="color:var(--ink-2)">میانگین کل ${faNum(x.avg,1)} روز<span class="sep"></span>بیشینه ${faInt(x.max)} روز<span class="sep"></span>${faInt(x.n)} سفارش</div>`;
+  s+=`<g class="row" ${tipA(tp)}><rect class="band${hot?' hot':''}" x="0" y="${y}" width="${W}" height="${rh-3}" rx="7"/>`;
+  s+=txt(W-8,y+rh/2+2,STAGES[i],{cls:hot?'t-lab hot':'t-lab'});
+  [[x.h1,x.h1n,'var(--c-h1)',7],[x.h2,x.h2n,'var(--c-h2)',19]].forEach(([v,n,c,dy])=>{
+   if(!n)return;const w=Math.max(2,v/mx*span);
+   s+=`<rect class="nohit" x="${(x0-w).toFixed(1)}" y="${y+dy-2}" width="${w.toFixed(1)}" height="10" rx="3" style="fill:${c}"/>`;
+   s+=txt(x0-w-5,y+dy+7,faNum(v,1),{cls:'t-small'});
+  });
+  s+='</g>';
+ });
+ el.innerHTML=svg(W,H,s);
+ const b=R.bottleneck;
+ if(b<0){$('#stTake').textContent='داده برای تشخیص گلوگاه کافی نیست.';return;}
+ const x=st[b];
+ $('#stTake').textContent=`${STAGES[b]} با میانگین ${faNum(x.avg,1)} روز کندترین مرحله است؛ ${faNum(x.avg/R.othersAvg,1)} برابر میانگین سایر مرحله‌ها (${faNum(R.othersAvg,1)} روز).`+(x.h1n&&x.h2n?` در نیمهٔ دوم سال از ${faNum(x.h1,1)} به ${faNum(x.h2,1)} روز رسیده است.`:'');
+}
+
+/* ---------- monthly columns (shared by volume) ---------- */
+function monthX(W,padR,padL){const step=(W-padR-padL)/12;return{step,x:i=>W-padR-(i+0.5)*step};}
+function drawVolume(){
+ const el=$('#volChart');el.innerHTML='';const W=el.clientWidth,H=Math.max(230,Math.min(420,el.clientHeight-4)),pt=18,pb=26,padR=34,padL=6,ih=H-pt-pb;
+ const v=R.vol,mx=niceMax(Math.max(...v.map(x=>x.prod+x.serv)));const {step,x}=monthX(W,padR,padL);const bw=Math.min(30,step*0.62);
+ let s='';
+ for(const tv of ticks(mx)){const yy=pt+ih-ih*tv/mx;s+=`<line class="gl" x1="${padL}" x2="${W-padR}" y1="${yy}" y2="${yy}"/>`+txt(W-padR+6,yy+4,faInt(tv),{a:'right'});}
+ const narrow=step<40;
+ v.forEach((m,i)=>{
+  const cx=x(i),sel=F.month<0||F.month===i,op=sel?1:.3;const tot=m.prod+m.serv;
+  const hP=m.prod/mx*ih,hS=m.serv/mx*ih;let y=pt+ih;
+  const tp=`<b>${FA_MONTHS[i]} ۱۴۰۴</b><div>${faInt(tot)} سفارش<span class="sep"></span>${faMoney(m.value)}</div>`+trow('var(--c-prod)','تولیدی',faInt(m.prod))+trow('var(--c-serv)','خدماتی',faInt(m.serv));
+  s+=`<g ${tipA(tp)}><rect class="hb" x="${cx-step/2}" y="${pt-10}" width="${step}" height="${ih+10}"/>`;
+  if(hP>0){s+=`<rect class="nohit" x="${cx-bw/2}" y="${y-hP}" width="${bw}" height="${hP}" rx="3" style="fill:var(--c-prod);opacity:${op}"/>`;y-=hP;}
+  if(hS>0){s+=`<rect class="nohit" x="${cx-bw/2}" y="${y-hS+ (hP>0?2:0)}" width="${bw}" height="${Math.max(1,hS-(hP>0?2:0))}" rx="3" style="fill:var(--c-serv);opacity:${op}"/>`;y-=hS;}
+  s+=txt(cx,y-5,faInt(tot),{a:'middle',cls:'t-small',st:sel?'':'opacity:.5'});
+  if(!narrow||i%2===0)s+=txt(cx,H-8,FA_MONTHS[i],{a:'middle',st:F.month===i?'fill:var(--ink);font-weight:700':''});
+  s+='</g>';
+ });
+ el.innerHTML=svg(W,H,s);
+ let hi=0,lo=0;v.forEach((m,i)=>{const t=m.prod+m.serv;if(t>v[hi].prod+v[hi].serv)hi=i;if(t<v[lo].prod+v[lo].serv)lo=i;});
+ const tt=i=>v[i].prod+v[i].serv;
+ $('#volTake').textContent=tt(hi)?`${FA_MONTHS[hi]} با ${faInt(tt(hi))} سفارش (${faMoney(v[hi].value)}) پرکارترین ماه بود و ${FA_MONTHS[lo]} با ${faInt(tt(lo))} سفارش کم‌کارترین؛ فشار کار پیش از نوروز بالا می‌رود.`+(F.month>=0?` ماه انتخابی شما ${FA_MONTHS[F.month]}: ${faInt(tt(F.month))} سفارش.`:''):'با این فیلترها سفارشی ثبت نشده است.';
+}
+
+/* ---------- on-time line ---------- */
+function drawOntime(){
+ const el=$('#otChart'),W=el.clientWidth,H=240,pt=16,pb=26,padR=40,padL=8,ih=H-pt-pb;
+ const {step,x}=monthX(W,padR,padL);const y=v=>pt+ih*(1-v);const ot=R.ontime;let s='';
+ for(let k=0;k<=4;k++){const yy=y(k/4);s+=`<line class="gl" x1="${padL}" x2="${W-padR}" y1="${yy}" y2="${yy}"/>`+txt(W-padR+6,yy+4,faInt(k*25)+'٪',{a:'right'});}
+ const narrow=step<40;
+ ot.forEach((m,i)=>{
+  const tp=`<b>موعد در ${FA_MONTHS[i]}</b>`+(m.n?`<div>${faPct(m.rate,0)} به‌موقع</div><div style="color:var(--ink-2)">${faInt(m.ok)} از ${faInt(m.n)} سفارش تا موعد ارسال شد</div>`:'<div style="color:var(--ink-2)">سفارشی با موعد در این ماه نیست</div>');
+  s+=`<rect class="hb" ${tipA(tp)} x="${x(i)-step/2}" y="${pt}" width="${step}" height="${ih}"/>`;
+  if(!narrow||i%2===0)s+=txt(x(i),H-8,FA_MONTHS[i],{a:'middle'});
+ });
+ s+=`<line class="nohit" x1="${padL}" x2="${W-padR}" y1="${y(.85)}" y2="${y(.85)}" style="stroke:var(--ink-2);stroke-width:1.3;stroke-dasharray:5 4"/>`+txt(padL+2,y(.85)-6,'هدف ۸۵٪',{a:'left',cls:'t-small'});
+ let d='',pen=false;ot.forEach((m,i)=>{if(m.rate==null){pen=false;return;}d+=(pen?'L':'M')+x(i).toFixed(1)+' '+y(m.rate).toFixed(1);pen=true;});
+ s+=`<path class="nohit" d="${d}" fill="none" style="stroke:var(--blue);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round"/>`;
+ const valid=ot.map((m,i)=>i).filter(i=>ot[i].rate!=null);
+ let mn=valid[0],last=valid[valid.length-1],fst=valid[0];valid.forEach(i=>{if(ot[i].rate<ot[mn].rate)mn=i;});
+ valid.forEach(i=>{const m=ot[i];const bad=m.rate<.85;s+=`<circle class="nohit" cx="${x(i)}" cy="${y(m.rate)}" r="4.2" style="fill:${bad?'var(--orange)':'var(--blue)'};stroke:var(--panel);stroke-width:2"/>`;});
+ [...new Set([fst,mn,last])].forEach(i=>{if(i==null)return;const m=ot[i];const above=m.rate<.93;s+=txt(x(i),y(m.rate)+(above?-10:17),faPct(m.rate,0),{a:'middle',cls:'t-val'});});
+ el.innerHTML=valid.length?svg(W,H,s):'<div class="empty">با این فیلترها سفارشی با موعد گذشته نیست.</div>';
+ if(!valid.length){$('#otTake').textContent='داده‌ای برای روند نیست.';return;}
+ const t=$('#otTake');t.classList.toggle('warn',R.ontimeH2!=null&&R.ontimeH2<.85);
+ t.textContent=(R.ontimeH1!=null&&R.ontimeH2!=null?`نرخ تحویل به‌موقع از ${faPct(R.ontimeH1,0)} در نیمهٔ اول سال به ${faPct(R.ontimeH2,0)} در نیمهٔ دوم رسیده است؛ `:`نرخ تحویل به‌موقع در کل سال ${faPct(R.ontimeYear,0)} است؛ `)+`پایین‌ترین ماه ${FA_MONTHS[mn]} با ${faPct(ot[mn].rate,0)}.`;
+}
+
+/* ---------- lead time histogram ---------- */
+function drawLead(){
+ const el=$('#ltChart'),W=el.clientWidth,H=240,pt=18,pb=42,padR=34,padL=6,ih=H-pt-pb;
+ const L=R.lead,n=L.length,step=(W-padR-padL)/n,x=i=>W-padR-(i+0.5)*step,bw=Math.min(46,step*0.66);
+ const mx=niceMax(Math.max(...L.map(b=>b.prod+b.serv)));let s='';
+ if(!R.done.length){el.innerHTML='<div class="empty">در این گروه هنوز سفارشی ارسال نشده است.</div>';$('#ltTake').textContent='داده‌ای برای توزیع نیست.';return;}
+ for(const tv of ticks(mx)){const yy=pt+ih-ih*tv/mx;s+=`<line class="gl" x1="${padL}" x2="${W-padR}" y1="${yy}" y2="${yy}"/>`+txt(W-padR+6,yy+4,faInt(tv),{a:'right'});}
+ const short=['۰–۱۴','۱۵–۲۱','۲۲–۲۸','۲۹–۳۵','۳۶–۴۲','۴۳–۵۶','۵۷+'];
+ L.forEach((b,i)=>{
+  const tot=b.prod+b.serv,cx=x(i),hP=b.prod/mx*ih,hS=b.serv/mx*ih;let y=pt+ih;
+  const tp=`<b>${b.b[2]} روز</b><div>${faInt(tot)} سفارش (${faPct(tot/R.done.length,0)} ارسال‌شده‌ها)</div>`+trow('var(--c-prod)','تولیدی',faInt(b.prod))+trow('var(--c-serv)','خدماتی',faInt(b.serv));
+  s+=`<g ${tipA(tp)}><rect class="hb" x="${cx-step/2}" y="${pt-10}" width="${step}" height="${ih+10}"/>`;
+  if(hP>0){s+=`<rect class="nohit" x="${cx-bw/2}" y="${y-hP}" width="${bw}" height="${hP}" rx="3" style="fill:var(--c-prod)"/>`;y-=hP;}
+  if(hS>0){s+=`<rect class="nohit" x="${cx-bw/2}" y="${y-hS+(hP>0?2:0)}" width="${bw}" height="${Math.max(1,hS-(hP>0?2:0))}" rx="3" style="fill:var(--c-serv)"/>`;y-=hS;}
+  if(tot)s+=txt(cx,y-5,faInt(tot),{a:'middle',cls:'t-small'});
+  s+=txt(cx,pt+ih+16,short[i],{a:'middle'})+'</g>';
+ });
+ s+=txt((W-padR+padL)/2,H-4,'روز از ثبت سفارش تا ارسال',{a:'middle',cls:'t-small'});
+ el.innerHTML=svg(W,H,s);
+ const parts=[];if(R.leadNProd)parts.push(`سفارش‌های تولیدی ${faInt(R.leadMedProd)} روز`);if(R.leadNServ)parts.push(`سفارش‌های خدماتی ${faInt(R.leadMedServ)} روز`);
+ const long=R.done.filter(o=>o.shipDay-o.d0>42).length;
+ $('#ltTake').textContent=`میانهٔ زمان تحویل: ${parts.join(' و ')}.`+(long?` ${faInt(long)} سفارش بیش از ۶ هفته طول کشیده‌اند.`:'');
+}
+
+/* ---------- payment ---------- */
+function renderPayment(){
+ const P=R.pay,N=R.payN||1;
+ const rows=[['paid','var(--green)',P.paid,`ارزش کل ${faMoney(P.paid.amt)}`],
+  ['unpaid','var(--red)',P.unpaid,`مانده ${faMoney(P.unpaid.amt)}<span class="sep"></span>${faInt(P.unpaid.dueN)} سفارش به تسویه رسیده (${faMoney(P.unpaid.dueAmt)})`],
+  ['exception','var(--orange)',P.exception,`ارسال شده با ماندهٔ ${faMoney(P.exception.amt)}`]];
+ $('#payStat').innerHTML=(R.payN?`<div class="share">${rows.map(([k,c,x])=>x.n?`<span style="width:${x.n/N*100}%;background:${c}" ${tipA(`<b>${PAY_LABEL[k]}</b><div>${faInt(x.n)} سفارش (${faPct(x.n/N)})</div>`)}></span>`:'').join('')}</div>`:'')+
+  rows.map(([k,c,x,sub])=>`<div class="pstat"><i class="sw" style="background:${c}"></i><span>${PAY_LABEL[k]}</span><span class="n">${faInt(x.n)} سفارش</span><span class="x">${sub}</span></div>`).join('');
+ const C=R.conc,tot=R.dueTotal;
+ if(!C.length)$('#payConc').innerHTML='<div class="empty">مطالبهٔ سررسیدشده‌ای وجود ندارد.</div>';
+ else{const mx=C[0].amt;$('#payConc').innerHTML=C.slice(0,6).map((c,i)=>`<div class="cbar${i>=3?' rest':''}" ${tipA(`<b>${c.c.name}</b><div><span class="vz">${c.c.kind}</span><span class="sep"></span>${faInt(c.n)} سفارش</div><div>${faMoney(c.amt)} (${faPct(c.amt/tot)} مطالبات)</div>`)}><span class="nm">${c.c.name}</span><span class="am">${faMoney(c.amt)}<span class="sep"></span>${faPct(c.amt/tot,0)}</span><div class="tr"><span style="width:${c.amt/mx*100}%"></span></div></div>`).join('')+
+  (C.length>6?`<div style="font-size:12px;color:var(--muted)">و ${faInt(C.length-6)} مشتری دیگر</div>`:'')+`<div style="font-size:12px;color:var(--ink-2);margin-top:6px">جمع: <b>${faMoney(tot)}</b> نزد ${faInt(C.length)} مشتری</div>`;}
+ /* permits per month */
+ const el=$('#permChart'),W=el.clientWidth,H=120,pt=16,pb=20,padR=4,padL=4,ih=H-pt-pb;const pm=R.permitsM,mx=Math.max(1,...pm);
+ const {step,x}=monthX(W,padR,padL);const bw=Math.min(22,step*.6);let s=`<line class="axis" x1="${padL}" x2="${W-padR}" y1="${pt+ih}" y2="${pt+ih}"/>`;
+ pm.forEach((v,i)=>{const h=v/mx*ih,q4=i>=9;s+=`<g ${tipA(`<b>${FA_MONTHS[i]}</b><div>${faInt(v)} مجوز استثنا</div>`)}><rect class="hb" x="${x(i)-step/2}" y="${pt-12}" width="${step}" height="${ih+12}"/>`+(v?`<rect class="nohit" x="${x(i)-bw/2}" y="${pt+ih-h}" width="${bw}" height="${h}" rx="3" style="fill:${q4?'var(--orange)':'var(--s3)'}"/>`:'')+txt(x(i),pt+ih-h-4,faInt(v),{a:'middle',cls:'t-small'})+((i%3===0)?txt(x(i),H-4,FA_MONTHS[i],{a:'middle'}):'')+'</g>';});
+ el.innerHTML=svg(W,H,s);
+ const L=R.permits.slice(0,4);
+ $('#permList').innerHTML=L.length?`<ul class="plist">${L.map(o=>`<li><span class="who"><span class="mono">${o.id}</span><span class="sep"></span>${o.cust.name}</span><span class="badge b-orange">${faMoney(o.remaining||o.total-o.deposit)}</span><span class="r">${o.permit.reason}<span class="sep"></span>${faDate(o.permit.day)}<span class="sep"></span>${o.permit.by}</span></li>`).join('')}</ul>`:'<div class="empty" style="padding:12px">مجوزی صادر نشده است.</div>';
+ const top=Object.entries(R.reasonCount).sort((a,b)=>b[1]-a[1])[0];
+ $('#payTake').textContent=(C.length?`${faInt(Math.min(3,C.length))} مشتری اول ${faPct(R.top3Share,0)} از ${faMoney(tot)} مطالبات سررسیدشده را دارند. `:'')+
+  `در سه ماه آخر سال ${faInt(R.permQ4)} مجوز استثنا صادر شده، ${R.permQ1?`در برابر ${faInt(R.permQ1)} مجوز در سه ماه اول`:'در حالی که در سه ماه اول هیچ مجوزی صادر نشده بود'}.`+(top?` رایج‌ترین دلیل: «${top[0]}».`:'');
+}
+
+/* ---------- insights ---------- */
+function renderInsights(){
+ const L=[];const b=R.bottleneck;
+ if(b>=0){const x=R.stime[b],q=R.flow[b].n,on=R.open.length;
+  L.push({lvl:'warn',ic:'!',h:`مرحلهٔ ${STAGES[b]} گلوگاه کارگاه است`,t:`میانگین ماندن ${faNum(x.avg,1)} روز، یعنی ${faNum(x.avg/R.othersAvg,1)} برابر بقیهٔ مراحل.`+(x.h1n&&x.h2n?` از ${faNum(x.h1,1)} روز در نیمهٔ اول به ${faNum(x.h2,1)} روز در نیمهٔ دوم رسیده.`:'')+(q&&on?` الان ${faInt(q)} سفارش (${faPct(q/on,0)} سفارش‌های باز) در این مرحله‌اند.`:''),a:'#stagetime'});}
+ if(R.ontimeH1!=null&&R.ontimeH2!=null){const dn=R.ontimeH2<R.ontimeH1;
+  L.push({lvl:R.ontimeH2<.85?'bad':'good',ic:dn?'▼':'▲',h:`تحویل به‌موقع ${dn?'افت کرده':'بهتر شده'} است`,t:`از ${faPct(R.ontimeH1,0)} در شش ماه اول به ${faPct(R.ontimeH2,0)} در شش ماه دوم${R.ontimeH2<.85?'؛ پایین‌تر از هدف ۸۵٪':''}.`,a:'#ontime'});}
+ if(R.lateOpen.length){const big=R.bigLate,w=[...R.lateOpen].sort((a,b)=>b.lateDays-a.lateDays)[0];
+  L.push({lvl:'bad',ic:'!',h:`${faInt(R.lateOpen.length)} سفارش باز از موعد گذشته‌اند`,t:(big.length?`${faInt(big.length)} مورد از آن‌ها سفارش بزرگ (بالای ۵۰۰ میلیون تومان) است. `:'')+`بیشترین تأخیر: ${w.id} برای ${w.cust.name}، ${faInt(w.lateDays)} روز، در مرحلهٔ ${STAGES[w.cur]}.`+(R.bigRate!=null&&R.smallRate!=null&&R.bigN>=3?` سفارش‌های بزرگ فقط ${faPct(R.bigRate,0)} به‌موقع تحویل شده‌اند، در برابر ${faPct(R.smallRate,0)} برای بقیه.`:''),a:'#orders'});}
+ else if(R.bigRate!=null&&R.smallRate!=null&&R.bigN>=3&&R.bigRate<R.smallRate){L.push({lvl:'warn',ic:'!',h:'سفارش‌های بزرگ دیرتر می‌رسند',t:`فقط ${faPct(R.bigRate,0)} سفارش‌های بالای ۵۰۰ میلیون تومان به‌موقع تحویل شده‌اند، در برابر ${faPct(R.smallRate,0)} برای بقیه.`,a:'#orders'});}
+ if(R.conc.length){const c=R.conc;L.push({lvl:R.top3Share>.6?'bad':'warn',ic:'﷼',h:'مطالبات در دست چند مشتری متمرکز است',t:`${faMoney(R.dueTotal)} مطالبهٔ سررسیدشده داریم که ${faPct(R.top3Share,0)} آن نزد ${c.slice(0,3).map(x=>x.c.name).join('، ')} است.`,a:'#payment'});}
+ if(R.permQ4>R.permQ1){L.push({lvl:'warn',ic:'▲',h:'مجوزهای استثنا رو به افزایش است',t:`در دی تا اسفند ${faInt(R.permQ4)} سفارش بدون تسویهٔ کامل ارسال شده؛ ${R.permQ1?`در فروردین تا خرداد ${faInt(R.permQ1)} سفارش`:'در فروردین تا خرداد هیچ موردی نبود'}. این روند ریسک وصول را بالا می‌برد.`,a:'#payment'});}
+ $('#insList').innerHTML=(L.length?L.slice(0,5):[{lvl:'info',ic:'i',h:'نکتهٔ خاصی دیده نشد',t:'با فیلترهای فعلی موردی که نیاز به توجه فوری داشته باشد پیدا نشد.'}]).map(x=>`<li><span class="ic ${x.lvl}">${x.ic}</span><div style="flex:1;min-width:0"><b>${x.h}</b><p>${x.t}${x.a?` <a href="${x.a}">مشاهده</a>`:''}</p></div></li>`).join('');
+}
+
+/* ---------- table ---------- */
+const COLS=[
+ {k:'id',l:'پیش‌فاکتور'},{k:'cust',l:'مشتری'},{k:'prod',l:'محصول'},{k:'total',l:'مبلغ',num:1},{k:'prog',l:'مراحل تولید'},{k:'due',l:'موعد تحویل'},{k:'pay',l:'پرداخت'}];
+const SEV={late:0,risk:1,ok:2,done_late:3,done_ok:4};
+let sortK='due',sortDir=1,shown=15,scope='open';
+const progKey=o=>o.shipDay!=null?11:o.cur+(ASOF-o.hist[o.cur].in)/30;
+const sortFns={id:o=>o.id,cust:o=>o.cust.name,prod:o=>o.prod,total:o=>o.total,prog:progKey,due:o=>SEV[o.dueState]*1e4+(o.dueState==='late'?-o.lateDays:o.due),pay:o=>({unpaid:o.reachedSettle?0:2,exception:1,paid:3})[o.pay]};
+function dueBadge(o){
+ switch(o.dueState){
+  case 'late':return `<span class="badge b-red">${faInt(o.lateDays)} روز تأخیر</span>`;
+  case 'risk':return '<span class="badge b-orange">در خطر تأخیر</span>';
+  case 'ok':return '<span class="badge b-green">در مسیر</span>';
+  case 'done_ok':return '<span class="badge b-grey">به‌موقع ارسال شد</span>';
+  default:return `<span class="badge b-red" style="opacity:.8">${faInt(o.lateDays)} روز دیرتر ارسال شد</span>`;
+ }
+}
+function payBadge(o){
+ if(o.pay==='paid')return '<span class="badge b-green">تسویه‌شده</span>';
+ if(o.pay==='exception')return '<span class="badge b-orange">مجوز استثنا</span>';
+ return o.reachedSettle?'<span class="badge b-red">پرداخت‌نشده</span>':'<span class="badge b-grey">پیش‌پرداخت</span>';
+}
+function tracker(o){
+ const done=o.shipDay!=null;
+ return `<div class="trk${done?' done':''}">`+STAGES.map((n,i)=>{const c=!o.req[i]?'x':(done||(o.hist[i]&&o.hist[i].out!=null))?'d':i===o.cur?'c':'';return `<i class="${c}"></i>`;}).join('')+'</div>'+
+  `<div class="trk-l">${done?`ارسال‌شده در ${faDate(o.shipDay)}`:(ASOF===o.hist[o.cur].in?`${STAGES[o.cur]}، از امروز`:`${faInt(ASOF-o.hist[o.cur].in)} روز در ${STAGES[o.cur]}`)}</div>`;
+}
+function initTable(){
+ $('#thead').innerHTML=COLS.map(c=>`<th data-k="${c.k}" class="${c.num?'num':''}" scope="col">${c.l} <span class="ar"></span></th>`).join('');
+ $('#thead').onclick=e=>{const th=e.target.closest('th');if(!th)return;const k=th.dataset.k;if(sortK===k)sortDir=-sortDir;else{sortK=k;sortDir=k==='total'?-1:1;}renderTable();};
+ $('#tScope').innerHTML=[['open','باز'],['done','ارسال‌شده'],['all','همه']].map(([v,l])=>`<button type="button" data-v="${v}">${l}</button>`).join('');
+ $('#tScope').onclick=e=>{const b=e.target.closest('button');if(!b)return;scope=b.dataset.v;shown=15;renderTable();};
+ $('#mSort').onchange=e=>{sortK=e.target.value;sortDir=sortK==='total'?-1:1;renderTable();};
+ $('#q').oninput=()=>{shown=15;renderTable();};
+ $('#moreBtn').onclick=()=>{shown+=15;renderTable();};
+ $('#tbody').onclick=e=>{const tr=e.target.closest('tr[data-id]');if(tr)openDrawer(tr.dataset.id);};
+}
+function renderTable(){
+ document.querySelectorAll('#tScope button').forEach(b=>b.classList.toggle('on',b.dataset.v===scope));
+ const q=$('#q').value.trim().toLowerCase();
+ let L=R.base.filter(o=>scope==='all'||(scope==='open'?o.shipDay==null:o.shipDay!=null));
+ if(q)L=L.filter(o=>[o.id,o.cust.name,o.prod,o.color,o.cust.kind,OTYPE_LABEL[o.otype],o.shipDay==null?STAGES[o.cur]:'ارسال‌شده'].join(' ').toLowerCase().includes(q));
+ const f=sortFns[sortK];L.sort((a,b)=>{const x=f(a),y=f(b);return (x<y?-1:x>y?1:0)*sortDir||a.due-b.due;});
+ $('#mSort').value=sortK;document.querySelectorAll('#thead th').forEach(th=>th.querySelector('.ar').textContent=th.dataset.k===sortK?(sortDir>0?'▲':'▼'):'');
+ const mx=Math.max(1,...R.base.map(o=>o.total));
+ $('#tbody').innerHTML=L.slice(0,shown).map(o=>`<tr data-id="${o.id}" tabindex="0">
+  <td><span class="mono">${o.id}</span><div class="ckind">${faDate(o.d0)}</div></td>
+  <td><div class="cname">${o.cust.name}</div><div class="ckind"><span class="vz">${o.cust.kind}</span><span class="sep"></span>${OTYPE_LABEL[o.otype]}</div></td>
+  <td><div style="white-space:nowrap">${o.prod}</div><div class="ckind">${faInt(o.qty)} ${o.unit}${o.color!=='—'?'<span class="sep"></span>'+o.color:''}</div></td>
+  <td class="num"><div class="amt">${faMoney(o.total)}</div><div class="mbar"><span style="width:${(o.total/mx*100).toFixed(1)}%"></span></div></td>
+  <td>${tracker(o)}</td>
+  <td><div class="ddate">${faDate(o.due)}</div>${dueBadge(o)}</td>
+  <td>${payBadge(o)}</td></tr>`).join('')||`<tr><td colspan="7"><div class="empty">سفارشی با این شرایط پیدا نشد.</div></td></tr>`;
+ $('#tcount').textContent=`${faInt(Math.min(shown,L.length))} از ${faInt(L.length)} سفارش`;
+ const mb=$('#moreBtn');mb.style.display=L.length>shown?'':'none';mb.textContent=`نمایش ${faInt(Math.min(15,L.length-shown))} سفارش دیگر`;
+}
+$('#tbody')&&document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches&&e.target.matches('tr[data-id]'))openDrawer(e.target.dataset.id);if(e.key==='Escape')closeDrawer();});
+
+/* ---------- drawer ---------- */
+function openDrawer(id){
+ const o=ORDERS.find(x=>x.id===id);if(!o)return;
+ $('#dHead').innerHTML=`<div><h3><span class="mono" style="font-size:15px">${o.id}</span></h3><p>${o.cust.name}<span class="sep"></span><span class="vz">${o.cust.kind}</span><span class="sep"></span>سفارش ${OTYPE_LABEL[o.otype]}</p><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">${dueBadge(o)}${payBadge(o)}</div></div><button class="dx" id="dClose" type="button" aria-label="بستن">×</button>`;
+ const tl=STAGES.map((n,i)=>{
+  if(!o.req[i])return `<li class="x"><span class="dot"></span><span class="sn">${n}</span><span></span><span class="sd">برای این سفارش لازم نیست</span></li>`;
+  const h=o.hist[i];
+  if(!h)return `<li><span class="dot"></span><span class="sn">${n}</span><span class="dur" style="color:var(--muted)">در انتظار</span><span class="sd">هنوز شروع نشده</span></li>`;
+  if(h.out==null){const d=ASOF-h.in;return `<li class="c"><span class="dot"></span><span class="sn">${n}<span class="sep"></span>مرحلهٔ فعلی</span><span class="dur">${faInt(d)} روز تاکنون</span><span class="sd">ورود ${faDate(h.in)}</span></li>`;}
+  const d=h.out-h.in,slow=i<8&&R.stime[i].n&&d>R.stime[i].avg*1.5&&d>=4;
+  return `<li class="d${slow?' slow':''}"><span class="dot"></span><span class="sn">${n}${i===PAINT&&o.rework?'<span class="sep"></span>دوباره‌کاری':''}</span><span class="dur">${faInt(d)} روز</span><span class="sd">ورود ${faDate(h.in)} ← خروج ${faDate(h.out)}</span></li>`;
+ }).join('');
+ const appr=o.hist[SHIP]?`<li class="${o.shipDay!=null?'d':'c'}"><span class="dot"></span><span class="sn">تأیید نهایی: آمادهٔ ارسال</span><span class="dur">${o.shipDay!=null?'ارسال شد':'منتظر حمل'}</span><span class="sd">تأیید ${faDate(o.hist[SHIP].in)}${o.shipDay!=null?'<span class="sep"></span>ارسال '+faDate(o.shipDay):''}</span></li>`:`<li><span class="dot"></span><span class="sn">تأیید نهایی: آمادهٔ ارسال</span><span class="dur" style="color:var(--muted)">در انتظار</span><span class="sd">پس از تسویه یا مجوز استثنا</span></li>`;
+ $('#dBody').innerHTML=`<dl class="kv">
+  <dt>محصول</dt><dd>${o.prod}</dd><dt>تعداد</dt><dd>${faInt(o.qty)} ${o.unit}</dd><dt>فی واحد</dt><dd>${faNum(o.price/1e6,2)} میلیون تومان</dd>
+  <dt>مبلغ پیش‌فاکتور</dt><dd>${faMoney(o.total)}</dd><dt>رنگ</dt><dd>${o.color}</dd>
+  <dt>تاریخ ثبت</dt><dd>${faDate(o.d0)}</dd><dt>موعد تحویل</dt><dd>${faDate(o.due)}</dd>
+  <dt>پیش‌پرداخت</dt><dd>${faMoney(o.deposit)}</dd><dt>مانده</dt><dd>${o.remaining?faMoney(o.remaining):'تسویه شده'}${o.pay==='paid'&&o.payDay>o.d0?' ('+faDate(o.payDay)+')':''}</dd></dl>`+
+  (o.permit?`<div class="permit"><b>مجوز استثنا</b><span class="sep"></span>${faDate(o.permit.day)}<span class="sep"></span>${o.permit.by}<br>دلیل: ${o.permit.reason}</div>`:'')+
+  `<h4>تاریخچهٔ مراحل</h4><ul class="tl">${tl}${appr}</ul>`;
+ $('#dClose').onclick=closeDrawer;
+ $('#drawer').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');
+}
+function closeDrawer(){$('#drawer').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');$('#scrim').classList.remove('on');}
+$('#scrim').onclick=closeDrawer;
+
+/* ---------- tooltip ---------- */
+const tip=$('#tip');
+function placeTip(e){const r=tip.getBoundingClientRect();let x=e.clientX-r.width-14,y=e.clientY+14;if(x<8)x=e.clientX+14;if(x+r.width>innerWidth-8)x=innerWidth-r.width-8;if(y+r.height>innerHeight-8)y=e.clientY-r.height-12;tip.style.left=Math.max(8,x)+'px';tip.style.top=Math.max(8,y)+'px';}
+function showTip(t,e){const h=t.dataset.tip!=null?TIPS[+t.dataset.tip]:t.dataset.tipt;if(h==null)return;tip.innerHTML=h;tip.hidden=false;placeTip(e);}
+document.addEventListener('mouseover',e=>{const t=e.target.closest('[data-tip],[data-tipt]');if(!t){tip.hidden=true;return;}showTip(t,e);});
+document.addEventListener('mousemove',e=>{if(!tip.hidden)placeTip(e);});
+document.addEventListener('click',e=>{const t=e.target.closest('[data-tip],[data-tipt]');if(t&&matchMedia('(hover:none)').matches)showTip(t,e);else if(!t)tip.hidden=true;});
+addEventListener('scroll',()=>{tip.hidden=true;},{passive:true});
+
+/* ---------- theme ---------- */
+const mq=matchMedia('(prefers-color-scheme: dark)');
+const isDark=()=>{const a=document.documentElement.getAttribute('data-theme');return a?a==='dark':mq.matches;};
+function paintThemeBtn(){const d=isDark();$('#themeBtn').innerHTML=(d?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>حالت تیره':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>حالت روشن');$('#themeBtn').title='تغییر به '+(d?'حالت روشن':'حالت تیره');}
+$('#themeBtn').onclick=()=>{const n=isDark()?'light':'dark';document.documentElement.setAttribute('data-theme',n);try{localStorage.setItem('sample-theme',n);}catch(e){}paintThemeBtn();};
+mq.addEventListener&&mq.addEventListener('change',paintThemeBtn);
+
+/* ---------- main ---------- */
+function drawCharts(){TIPS=[];drawFlow();drawStageTime();drawVolume();drawOntime();drawLead();renderPayment();}
+function update(){R=compute(F);syncFilterUI();renderKPIs();renderInsights();drawCharts();renderTable();}
+initFilters();initTable();paintThemeBtn();update();
+let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{TIPS=[];drawCharts();renderInsights();},120);});
+(function(){const q=new URLSearchParams(location.search);if(q.get('open'))openDrawer(q.get('open'));if(q.get('scope')&&['open','done','all'].includes(q.get('scope'))){scope=q.get('scope');renderTable();}
+ if(location.hash){const el=document.querySelector(location.hash);if(el)setTimeout(()=>el.scrollIntoView(),60);}})();
+</script>
+</body>
+</html>

@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Production Dashboard Guide</title>
+<link href="../../fonts/fonts.css" rel="stylesheet">
+<script>
+(function(){var t=null;try{t=new URLSearchParams(location.search).get('theme');}catch(e){}
+if(!t){try{t=localStorage.getItem('sample-theme');}catch(e){}}
+if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<style>
+:root{
+ --page:#f3f5f8;--panel:#ffffff;--panel-2:#eef1f5;--line:#e2e6ec;--ink:#121826;--ink-2:#4a5468;--muted:#8a93a5;
+ --blue:#2a78d6;--accent-soft:#e3edfb;--deep:#0d366b;--orange:#eb6834;--green:#1baf7a;--red:#c23434;--s3:#6da7ec;
+ --green-soft:#e1f5ec;--green-ink:#0d7a53;--red-soft:#f9e4e4;--red-ink:#a52a2a;--orange-soft:#fdeee6;--orange-ink:#b5461a;
+ --shadow:0 1px 2px rgba(18,24,38,.06),0 4px 16px rgba(18,24,38,.05);color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+ --page:#0e1116;--panel:#161a21;--panel-2:#1d222b;--line:#2a303b;--ink:#f1f3f7;--ink-2:#c2c8d3;--muted:#8d96a8;
+ --blue:#3987e5;--accent-soft:#1b2a40;--deep:#9ec5f4;--orange:#d95926;--green:#199e70;--red:#d64545;
+ --green-soft:#11302a;--green-ink:#63d2a8;--red-soft:#361c1e;--red-ink:#f19595;--orange-soft:#38231a;--orange-ink:#f3a37f;
+ --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);color-scheme:dark;}}
+:root[data-theme="dark"]{
+ --page:#0e1116;--panel:#161a21;--panel-2:#1d222b;--line:#2a303b;--ink:#f1f3f7;--ink-2:#c2c8d3;--muted:#8d96a8;
+ --blue:#3987e5;--accent-soft:#1b2a40;--deep:#9ec5f4;--orange:#d95926;--green:#199e70;--red:#d64545;
+ --green-soft:#11302a;--green-ink:#63d2a8;--red-soft:#361c1e;--red-ink:#f19595;--orange-soft:#38231a;--orange-ink:#f3a37f;
+ --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);color-scheme:dark;}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--page);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}
+.mono{font-family:"IBM Plex Mono",Consolas,monospace;font-size:13px;white-space:nowrap}
+.sep{display:inline-block;width:1px;height:.95em;background:currentColor;opacity:.35;margin:0 8px;vertical-align:-.12em}
+.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap;padding:12px 24px;background:var(--panel);border-bottom:1px solid var(--line)}
+.top .t{display:flex;align-items:center;gap:10px;min-width:0}
+.top .t b{font-size:16px}
+.top .t span{font-size:13px;color:var(--ink-2)}
+.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.home{font-size:12.5px;color:var(--ink-2);text-decoration:none;white-space:nowrap;padding:5px 4px;margin-right:2px}
+.home:hover{color:var(--blue)}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:10px;padding:7px 13px;font:inherit;font-size:13px;font-weight:500;text-decoration:none;cursor:pointer;white-space:nowrap;line-height:1.6}
+.btn:hover{border-color:var(--blue);color:var(--blue)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.lang{font-family:"IBM Plex Sans Arabic",Tahoma,sans-serif}
+.btn svg{width:16px;height:16px}
+.wrap{display:grid;grid-template-columns:230px minmax(0,780px);gap:40px;justify-content:center;padding:28px 24px 10px;max-width:1160px;margin:0 auto}
+nav.toc{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow:auto}
+.toc h2{font-size:12.5px;color:var(--muted);font-weight:600;margin:0 0 8px}
+.toc ol{list-style:none;margin:0;padding:0;border-left:2px solid var(--line)}
+.toc a{display:block;padding:4px 14px;margin-left:-2px;border-left:2px solid transparent;color:var(--ink-2);text-decoration:none;font-size:13.5px;line-height:1.6}
+.toc a:hover{color:var(--ink)}
+.toc a.on{color:var(--blue);border-left-color:var(--blue);font-weight:600}
+article{min-width:0}
+section{scroll-margin-top:84px;padding-bottom:18px;margin-bottom:26px;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+h1{font-size:27px;line-height:1.4;margin:0 0 6px}
+.lead{font-size:16px;color:var(--ink-2);margin:0 0 18px}
+h2.s{font-size:20.5px;margin:0 0 8px;line-height:1.4;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+h2.s .go{font-size:12.5px;font-weight:500;text-decoration:none;background:var(--accent-soft);color:var(--blue);border-radius:999px;padding:2px 12px;margin-inline-start:auto}
+h3{font-size:15.5px;margin:18px 0 4px}
+p{margin:0 0 10px}
+ul.l,ol.l{margin:0 0 12px;padding-left:22px}
+ul.l li,ol.l li{margin-bottom:5px}
+figure{margin:14px 0 16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px;box-shadow:var(--shadow)}
+figure img{display:block;width:100%;height:auto;border-radius:8px}
+figure.narrow img{max-width:470px;margin:0 auto}
+figcaption{font-size:12.8px;color:var(--ink-2);padding:8px 4px 0;text-align:center}
+.q{background:var(--accent-soft);border-radius:12px;padding:12px 16px;margin:14px 0 6px}
+.q b{display:block;color:var(--blue);font-size:13.5px;margin-bottom:2px}
+.ex{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--orange);border-radius:12px;padding:12px 16px;margin:10px 0}
+.ex b.h{display:block;font-size:13.5px;color:var(--orange-ink);margin-bottom:2px}
+.v{font-weight:700;color:var(--ink);white-space:nowrap}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:12px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.card b{display:block;margin-bottom:3px}
+.card p{font-size:13.5px;color:var(--ink-2);margin:0}
+.steps{counter-reset:s;list-style:none;padding:0;margin:12px 0}
+.steps li{counter-increment:s;position:relative;padding:12px 16px 12px 56px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px}
+.steps li::before{content:counter(s);position:absolute;left:14px;top:12px;width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:700}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:12px 0;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:560px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--panel-2);font-weight:600;color:var(--ink-2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.c{text-align:center;white-space:nowrap}
+.y{color:var(--green-ink);font-weight:700}.n{color:var(--red-ink);font-weight:700}.h{color:var(--orange-ink);font-weight:600}
+.badge{display:inline-flex;align-items:center;font-size:12px;font-weight:600;border-radius:999px;padding:1px 10px;white-space:nowrap;line-height:1.7}
+.b-green{background:var(--green-soft);color:var(--green-ink)}.b-red{background:var(--red-soft);color:var(--red-ink)}.b-orange{background:var(--orange-soft);color:var(--orange-ink)}.b-grey{background:var(--panel-2);color:var(--ink-2)}
+.trk{display:inline-flex;gap:2px;width:150px;vertical-align:middle}
+.trk i{flex:1;height:8px;border-radius:2px;border:1.5px solid var(--line)}
+.trk i.d{background:var(--blue);border-color:var(--blue)}
+.trk i.c{background:var(--orange);border-color:var(--orange);height:10px;margin-top:-1px}
+.trk i.x{border:0;background:var(--panel-2);height:3px;margin-top:2.5px}
+.sw{display:inline-block;width:14px;height:8px;border-radius:2px;vertical-align:middle;margin-right:6px}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600;font-size:14.5px}
+details p{margin:8px 0 2px;color:var(--ink-2);font-size:14px}
+dl.g{display:grid;grid-template-columns:170px 1fr;gap:0;margin:12px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+dl.g dt,dl.g dd{padding:9px 14px;border-bottom:1px solid var(--line);margin:0}
+dl.g dt{font-weight:600;background:var(--panel-2)}
+dl.g dd{font-size:14px;color:var(--ink-2)}
+dl.g dt:last-of-type,dl.g dd:last-of-type{border-bottom:0}
+footer{text-align:center;color:var(--muted);font-size:12.5px;padding:10px 16px 30px}
+@media (max-width:900px){
+ .wrap{grid-template-columns:minmax(0,1fr);gap:0;padding:0 16px 10px}
+ .top{position:static}
+ nav.toc{position:sticky;top:0;z-index:5;max-height:none;overflow-x:auto;overflow-y:hidden;background:var(--page);margin:0 -16px;padding:10px 16px;border-bottom:1px solid var(--line);scrollbar-width:none}
+ .toc h2{display:none}
+ .toc ol{display:flex;gap:6px;border:0;width:max-content}
+ .toc a{border:1px solid var(--line);border-radius:999px;padding:3px 12px;margin:0;background:var(--panel);white-space:nowrap;font-size:13px}
+ .toc a.on{border-color:var(--blue);background:var(--accent-soft)}
+ article{padding-top:20px}
+ section{scroll-margin-top:64px}
+ .cards{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:620px){
+ body{font-size:14.5px}
+ .top{padding:10px 16px}
+ .top .t span{display:none}
+ h1{font-size:22px}
+ h2.s{font-size:18.5px}
+ dl.g{grid-template-columns:minmax(0,1fr)}
+ dl.g dt{border-bottom:0}
+}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="t"><b>Orders &amp; Production Stages Dashboard Guide</b><span>Sample workshop</span></div>
+ <div class="actions">
+  <a class="home" href="../../index.html">&larr; All dashboards</a>
+  <a class="btn primary" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>Back to dashboard</a>
+  <a class="btn lang" href="../../fa/production/guide.html" lang="fa" hreflang="fa">فارسی</a><button class="btn" id="themeBtn" type="button"></button>
+ </div>
+</header>
+
+<div class="wrap">
+ <nav class="toc" aria-label="Contents">
+  <h2>Contents</h2>
+  <ol>
+   <li><a href="#glance">At a glance</a></li>
+   <li><a href="#quick">Quick start</a></li>
+   <li><a href="#g-kpis">Key metrics</a></li>
+   <li><a href="#g-insights">Key insights</a></li>
+   <li><a href="#g-volume">Monthly order volume</a></li>
+   <li><a href="#g-flow">Orders by stage</a></li>
+   <li><a href="#g-stagetime">Days per stage</a></li>
+   <li><a href="#g-ontime">On-time delivery</a></li>
+   <li><a href="#g-leadtime">Lead time</a></li>
+   <li><a href="#g-payment">Payment &amp; exception permits</a></li>
+   <li><a href="#g-orders">Order list</a></li>
+   <li><a href="#g-filters">Filters</a></li>
+   <li><a href="#faq">FAQ</a></li>
+   <li><a href="#glossary">Glossary</a></li>
+  </ol>
+ </nav>
+
+ <article>
+  <section id="glance">
+   <h1>Orders &amp; Production Stages Dashboard</h1>
+   <p class="lead">This dashboard shows where every workshop order sits on the production line, which stage is slowing work down, which orders have fallen behind their due date, and how much of the order value has not yet been collected.</p>
+   <figure><img src="shots/overview.png" alt="Overview of the orders and production stages dashboard" loading="lazy"><figcaption>Dashboard overview: filters on the left, key metrics at the top, followed by insights and charts</figcaption></figure>
+   <p>Every order starts with a pro forma invoice and passes through up to ten stages in sequence: <b>laser cutting, bending, forging, welding, cleaning, painting, assembly, packaging, settlement and shipping</b>. Service orders (for example, just cutting the customer’s own sheet metal) need only some of these stages. After settlement, or once an “exception permit” is issued, the order receives final approval as <b>“Ready to ship”</b>.</p>
+   <p>The data covers the Persian year 1404, and all statuses are calculated as of <b>20 Esfand 1404</b>. In total, <span class="v" data-v="total"></span> orders worth <span class="v" data-v="totalValue"></span> were placed.</p>
+   <div class="cards">
+    <div class="card"><b>Workshop manager</b><p>Which stage is the bottleneck, and where is the work piling up?</p></div>
+    <div class="card"><b>Sales manager</b><p>Which orders are behind the date we promised the customer?</p></div>
+    <div class="card"><b>Finance manager</b><p>How much are we owed, by whom, and how many orders shipped without settlement?</p></div>
+   </div>
+  </section>
+
+  <section id="quick">
+   <h2 class="s">Quick start</h2>
+   <ol class="steps">
+    <li><b>Read the metrics and insights.</b> The row of cards at the top describes today’s status, and the “Key insights” panel states the most important problems with numbers and names.</li>
+    <li><b>Narrow the scope with filters.</b> For example, select the customer “<span data-v="exCust"></span>” so every chart shows only their orders.</li>
+    <li><b>Click on orders.</b> In the “Order list”, click any row to open that order’s full stage history in a side panel.</li>
+   </ol>
+   <p>Hover over any bar, point or chart row to see its details in a small tooltip. On a phone, tap it instead.</p>
+  </section>
+
+  <section id="g-kpis">
+   <h2 class="s">Key metrics <a class="go" href="index.html#kpis">View in dashboard →</a></h2>
+   <figure><img src="shots/kpis.png" alt="Key metric cards" loading="lazy"><figcaption>Six metric cards; below each number is its change compared with 30 days ago</figcaption></figure>
+   <h3>What does it show?</h3>
+   <ul class="l">
+    <li><b>Open orders:</b> orders that have not shipped yet.</li>
+    <li><b>In production:</b> orders currently in one of the eight production stages (cutting through packaging).</li>
+    <li><b>Ready to ship:</b> orders with final approval that are only waiting for pickup.</li>
+    <li><b>Past due date:</b> open orders whose due date has passed.</li>
+    <li><b>Receivables due:</b> the outstanding balance on orders that have reached the settlement stage but have not been paid in full.</li>
+    <li><b>Shipped on exception:</b> the number of orders shipped without full settlement, with a manager’s approval.</li>
+   </ul>
+   <h3>How to read it</h3>
+   <p>▲ means the number is higher than 30 days ago and ▼ means it is lower. Green means the change is good for the workshop and red means it needs follow-up; for example, a rise in “Ready to ship” is green, while a rise in “Past due date” is red. For “In production”, whether a change is good or bad is not clear-cut, so it is shown in grey.</p>
+   <div class="ex"><b class="h">Example using this dashboard’s numbers</b>
+    We currently have <span class="v" data-v="open"></span> open orders (30 days ago there were <span class="v" data-v="openPrev"></span>). <span class="v" data-v="prod"></span> orders are in production, <span class="v" data-v="settle"></span> are awaiting settlement and <span class="v" data-v="ready"></span> are ready to ship. <span class="v" data-v="overdue"></span> orders (<span class="v" data-v="overduePct"></span> of open orders) are past due. Receivables due stand at <span class="v" data-v="dueBal"></span>, and since the start of the year <span class="v" data-v="permits"></span> orders have shipped on an exception permit, <span class="v" data-v="permits30"></span> of them in the last 30 days.</div>
+   <div class="q"><b>Which question does this section answer?</b>“What state is the workshop in today, and are we better or worse off than a month ago?”</div>
+  </section>
+
+  <section id="g-insights">
+   <h2 class="s">Key insights <a class="go" href="index.html#insights">View in dashboard →</a></h2>
+   <figure class="narrow"><img src="shots/insights.png" alt="Key insights panel" loading="lazy" style="max-width:560px"><figcaption>Insights are recalculated every time a filter changes</figcaption></figure>
+   <p>This panel reviews the charts for you and writes up to five key points in plain language. The color of each point’s icon shows its severity: red for a serious problem, orange for a warning and green for good news. The “View” link takes you to the related chart.</p>
+   <div class="ex"><b class="h">Example using this dashboard’s numbers</b>
+    The most important insight is that the <span class="v" data-v="bName"></span> stage is the workshop’s bottleneck: orders spend an average of <span class="v" data-v="bAvg"></span> days there, <span class="v" data-v="bRatio"></span>× longer than in the other stages. Another insight is that only <span class="v" data-v="bigRate"></span> of large orders (over 500M Toman) were delivered on time, versus <span class="v" data-v="smallRate"></span> of smaller orders.</div>
+   <div class="q"><b>Which question does this section answer?</b>“If I only have one minute, what should I pay attention to?”</div>
+  </section>
+
+  <section id="g-volume">
+   <h2 class="s">Monthly order volume <a class="go" href="index.html#volume">View in dashboard →</a></h2>
+   <figure class="narrow"><img src="shots/volume.png" alt="Monthly order volume chart" loading="lazy" style="max-width:560px"><figcaption>Stacked columns: the dark segment is production orders and the light segment is service orders</figcaption></figure>
+   <p>Each column is one month, and the months run from left to right (Farvardin on the left). The full height of a column is the number of orders placed that month, and the number above it shows the same count. If you select a month filter, the chart keeps the whole year and simply highlights the selected month, so the comparison is not lost.</p>
+   <div class="ex"><b class="h">Example using this dashboard’s numbers</b>
+    <span class="v" data-v="volHi"></span> was the busiest month with <span class="v" data-v="volHiN"></span> orders (worth <span class="v" data-v="volHiVal"></span>) and <span class="v" data-v="volLo"></span> the quietest with <span class="v" data-v="volLoN"></span> orders: the familiar market pattern of a rush before Nowruz and a lull after the holidays.</div>
+   <div class="q"><b>Which question does this section answer?</b>“In which months does the workshop’s workload rise, and for which season should we prepare capacity?”</div>
+  </section>
+
+  <section id="g-flow">
+   <h2 class="s">Open orders by stage <a class="go" href="index.html#flow">View in dashboard →</a></h2>
+   <figure class="narrow"><img src="shots/flow.png" alt="Open orders by stage chart" loading="lazy" style="max-width:560px"><figcaption>The ten stages in production-line order; the highlighted row is the workshop’s bottleneck</figcaption></figure>
+   <p>Each row is one of the ten stages, and the length of the bar is the number of open orders in that stage <b>right now</b>. The bar is split into three colors: blue for orders “on track”, orange for orders “at risk of delay” and red for orders “past due”. The row with the cream background is the bottleneck stage (based on the next chart).</p>
+   <div class="ex"><b class="h">Example using this dashboard’s numbers</b>
+    Of <span class="v" data-v="open"></span> open orders, <span class="v" data-v="flowMaxN"></span> (<span class="v" data-v="flowMaxPct"></span>) are waiting at the <span class="v" data-v="flowMax"></span> stage, the longest queue in the workshop. <span class="v" data-v="flowMaxLate"></span> orders in this queue are already past due, and <span class="v" data-v="flowMaxRisk"></span> at risk of delay.</div>
+   <div class="q"><b>Which question does this section answer?</b>“Where is work stuck right now, and which station should we send extra help to?”</div>
+  </section>
+
+  <section id="g-stagetime">
+   <h2 class="s">Average days spent in each stage <a class="go" href="index.html#stagetime">View in dashboard →</a></h2>
+   <figure class="narrow"><img src="shots/stagetime.png" alt="Average days per stage chart" loading="lazy" style="max-width:560px"><figcaption>The light bar is the first half of the year and the dark bar the second half</figcaption></figure>
+   <p>For each production stage, the chart shows the average number of days orders spent in it (from entry to exit). Each stage has two bars so you can see whether things got better or worse in the second half of the year. The stage with the highest average is labeled the “bottleneck”. Settlement and shipping are left out of this chart because their timing depends on customer payment and transport, not on workshop capacity.</p>
+   <div class="ex"><b class="h">Example using this dashboard’s numbers</b>
+    Orders spend an average of <span class="v" data-v="bAvg"></span> days in the <span class="v" data-v="bName"></span> stage, while the average for the other stages is <span class="v" data-v="othersAvg"></span> days. This figure rose from <span class="v" data-v="bH1"></span> days in the first half of the year to <span class="v" data-v="bH2"></span> days in the second, meaning the paint booth’s capacity cannot keep up as the workload grows. The other stages stayed roughly flat across both halves of the year.</div>
+   <div class="q"><b>Which question does this section answer?</b>“Which stage is the slowest, and has it become slower over time?”</div>
+  </section>
+
+  <section id="g-ontime">
+   <h2 class="s">On-time delivery trend <a class="go" href="index.html#ontime">View in dashboard →</a></h2>
+   <figure class="narrow"><img src="shots/ontime.png" alt="On-time delivery trend chart" loading="lazy" style="max-width:560px"><figcaption>The dashed line is the 85% target; orange points are months below target</figcaption></figure>
+   <p>For each month, the chart takes the orders that were due that month and plots the percentage shipped by their due date. Months run from left to right. Because this chart is plotted by “due month” rather than “order month”, the month filter is not applied to it.</p>
+   <div class="ex"><b class="h">Example using this dashboard’s numbers</b>
+    The on-time delivery rate was <span class="v" data-v="otH1"></span> in the first six months of the year and fell to <span class="v" data-v="otH2"></span> in the second six. The lowest month was <span class="v" data-v="otMinM"></span> at <span class="v" data-v="otMin"></span>. The drop coincides with the <span class="v" data-v="bName"></span> stage slowing down and the rush before Nowruz.</div>
+   <div class="q"><b>Which question does this section answer?</b>“How well do we keep the promises we make to customers, and is it getting better or worse?”</div>
+  </section>
+
+  <section id="g-leadtime">
+   <h2 class="s">Lead time distribution <a class="go" href="index.html#leadtime">View in dashboard →</a></h2>
+   <figure class="narrow"><img src="shots/leadtime.png" alt="Lead time distribution chart" loading="lazy" style="max-width:560px"><figcaption>Each column is a time range, from the shortest (left) to the longest (right)</figcaption></figure>
+   <p>For shipped orders, the number of days between placing the order and shipping it is counted, and orders are grouped into time ranges. The dark part of each column is production orders and the light part is service orders. The further the columns stretch to the right, the longer customers have had to wait.</p>
+   <div class="ex"><b class="h">Example using this dashboard’s numbers</b>
+    The median lead time is <span class="v" data-v="leadProd"></span> days for production orders and <span class="v" data-v="leadServ"></span> days for service orders. <span class="v" data-v="leadLong"></span> orders took more than six weeks.</div>
+   <div class="q"><b>Which question does this section answer?</b>“What lead time should we quote a new customer for a production or a service order?”</div>
+  </section>
+
+  <section id="g-payment">
+   <h2 class="s">Payment status &amp; exception permits <a class="go" href="index.html#payment">View in dashboard →</a></h2>
+   <figure><img src="shots/payment.png" alt="Payment status and exception permits section" loading="lazy"><figcaption>Three columns: payment status, concentration of receivables, and exception permits</figcaption></figure>
+   <h3>What does it show?</h3>
+   <ul class="l">
+    <li><b>Payment status:</b> the colored bar shows the share of <span class="badge b-green">Paid</span>, <span class="badge b-red">Unpaid</span> and <span class="badge b-orange">Exception permit</span> orders, with the count and amount for each group listed below it.</li>
+    <li><b>Concentration of receivables due:</b> the customers with the largest amounts due, with the amount and share of each. The top three customers are shown in red.</li>
+    <li><b>Exception permits:</b> the number of permits issued each month (the last three months of the year in orange) and the latest permits with their reason, date and approver.</li>
+   </ul>
+   <div class="ex"><b class="h">Example using this dashboard’s numbers</b>
+    <span class="v" data-v="payPaidN"></span> orders have been paid in full. <span class="v" data-v="payUnN"></span> orders are still unpaid (balance <span class="v" data-v="payUnAmt"></span>), although most of them are still in production and their payment is not yet due. <span class="v" data-v="payExN"></span> orders shipped on an exception permit, and <span class="v" data-v="payExAmt"></span> of their value has not yet been collected.<br>
+    Of the <span class="v" data-v="dueTotal"></span> in receivables due, <span class="v" data-v="top3"></span> is held by three customers, with the largest share held by <span class="v" data-v="conc1"></span> at <span class="v" data-v="conc1Amt"></span>.<br>
+    <span class="v" data-v="permQ4"></span> exception permits were issued in Dey–Esfand, compared with <span class="v" data-v="permQ1"></span> in Farvardin–Khordad. Most common reason: “<span data-v="permReason"></span>”.</div>
+   <p>The “Payment status” filter is not applied to this section, so you always see the full payment picture; the monthly permits chart also always shows the whole year.</p>
+   <div class="q"><b>Which question does this section answer?</b>“How much money is sitting with customers, which customer should we chase first, and have we been too generous with exception permits?”</div>
+  </section>
+
+  <section id="g-orders">
+   <h2 class="s">Order list and details panel <a class="go" href="index.html#orders">View in dashboard →</a></h2>
+   <figure><img src="shots/orders.png" alt="Order list table" loading="lazy"><figcaption>Each row is one order; the “Production stages” column shows progress through the ten stages</figcaption></figure>
+   <h3>How to read it</h3>
+   <p><b>Stage tracker:</b> ten small boxes, in order from left (laser cutting) to right (shipping):</p>
+   <ul class="l">
+    <li><span class="trk"><i class="d"></i><i class="d"></i><i class="x"></i><i class="d"></i><i class="c"></i><i></i><i></i><i></i><i></i><i></i></span><br>Blue = completed stage, orange = current stage, empty box = remaining stage, faint line = a stage this order does not need.</li>
+    <li><b>Due date:</b> <span class="badge b-green">On track</span> <span class="badge b-orange">At risk of delay</span> <span class="badge b-red">8 days late</span> <span class="badge b-grey">Shipped on time</span></li>
+    <li><b>Payment:</b> <span class="badge b-green">Paid</span> <span class="badge b-grey">Deposit paid</span> (not yet at settlement) <span class="badge b-red">Unpaid</span> (reached settlement but payment has not arrived) <span class="badge b-orange">Exception permit</span></li>
+   </ul>
+   <p>Click any column header to sort the table (click again to reverse the order). The default order is “due-date urgency”: late orders first, then orders at risk. In the search box you can type a pro forma number, customer name, product, color or stage name. The “Open / Shipped / All” buttons set the table’s scope. On a phone, the table is shown as cards and sorting is done from the menu above it.</p>
+   <figure class="narrow"><img src="shots/drawer.png" alt="Order details panel" loading="lazy"><figcaption>Details panel: order information and the entry and exit dates of each stage</figcaption></figure>
+   <div class="ex"><b class="h">Example using this dashboard’s numbers</b>
+    The most overdue open order is <span class="mono" data-v="worstId"></span> for <span class="v" data-v="worstCust"></span>: <span class="v" data-v="worstProd"></span> worth <span class="v" data-v="worstTotal"></span>, which is <span class="v" data-v="worstDays"></span> days past due and still sitting in the <span class="v" data-v="worstStage"></span> stage. <span data-v="worstNote"></span></div>
+   <div class="q"><b>Which question does this section answer?</b>“Where is a given customer’s order right now, how long has it been there, and why is it late?”</div>
+  </section>
+
+  <section id="g-filters">
+   <h2 class="s">Filters <a class="go" href="index.html#filters">View in dashboard →</a></h2>
+   <figure class="narrow"><img src="shots/filters.png" alt="Filters panel" loading="lazy" style="max-width:270px"><figcaption>The filters panel; on a phone it opens and closes with the “Filters” button</figcaption></figure>
+   <ul class="l">
+    <li><b>Order month:</b> only orders placed in that month.</li>
+    <li><b>Customer:</b> a specific customer, or all individual customers, or all company customers.</li>
+    <li><b>Order type:</b> production (manufacturing a complete product) or service (carrying out one or more stages on the customer’s own material).</li>
+    <li><b>Payment status:</b> paid, unpaid or exception permit.</li>
+   </ul>
+   <p>The “Clear all” button removes every filter. Selected filters are saved in the page address, so you can send the link to a colleague and they will see exactly the same view.</p>
+   <div class="tw"><table>
+    <thead><tr><th>Dashboard section</th><th>Order month</th><th>Customer</th><th>Order type</th><th>Payment status</th></tr></thead>
+    <tbody>
+     <tr><td>Key metrics</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+     <tr><td>Key insights</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+     <tr><td>Monthly order volume</td><td class="c h">Highlight only</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+     <tr><td>Open orders by stage</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+     <tr><td>Days spent in each stage</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+     <tr><td>On-time delivery trend</td><td class="c n">✗</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+     <tr><td>Lead time distribution</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+     <tr><td>Payment status &amp; receivables concentration</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td><td class="c n">✗</td></tr>
+     <tr><td>Monthly exception permits chart</td><td class="c n">✗</td><td class="c y">✓</td><td class="c y">✓</td><td class="c n">✗</td></tr>
+     <tr><td>Order list</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+    </tbody></table></div>
+   <div class="ex"><b class="h">Example using this dashboard’s numbers</b>
+    If you select the customer “<span data-v="exCust"></span>”, you will see that they placed <span class="v" data-v="exN"></span> orders during the year, <span class="v" data-v="exOpen"></span> of their orders are still open, and <span class="v" data-v="exDue"></span> of receivables from them is due; <span class="v" data-v="exPermits"></span> of their orders also shipped on an exception permit.</div>
+   <div class="q"><b>Which question does this section answer?</b>“What does a single customer, month or order type look like on its own?”</div>
+  </section>
+
+  <section id="faq">
+   <h2 class="s">Frequently asked questions</h2>
+   <details open><summary>What is the difference between “past due” and “at risk of delay”?</summary><p>“Past due” means the due date has passed and the order has not shipped yet. “At risk of delay” means the due date has not arrived yet, but if the remaining stages proceed at their usual pace, the order will be ready after the due date. At-risk orders are the best opportunity to prevent delays.</p></details>
+   <details><summary>How do “receivables due” differ from the total outstanding balance on orders?</summary><p>Customers usually pay part of the amount when placing the order and the rest before shipment. A balance on orders still in production is normal and not yet due. “Receivables due” only counts the balance on orders that have reached the settlement stage or shipped on an exception permit, in other words, money that should already have been collected.</p></details>
+   <details><summary>How is the “vs. 30 days ago” comparison calculated?</summary><p>The same metric is recalculated for 30 days earlier (20 Bahman) with the same filters, and the difference between the two numbers is shown. For exception permits, the comparison figure is the number of permits issued in the last 30 days.</p></details>
+   <details><summary>How is the bottleneck determined, and why isn’t settlement included?</summary><p>Of the eight production stages, the one with the highest average number of days is called the bottleneck. Settlement time depends on customer payment and shipping time on transport, and neither gets shorter by adding staff or machines to the workshop, so they are analyzed separately in the payment section.</p></details>
+   <details><summary>Why doesn’t the on-time delivery trend change with the month filter?</summary><p>This chart is plotted by the due month, not the month the order was placed. If the order-month filter were applied, the year’s trend would fall apart and the months could no longer be compared.</p></details>
+   <details><summary>Where does the dashboard’s data come from?</summary><p>The data is read from the list of pro forma invoices, the entry and exit logs of each workstation, and the receipts ledger, and the dashboard updates automatically.</p></details>
+  </section>
+
+  <section id="glossary">
+   <h2 class="s">Glossary</h2>
+   <dl class="g">
+    <dt>Pro forma invoice</dt><dd>A document issued to the customer before work begins; its number (such as <span class="mono">PI-04-0646</span>) identifies the order throughout the dashboard.</dd>
+    <dt>Production order</dt><dd>Manufacturing a complete product, such as shelving, a door or an electrical panel enclosure, which usually passes through most of the stages.</dd>
+    <dt>Service order</dt><dd>Carrying out one or more stages on the customer’s own material, such as laser cutting sheet metal or powder coating parts.</dd>
+    <dt>Current stage</dt><dd>The stage an order is in on the report date.</dd>
+    <dt>Bottleneck</dt><dd>The slowest production stage, which sets the pace for the whole workshop.</dd>
+    <dt>Due date</dt><dd>The date promised to the customer when the order was placed.</dd>
+    <dt>Settlement</dt><dd>The stage in which the remaining balance is collected before shipment.</dd>
+    <dt>Exception permit</dt><dd>A manager’s approval to ship an order without full settlement, with the reason recorded.</dd>
+    <dt>Ready to ship</dt><dd>Final approval after settlement or an exception permit; the order is only waiting for pickup.</dd>
+    <dt>Receivables due</dt><dd>The outstanding balance on orders that have reached settlement or shipped on an exception permit.</dd>
+    <dt>Lead time</dt><dd>The number of days between placing an order and shipping it.</dd>
+    <dt>Median</dt><dd>The middle value when all values are sorted; unlike the average, a few very long orders do not push it up.</dd>
+   </dl>
+  </section>
+ </article>
+</div>
+<footer>Designed &amp; built by Fatemeh Mansouri · Portfolio sample</footer>
+
+<script>
+/* ===== Synthetic data and shared calculations (identical in dashboard and guide) ===== */
+const MONTHS=['Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar','Mehr','Aban','Azar','Dey','Bahman','Esfand'];
+const MONTHS_S=['Far','Ord','Kho','Tir','Mor','Sha','Meh','Aba','Aza','Dey','Bah','Esf'];
+const MLEN=[31,31,31,31,31,31,30,30,30,30,30,29];
+const MSTART=[];(()=>{let c=1;for(const l of MLEN){MSTART.push(c);c+=l;}})();
+const YEAR_DAYS=365;
+const ASOF=MSTART[11]+19;               /* 20 Esfand 1404 */
+const H2_START=MSTART[6];               /* 1 Mehr */
+const STAGES=['Laser cutting','Bending','Forging','Welding','Cleaning','Painting','Assembly','Packaging','Settlement','Shipping'];
+const PAINT=5,SETTLE=8,SHIP=9;
+const STD=[1.5,1.5,2,2.2,1.2,3,2,1,1,1.5];
+const PAY_LABEL={paid:'Paid',unpaid:'Unpaid',exception:'Exception permit'};
+const OTYPE_LABEL={prod:'Production',serv:'Service'};
+const KIND_PL={Company:'Companies',Individual:'Individuals'};
+
+function md(d){let y=1404;if(d>YEAR_DAYS){d-=YEAR_DAYS;y=1405;}let m=0;while(m<11&&d>=MSTART[m+1])m++;return{y,m,day:d-MSTART[m]+1};}
+const fmtNum=(n,f=0)=>Number(n).toLocaleString('en-US',{maximumFractionDigits:f,minimumFractionDigits:0});
+const fmtInt=n=>Math.round(n).toLocaleString('en-US');
+const fmtPct=(x,f=1)=>fmtNum(x*100,f)+'%';
+function fmtDate(d,withYear){const t=md(d);return t.day+' '+MONTHS[t.m]+((withYear||t.y!==1404)?' '+t.y:'');}
+function moneyParts(t){if(Math.abs(t)>=1e9)return{v:fmtNum(t/1e9,Math.abs(t)>=1e10?1:2),u:'B Toman'};return{v:fmtInt(t/1e6),u:'M Toman'};}
+function fmtMoney(t){const p=moneyParts(t);return p.v+p.u;}
+const pl=(n,one,many)=>(Math.abs(Math.round(n*10)/10)===1?one:(many||one+'s'));
+const nOrd=n=>fmtInt(n)+' '+pl(n,'order');
+const nDay=(n,f=0)=>fmtNum(n,f)+' '+pl(+fmtNum(n,f).replace(/,/g,''),'day');
+const qtyUnit=(q,u)=>{const [one,many]=u.split('|');return fmtInt(q)+' '+(q===1?one:(many||one));};
+
+const CUSTOMERS=[
+ {id:'c01',name:'Kouhsar Sepehr Construction',kind:'Company',w:2.4,prof:'bad',big:1.7},
+ {id:'c02',name:'Rahavaran-e Shargh Contracting',kind:'Company',w:1.6,prof:'bad',big:1.4},
+ {id:'c03',name:'Azarnour Electrical Equipment',kind:'Company',w:2.5,prof:'good',big:1.1},
+ {id:'c04',name:'Novinpart Metal Industries',kind:'Company',w:2.0,prof:'good',big:1.0},
+ {id:'c05',name:'Pouya Tarabar Warehousing',kind:'Company',w:2.0,prof:'slow',big:1.2},
+ {id:'c06',name:'Dibakala Retail Chain',kind:'Company',w:1.6,prof:'good',big:1.0},
+ {id:'c07',name:'Abgostar Minou Installations',kind:'Company',w:1.4,prof:'slow',big:1.0},
+ {id:'c08',name:'Pishro Sanat Machinery',kind:'Company',w:1.5,prof:'good',big:1.3},
+ {id:'c09',name:'Arghavan Shopping Center',kind:'Company',w:1.0,prof:'good',big:0.9},
+ {id:'c10',name:'Radin Tech',kind:'Company',w:1.0,prof:'good',big:0.8},
+ {id:'c11',name:'Behsazan-e Rey Construction',kind:'Company',w:1.2,prof:'slow',big:1.1},
+ {id:'c12',name:'Tizrobar Logistics',kind:'Company',w:0.8,prof:'good',big:0.9},
+ {id:'p01',name:'Mr. Hamid Nowruzi',kind:'Individual',w:0.9,prof:'bad',big:0.9},
+ {id:'p02',name:'Mr. Majid Rahimi',kind:'Individual',w:1.0,prof:'good',big:0.6},
+ {id:'p03',name:'Ms. Elham Sadeghi',kind:'Individual',w:0.8,prof:'good',big:0.6},
+ {id:'p04',name:'Mr. Saeed Kazemi',kind:'Individual',w:1.0,prof:'slow',big:0.6},
+ {id:'p05',name:'Mr. Amir Hosseini',kind:'Individual',w:0.9,prof:'good',big:0.6},
+ {id:'p06',name:'Ms. Maryam Akbari',kind:'Individual',w:0.7,prof:'good',big:0.5},
+ {id:'p07',name:'Mr. Reza Moradi',kind:'Individual',w:0.9,prof:'good',big:0.6},
+ {id:'p08',name:'Mr. Ali Jafari',kind:'Individual',w:0.8,prof:'slow',big:0.6},
+ {id:'p09',name:'Mr. Mahdi Ghasemi',kind:'Individual',w:0.7,prof:'good',big:0.5},
+ {id:'p10',name:'Ms. Narges Rezaei',kind:'Individual',w:0.6,prof:'good',big:0.5}
+];
+/* st: which of the 8 production stages are needed (cutting, bending, forging, welding, cleaning, painting, assembly, packaging) — settlement and shipping always apply */
+/* u: "singular|plural" unit label */
+const PRODUCTS={
+ prod:[
+  {n:'Warehouse steel shelving',u:'unit|units',p:[4.5,7],q:[10,120],st:[1,1,0,1,1,1,1,1]},
+  {n:'Fire-rated door',u:'door leaf|door leaves',p:[18,28],q:[2,40],st:[1,1,0,1,1,1,1,1]},
+  {n:'Electrical panel enclosure',u:'unit|units',p:[9,15],q:[3,60],st:[1,1,0,1,1,1,1,1]},
+  {n:'Industrial machine frame',u:'unit|units',p:[25,60],q:[1,12],st:[1,1,1,1,1,1,1,1]},
+  {n:'Steel office cabinet',u:'unit|units',p:[6,10],q:[5,80],st:[1,1,0,1,1,1,1,1]},
+  {n:'Wrought-iron railing',u:'m',p:[1.4,2.4],q:[30,400],st:[1,1,1,1,1,1,0,1]},
+  {n:'Galvanized cable tray',u:'length|lengths',p:[0.6,1.1],q:[50,800],st:[1,1,0,0,0,0,0,1],galv:1},
+  {n:'Brackets & fittings',u:'pc|pcs',p:[0.08,0.25],q:[200,3000],st:[1,1,1,0,1,1,0,1]}
+ ],
+ serv:[
+  {n:'Laser cutting of customer sheet',u:'sheet|sheets',p:[0.35,0.8],q:[10,300],st:[1,0,0,0,0,0,0,1],raw:1},
+  {n:'Cutting & bending of customer sheet',u:'sheet|sheets',p:[0.6,1.2],q:[10,250],st:[1,1,0,0,0,0,0,1],raw:1},
+  {n:'Powder coating of customer parts',u:'part|parts',p:[0.15,0.6],q:[40,900],st:[0,0,0,0,1,1,0,1]}
+ ]
+};
+const COLORS=['Light grey RAL 7035','White RAL 9010','Matte black','Ivory RAL 1015','Blue RAL 5015','Green RAL 6005','Red RAL 3000'];
+const REASONS=['Long-standing customer with a good payment record','Post-dated cheque received','Government project; payment after delivery','Written commitment to pay within 30 days','Urgent customer need for a project opening','Small balance; to be settled with the next order'];
+
+function buildData(){
+ let s=1404;const rnd=()=>(s=s*16807%2147483647)/2147483647;
+ const ri=(a,b)=>a+Math.floor(rnd()*(b-a+1)),rf=(a,b)=>a+rnd()*(b-a),pick=a=>a[Math.floor(rnd()*a.length)];
+ const wpick=(arr)=>{const tot=arr.reduce((a,c)=>a+c.w,0);let r=rnd()*tot;for(const c of arr){r-=c.w;if(r<=0)return c;}return arr[arr.length-1];};
+ const WEIGHT=[0.55,0.85,0.95,1,0.95,1,1.05,1.1,1.1,1.2,1.4,1.55];
+ const cong=t=>t<150?rf(0,1):rf(0.5,1)*(1+(t-150)/28);
+ const orders=[];let seq=100;
+ for(let m=0;m<12;m++){
+  const span=m===11?(ASOF-MSTART[11]+1):MLEN[m];
+  const n=Math.round(30*WEIGHT[m]*span/MLEN[m]);
+  const days=[];for(let k=0;k<n;k++)days.push(MSTART[m]+ri(0,span-1));days.sort((a,b)=>a-b);
+  for(const d0 of days){
+   const cust=wpick(CUSTOMERS);
+   const otype=rnd()<(cust.kind==='Individual'?0.5:0.2)?'serv':'prod';
+   const prod=pick(PRODUCTS[otype]);
+   const rel=Math.pow(rnd(),1.8/cust.big);
+   const qty=Math.max(prod.q[0],Math.round((prod.q[0]+(prod.q[1]-prod.q[0])*rel)/(prod.q[1]>200?10:1))*(prod.q[1]>200?10:1));
+   const price=Math.round(rf(prod.p[0],prod.p[1])*1e6/1e4)*1e4;
+   const total=Math.round(qty*price/1e5)*1e5;
+   const sizeF=1+1.4*Math.pow(rel,1.3);
+   const promF=1+0.2*rel;
+   const req=prod.st.concat([1,1]).map(Boolean);
+   const color=prod.galv?'Galvanized (unpainted)':(prod.raw?'—':pick(COLORS));
+   let lead=1.5;for(let i=0;i<10;i++)if(req[i])lead+=STD[i]*(i<8?(0.5+0.5*sizeF)*1.15:1);
+   lead=Math.ceil(lead+ri(4,7));
+   const due=d0+lead;
+   let deposit=Math.round(total*(cust.prof==='good'?rf(0.4,0.6):cust.prof==='slow'?rf(0.3,0.4):rf(0.2,0.3))/1e5)*1e5;
+   let payDay=null;
+   if(otype==='serv'&&rnd()<0.45){deposit=total;payDay=d0;}
+   else if(cust.prof==='good'&&rnd()<0.45)payDay=d0+ri(4,lead);
+   const hist=Array(10).fill(null);let cur=-1,shipDay=null,permit=null,rework=false;
+   let t=d0+Math.min(ri(1,3),ASOF-d0);
+   for(let i=0;i<10;i++){
+    if(!req[i])continue;
+    let dur;
+    if(i<8){
+     dur=i===PAINT?(2.2+rf(0,1.8))*(0.4+0.6*sizeF)+cong(t)*Math.sqrt(sizeF):STD[i]*rf(0.6,1.4)*sizeF;
+     dur=Math.max(1,Math.round(dur));
+     if(i===PAINT&&sizeF>1.6&&t>H2_START-20&&rnd()<0.55){dur+=ri(5,12);rework=true;}
+    }else if(i===SETTLE){
+     if(payDay==null){const ph=Math.pow(t/YEAR_DAYS,1.5);const lateP=cust.prof==='bad'?0.15+0.8*ph:cust.prof==='slow'?0.05+0.55*ph:0.03+0.2*ph;const pd=rnd()<lateP?(cust.prof==='bad'?ri(12,60):cust.prof==='slow'?ri(4,14):ri(4,8)):ri(0,2);payDay=t+pd;}
+     if(payDay<=t)dur=1;
+     else{
+      const wait=payDay-t;
+      const pEx=Math.min(0.9,0.03+0.95*Math.pow(t/YEAR_DAYS,2.5));
+      if(wait>2&&rnd()<pEx){dur=ri(1,2);permit={day:t+dur,reason:pick(REASONS),by:rnd()<0.6?'Sales manager':'Plant manager'};}
+      else dur=Math.max(1,wait);
+     }
+    }else dur=ri(1,4);
+    hist[i]={in:t,out:t+dur};
+    if(t+dur>ASOF){hist[i].out=null;cur=i;break;}
+    t+=dur;
+   }
+   if(cur===-1)shipDay=t;
+   const pay=(payDay!=null&&payDay<=ASOF)?'paid':permit?'exception':'unpaid';
+   seq+=ri(1,3);
+   orders.push({id:'PI-04-'+String(seq).padStart(4,'0'),d0,m,cust,otype,prod:prod.n,unit:prod.u,qty,price,total,color,req,due,rework,deposit,payDay,hist,cur,shipDay,permit,pay,sizeF,
+    remaining:pay==='paid'?0:total-deposit});
+  }
+ }
+ /* due-date status on the report date */
+ for(const o of orders){
+  if(o.shipDay!=null){o.dueState=o.shipDay<=o.due?'done_ok':'done_late';o.lateDays=Math.max(0,o.shipDay-o.due);}
+  else if(ASOF>o.due){o.dueState='late';o.lateDays=ASOF-o.due;}
+  else{
+   let est=0;for(let i=o.cur;i<10;i++){if(!o.req[i])continue;const b=i===PAINT?6.5:STD[i]*(i<8?o.sizeF:1);est+=i===o.cur?b*0.5:b;}
+   o.dueState=ASOF+est>o.due?'risk':'ok';o.lateDays=0;
+  }
+  o.reachedSettle=!!(o.hist[SETTLE]&&o.hist[SETTLE].in<=ASOF);
+  o.dueBal=o.reachedSettle?o.remaining:0;
+ }
+ return orders;
+}
+const ORDERS=buildData();
+
+function stateAt(o,T){
+ if(o.d0>T)return null;
+ if(o.shipDay!=null&&o.shipDay<=T)return 'done';
+ let st=-1;for(let i=0;i<10;i++){const h=o.hist[i];if(h&&h.in<=T)st=i;}
+ return st;
+}
+function snapshot(list,T){
+ const r={total:0,open:0,prod:0,settle:0,ready:0,overdue:0,dueBal:0,permits:0,done:0};
+ for(const o of list){
+  if(o.d0>T)continue;r.total++;
+  if(o.permit&&o.permit.day<=T)r.permits++;
+  if(o.hist[SETTLE]&&o.hist[SETTLE].in<=T&&!(o.payDay!=null&&o.payDay<=T))r.dueBal+=o.total-o.deposit;
+  const s=stateAt(o,T);
+  if(s==='done'){r.done++;continue;}
+  r.open++;if(s<=7)r.prod++;else if(s===SETTLE)r.settle++;else r.ready++;
+  if(T>o.due)r.overdue++;
+ }
+ return r;
+}
+const DEFAULT_F={month:-1,cust:'all',otype:'all',pay:'all'};
+function applyF(list,F,skip){
+ skip=skip||{};
+ return list.filter(o=>(skip.month||F.month<0||o.m===F.month)&&
+  (F.cust==='all'||(F.cust.startsWith('k:')?o.cust.kind===F.cust.slice(2):o.cust.id===F.cust))&&
+  (F.otype==='all'||o.otype===F.otype)&&
+  (skip.pay||F.pay==='all'||o.pay===F.pay));
+}
+const median=a=>{if(!a.length)return 0;const b=[...a].sort((x,y)=>x-y),k=b.length>>1;return b.length%2?b[k]:(b[k-1]+b[k])/2;};
+const LEAD_BINS=[[0,14,'0–14'],[15,21,'15–21'],[22,28,'22–28'],[29,35,'29–35'],[36,42,'36–42'],[43,56,'43–56'],[57,999,'57 or more']];
+const BIG_ORDER=500e6;
+
+function compute(F){
+ const base=applyF(ORDERS,F),noMonth=applyF(ORDERS,F,{month:1}),noPay=applyF(ORDERS,F,{pay:1}),noMP=applyF(ORDERS,F,{month:1,pay:1});
+ const R={F,base,noMonth,noPay};
+ R.now=snapshot(base,ASOF);R.prev=snapshot(base,ASOF-30);
+ R.open=base.filter(o=>o.shipDay==null);
+ /* stage flow */
+ R.flow=STAGES.map(()=>({ok:0,risk:0,late:0,n:0,value:0,orders:[]}));
+ for(const o of R.open){const f=R.flow[o.cur];f.n++;f.value+=o.total;f.orders.push(o);f[o.dueState==='late'?'late':o.dueState==='risk'?'risk':'ok']++;}
+ /* time per stage */
+ R.stime=STAGES.map(()=>({sum:0,n:0,h1s:0,h1n:0,h2s:0,h2n:0,max:0}));
+ for(const o of base)for(let i=0;i<10;i++){const h=o.hist[i];if(!h||h.out==null)continue;const d=h.out-h.in,x=R.stime[i];x.sum+=d;x.n++;x.max=Math.max(x.max,d);if(h.in<H2_START){x.h1s+=d;x.h1n++;}else{x.h2s+=d;x.h2n++;}}
+ R.stime.forEach(x=>{x.avg=x.n?x.sum/x.n:0;x.h1=x.h1n?x.h1s/x.h1n:0;x.h2=x.h2n?x.h2s/x.h2n:0;});
+ let bi=-1;for(let i=0;i<8;i++)if(R.stime[i].n>=3&&(bi<0||R.stime[i].avg>R.stime[bi].avg))bi=i;R.bottleneck=bi;
+ const others=R.stime.slice(0,8).filter((x,i)=>i!==bi&&x.n>0);
+ R.othersAvg=others.length?others.reduce((a,x)=>a+x.sum,0)/others.reduce((a,x)=>a+x.n,0):0;
+ /* monthly on-time delivery (by due month) */
+ R.ontime=MONTHS.map(()=>({n:0,ok:0}));
+ for(const o of noMonth){if(o.due>ASOF||o.due>YEAR_DAYS)continue;const x=R.ontime[md(o.due).m];x.n++;if(o.shipDay!=null&&o.shipDay<=o.due)x.ok++;}
+ R.ontime.forEach(x=>x.rate=x.n?x.ok/x.n:null);
+ const sumR=(a,b)=>{let n=0,k=0;for(let i=a;i<=b;i++){n+=R.ontime[i].n;k+=R.ontime[i].ok;}return n?k/n:null;};
+ R.ontimeH1=sumR(0,5);R.ontimeH2=sumR(6,11);R.ontimeYear=sumR(0,11);
+ /* lead time */
+ const done=base.filter(o=>o.shipDay!=null);R.done=done;
+ R.lead=LEAD_BINS.map(b=>({b,prod:0,serv:0}));
+ for(const o of done){const L=o.shipDay-o.d0;const k=LEAD_BINS.findIndex(b=>L>=b[0]&&L<=b[1]);R.lead[k][o.otype]++;}
+ R.leadMedProd=median(done.filter(o=>o.otype==='prod').map(o=>o.shipDay-o.d0));
+ R.leadMedServ=median(done.filter(o=>o.otype==='serv').map(o=>o.shipDay-o.d0));
+ R.leadNProd=done.filter(o=>o.otype==='prod').length;R.leadNServ=done.filter(o=>o.otype==='serv').length;
+ /* monthly volume */
+ R.vol=MONTHS.map(()=>({prod:0,serv:0,value:0}));
+ for(const o of noMonth){R.vol[o.m][o.otype]++;R.vol[o.m].value+=o.total;}
+ /* payment */
+ const P={paid:{n:0,amt:0},unpaid:{n:0,amt:0,dueN:0,dueAmt:0},exception:{n:0,amt:0}};
+ for(const o of noPay){const x=P[o.pay];x.n++;x.amt+=o.pay==='paid'?o.total:o.remaining;if(o.pay==='unpaid'&&o.reachedSettle){x.dueN++;x.dueAmt+=o.remaining;}}
+ R.pay=P;R.payN=noPay.length;
+ const byC={};for(const o of noPay){if(!o.dueBal)continue;const k=o.cust.id;(byC[k]=byC[k]||{c:o.cust,amt:0,n:0});byC[k].amt+=o.dueBal;byC[k].n++;}
+ R.conc=Object.values(byC).sort((a,b)=>b.amt-a.amt);R.dueTotal=R.conc.reduce((a,x)=>a+x.amt,0);
+ R.top3Share=R.dueTotal?R.conc.slice(0,3).reduce((a,x)=>a+x.amt,0)/R.dueTotal:0;
+ R.permitsM=MONTHS.map(()=>0);
+ R.permits=noMP.filter(o=>o.permit&&o.permit.day<=ASOF&&(F.month<0||o.m===F.month)).sort((a,b)=>b.permit.day-a.permit.day);
+ for(const o of noMP)if(o.permit&&o.permit.day<=ASOF&&o.permit.day<=YEAR_DAYS)R.permitsM[md(o.permit.day).m]++;
+ R.permQ1=R.permitsM.slice(0,3).reduce((a,b)=>a+b,0);R.permQ4=R.permitsM.slice(9,12).reduce((a,b)=>a+b,0);
+ R.reasonCount={};for(const o of R.permits)R.reasonCount[o.permit.reason]=(R.reasonCount[o.permit.reason]||0)+1;
+ /* large late orders */
+ R.bigLate=R.open.filter(o=>o.dueState==='late'&&o.total>=BIG_ORDER).sort((a,b)=>b.lateDays-a.lateDays);
+ R.lateOpen=R.open.filter(o=>o.dueState==='late');
+ const dueD=base.filter(o=>o.due<=ASOF),bg=dueD.filter(o=>o.total>=BIG_ORDER),sm=dueD.filter(o=>o.total<BIG_ORDER);
+ const okR=a=>a.length?a.filter(o=>o.shipDay!=null&&o.shipDay<=o.due).length/a.length:null;
+ R.bigN=bg.length;R.bigRate=okR(bg);R.smallRate=okR(sm);
+ return R;
+}
+
+</script>
+<script>
+(function(){
+ const R=compute(DEFAULT_F),n=R.now,p=R.prev,b=R.bottleneck,st=R.stime[b];
+ const tot=i=>R.vol[i].prod+R.vol[i].serv;let hi=0,lo=0;R.vol.forEach((m,i)=>{if(tot(i)>tot(hi))hi=i;if(tot(i)<tot(lo))lo=i;});
+ let fm=0;R.flow.forEach((f,i)=>{if(f.n>R.flow[fm].n)fm=i;});
+ const vm=R.ontime.map((m,i)=>i).filter(i=>R.ontime[i].rate!=null);let mn=vm[0];vm.forEach(i=>{if(R.ontime[i].rate<R.ontime[mn].rate)mn=i;});
+ const w=[...R.lateOpen].sort((a,c)=>c.lateDays-a.lateDays)[0];
+ const reason=Object.entries(R.reasonCount).sort((a,c)=>c[1]-a[1])[0];
+ const exC=R.conc[0].c,E=compute(Object.assign({},DEFAULT_F,{cust:exC.id}));
+ const V={
+  total:fmtInt(ORDERS.length),totalValue:fmtMoney(ORDERS.reduce((a,o)=>a+o.total,0)),
+  open:fmtInt(n.open),openPrev:fmtInt(p.open),prod:fmtInt(n.prod),settle:fmtInt(n.settle),ready:fmtInt(n.ready),overdue:fmtInt(n.overdue),overduePct:fmtPct(n.overdue/n.open),
+  dueBal:fmtMoney(n.dueBal),permits:fmtInt(n.permits),permits30:fmtInt(n.permits-p.permits),
+  bName:STAGES[b],bAvg:fmtNum(st.avg,1),bRatio:fmtNum(st.avg/R.othersAvg,1),othersAvg:fmtNum(R.othersAvg,1),bH1:fmtNum(st.h1,1),bH2:fmtNum(st.h2,1),
+  bigRate:fmtPct(R.bigRate,0),smallRate:fmtPct(R.smallRate,0),
+  volHi:MONTHS[hi],volHiN:fmtInt(tot(hi)),volHiVal:fmtMoney(R.vol[hi].value),volLo:MONTHS[lo],volLoN:fmtInt(tot(lo)),
+  flowMax:STAGES[fm],flowMaxN:fmtInt(R.flow[fm].n),flowMaxPct:fmtPct(R.flow[fm].n/R.open.length,0),flowMaxLate:fmtInt(R.flow[fm].late),flowMaxRisk:fmtInt(R.flow[fm].risk),
+  otH1:fmtPct(R.ontimeH1,0),otH2:fmtPct(R.ontimeH2,0),otMinM:MONTHS[mn],otMin:fmtPct(R.ontime[mn].rate,0),
+  leadProd:fmtInt(R.leadMedProd),leadServ:fmtInt(R.leadMedServ),leadLong:fmtInt(R.done.filter(o=>o.shipDay-o.d0>42).length),
+  payPaidN:fmtInt(R.pay.paid.n),payUnN:fmtInt(R.pay.unpaid.n),payUnAmt:fmtMoney(R.pay.unpaid.amt),payExN:fmtInt(R.pay.exception.n),payExAmt:fmtMoney(R.pay.exception.amt),
+  dueTotal:fmtMoney(R.dueTotal),top3:fmtPct(R.top3Share,0),conc1:R.conc[0].c.name,conc1Amt:fmtMoney(R.conc[0].amt),
+  permQ1:fmtInt(R.permQ1),permQ4:fmtInt(R.permQ4),permReason:reason?reason[0]:'—',
+  worstId:w.id,worstCust:w.cust.name,worstProd:w.prod,worstTotal:fmtMoney(w.total),worstDays:fmtInt(w.lateDays),worstStage:STAGES[w.cur],worstNote:w.cur===SETTLE?`In the details panel you can see that all production stages are finished and the order has been waiting in settlement for the customer’s payment since ${fmtDate(w.hist[w.cur].in)}; in other words, this delay is caused by payment, not by the workshop.`:`In the details panel you can see that the order has been in this stage since ${fmtDate(w.hist[w.cur].in)}.`,
+  exCust:exC.name,exN:fmtInt(E.base.length),exOpen:fmtInt(E.now.open),exDue:fmtMoney(E.now.dueBal),exPermits:fmtInt(E.now.permits)
+ };
+ document.querySelectorAll('[data-v]').forEach(el=>{const k=el.dataset.v;if(V[k]!=null)el.textContent=V[k];});
+ /* theme */
+ const mq=matchMedia('(prefers-color-scheme: dark)'),btn=document.getElementById('themeBtn');
+ const isDark=()=>{const a=document.documentElement.getAttribute('data-theme');return a?a==='dark':mq.matches;};
+ const paint=()=>{btn.textContent=isDark()?'Dark mode':'Light mode';btn.title='Switch to '+(isDark()?'light mode':'dark mode');};
+ btn.onclick=()=>{const t=isDark()?'light':'dark';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('sample-theme',t);}catch(e){}paint();};
+ mq.addEventListener&&mq.addEventListener('change',paint);paint();
+ /* toc highlight */
+ const links=[...document.querySelectorAll('.toc a')],secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+ const onScroll=()=>{let k=0;secs.forEach((s,i)=>{if(s&&s.getBoundingClientRect().top<140)k=i;});links.forEach((a,i)=>a.classList.toggle('on',i===k));
+  const on=links[k];if(on&&getComputedStyle(on.closest('nav')).position==='sticky'&&innerWidth<=900){const nav=on.closest('nav');const r=on.getBoundingClientRect(),nr=nav.getBoundingClientRect();if(r.left<nr.left||r.right>nr.right)nav.scrollLeft+= (r.left+r.width/2)-(nr.left+nr.width/2);}};
+ addEventListener('scroll',onScroll,{passive:true});onScroll();
+})();
+</script>
+</body>
+</html>

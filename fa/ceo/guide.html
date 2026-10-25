@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>راهنمای داشبورد مدیریت</title>
+<link href="../../fonts/fonts.css" rel="stylesheet">
+<link href="../../fonts/vazirmatn.css" rel="stylesheet">
+<script>(function(){var q=new URLSearchParams(location.search).get('theme');if(q==='dark'||q==='light')document.documentElement.setAttribute('data-theme',q);})();</script>
+<style>
+:root{
+  --page:#f3f5f8;--panel:#ffffff;--panel2:#eef1f5;--line:#e2e6ec;--ink:#121826;--ink2:#4a5468;--muted:#8a93a5;
+  --blue:#2a78d6;--soft:#e3edfb;--deep:#0d366b;--orange:#eb6834;--green:#1baf7a;--red:#c23434;
+  --s1:#cde2fb;--s2:#9ec5f4;--s3:#6da7ec;--s4:#3987e5;--s5:#256abf;--s6:#184f95;--s7:#0d366b;
+  --done:#cfd6e0;--grid:#e9ecf1;--axis:#c9cfd8;
+  --red-soft:#fbe9e9;--green-soft:#e2f5ed;--orange-soft:#fdeee6;
+  --shadow:0 1px 2px rgba(18,24,38,.06),0 4px 16px rgba(18,24,38,.05);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --page:#0e1116;--panel:#161a21;--panel2:#1d222b;--line:#2a303b;--ink:#f1f3f7;--ink2:#c2c8d3;--muted:#8a93a5;
+  --blue:#3987e5;--soft:#1a2a40;--deep:#9ec5f4;--orange:#d95926;--green:#199e70;--red:#e25555;
+  --s1:#1e3557;--s2:#244a7d;--s3:#2d63a6;--s4:#3987e5;--s5:#6da7ec;--s6:#9ec5f4;--s7:#cde2fb;
+  --done:#3a4250;--grid:#232933;--axis:#3a414d;
+  --red-soft:#3a1d20;--green-soft:#15302a;--orange-soft:#3a2418;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --page:#0e1116;--panel:#161a21;--panel2:#1d222b;--line:#2a303b;--ink:#f1f3f7;--ink2:#c2c8d3;--muted:#8a93a5;
+  --blue:#3987e5;--soft:#1a2a40;--deep:#9ec5f4;--orange:#d95926;--green:#199e70;--red:#e25555;
+  --s1:#1e3557;--s2:#244a7d;--s3:#2d63a6;--s4:#3987e5;--s5:#6da7ec;--s6:#9ec5f4;--s7:#cde2fb;
+  --done:#3a4250;--grid:#232933;--axis:#3a414d;
+  --red-soft:#3a1d20;--green-soft:#15302a;--orange-soft:#3a2418;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--page);color:var(--ink);font-family:"IBM Plex Sans Arabic",Vazirmatn,Tahoma,sans-serif;font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}
+.mono{font-family:"IBM Plex Mono",Consolas,monospace;font-size:12px;direction:ltr;unicode-bidi:isolate}
+.btn{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:var(--blue);color:var(--blue)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{filter:brightness(1.07);color:#fff}
+.btn svg{width:16px;height:16px;flex:none}
+footer.credit{text-align:center;color:var(--muted);font-size:12.5px;padding:28px 16px 36px}
+
+body{font-size:15px;line-height:1.95}
+.bar{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--page) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1180px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.bar .t{display:flex;align-items:center;gap:10px;min-width:0}
+.bar .t b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .t span{font-size:12px;color:var(--muted);white-space:nowrap}
+.logo{width:32px;height:32px;border-radius:9px;background:var(--blue);display:grid;place-items:center;flex:none}
+.logo svg{width:18px;height:18px}
+.bar .act{display:flex;gap:8px;flex:none}
+.doc{max-width:1180px;margin:0 auto;padding:28px 20px 0;display:grid;grid-template-columns:230px minmax(0,1fr);gap:48px;align-items:start}
+.toc{position:sticky;top:76px;max-height:calc(100vh - 96px);overflow:auto;font-size:13.5px;scrollbar-width:thin}
+.toc .cap{font-size:11.5px;color:var(--muted);font-weight:600;margin:0 10px 6px}
+.toc a{display:block;padding:4px 10px;border-radius:8px;color:var(--ink2);text-decoration:none;border-inline-start:2px solid transparent;line-height:1.7}
+.toc a.sub{padding-inline-start:22px;font-size:13px}
+.toc a:hover{color:var(--ink);background:var(--panel2)}
+.toc a.on{color:var(--blue);border-inline-start-color:var(--blue);background:var(--soft);font-weight:600}
+.toc .grp{margin:10px 10px 2px;font-size:11.5px;color:var(--muted);font-weight:600}
+article{max-width:760px;min-width:0}
+.hero{margin-bottom:8px}
+.hero .kick{font-size:12.5px;color:var(--blue);font-weight:600}
+.hero h1{margin:4px 0 8px;font-size:28px;line-height:1.5}
+.hero p{margin:0;color:var(--ink2);font-size:15.5px}
+section{scroll-margin-top:76px;padding-top:30px}
+h2{font-size:21px;margin:0 0 10px;line-height:1.5;display:flex;align-items:center;gap:10px}
+h2 .n{font-size:12px;font-weight:700;background:var(--deep);color:var(--panel);border-radius:7px;padding:0 8px;line-height:1.9}
+h3{font-size:16px;margin:18px 0 4px}
+p{margin:8px 0}
+.lead{color:var(--ink2)}
+figure{margin:16px 0 8px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+figure img{display:block;width:100%;height:auto;border-bottom:1px solid var(--line)}
+figcaption{font-size:12.5px;color:var(--ink2);padding:8px 14px}
+.ex{background:var(--soft);border-radius:12px;padding:12px 16px;margin:12px 0}
+.ex .h{font-size:12.5px;font-weight:700;color:var(--blue);margin-bottom:2px}
+.ex b,.num{font-weight:700;color:var(--ink)}
+.ask{border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:10px 16px;margin:12px 0;display:flex;gap:12px;align-items:flex-start}
+.ask .q{flex:none;width:26px;height:26px;border-radius:8px;background:var(--panel2);display:grid;place-items:center;font-weight:700;color:var(--ink2);margin-top:3px}
+.ask .h{font-size:12.5px;font-weight:700;color:var(--ink2)}
+.go{display:inline-flex;gap:6px;align-items:center;font-size:13.5px;font-weight:600;text-decoration:none;margin-top:2px}
+ul.clean{padding-inline-start:20px;margin:6px 0}
+ul.clean li{margin:3px 0}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.step i{font-style:normal;width:28px;height:28px;border-radius:9px;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:700;margin-bottom:6px}
+.step b{display:block;margin-bottom:2px}
+.step span{font-size:13.5px;color:var(--ink2);line-height:1.8;display:block}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+.cards div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:14px}
+.cards div b{display:block;font-size:13px;color:var(--blue)}
+.tw{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+th{background:var(--panel2);font-weight:600;font-size:12.5px;color:var(--ink2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.c,th.c{text-align:center;white-space:nowrap}
+.y{color:var(--green);font-weight:700}.no{color:var(--muted)}.hl{color:var(--blue);font-weight:600;font-size:12.5px}
+details.qa{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:8px 0;padding:0 16px}
+details.qa summary{cursor:pointer;font-weight:600;padding:11px 0;list-style:none;display:flex;justify-content:space-between;gap:10px}
+details.qa summary::-webkit-details-marker{display:none}
+details.qa summary::after{content:"+";color:var(--muted);font-weight:400;font-size:18px;line-height:1.4}
+details.qa[open] summary::after{content:"−"}
+details.qa p{margin:0 0 12px;color:var(--ink2)}
+dl.gl{display:grid;grid-template-columns:170px minmax(0,1fr);gap:0;border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden;margin:12px 0}
+dl.gl dt,dl.gl dd{margin:0;padding:9px 14px;border-bottom:1px solid var(--line)}
+dl.gl dt{font-weight:600;background:var(--panel2)}
+dl.gl dd{color:var(--ink2);font-size:14px}
+dl.gl dt:last-of-type,dl.gl dd:last-of-type{border-bottom:0}
+.areahead{margin-top:34px;padding:14px 16px;border-radius:14px;background:var(--panel2);display:flex;gap:12px;align-items:center}
+.areahead .n{width:30px;height:30px;border-radius:9px;background:var(--deep);color:var(--panel);display:grid;place-items:center;font-weight:700;flex:none}
+.areahead b{font-size:17px}
+.areahead span{display:block;font-size:13px;color:var(--ink2)}
+@media(max-width:900px){
+  .doc{grid-template-columns:minmax(0,1fr);gap:0;padding:0 16px}
+  .toc{position:sticky;top:53px;z-index:5;max-height:none;display:flex;gap:6px;overflow-x:auto;padding:10px 0;background:var(--page);scrollbar-width:none;margin:0 -16px;padding-inline:16px;border-bottom:1px solid var(--line)}
+  .toc .cap,.toc .grp,.toc a.sub{display:none}
+  .toc a{flex:none;border:1px solid var(--line);border-radius:999px;padding:2px 12px;background:var(--panel);font-size:13px}
+  .toc a.on{border-color:var(--blue)}
+  section{scroll-margin-top:110px}
+  .hero{margin-top:20px}
+  .bar-in{padding:10px 16px}
+  .bar .t span{display:none}
+}
+@media(max-width:620px){
+  .steps,.cards{grid-template-columns:minmax(0,1fr)}
+  .hero h1{font-size:23px}
+  dl.gl{grid-template-columns:minmax(0,1fr)}
+  dl.gl dt{border-bottom:0;padding-bottom:2px}
+  .bar .act .btn .lbl{display:none}
+}
+</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <div class="t"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><b>راهنمای داشبورد یکپارچهٔ مدیریت</b><span>شرکت نمونه</span></div>
+  <div class="act"><a class="btn primary" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>بازگشت به داشبورد</a><a class="btn" href="../../en/ceo/guide.html" lang="en" hreflang="en">English</a><button class="btn" id="themeBtn" type="button"></button></div>
+</div></div>
+
+<div class="doc">
+  <nav class="toc" id="toc">
+    <div class="cap">در این راهنما</div>
+    <a href="#glance">در یک نگاه</a>
+    <a href="#quick">شروع سریع</a>
+    <a href="#filters">فیلترها</a>
+    <a href="#kpis">کارت‌های خلاصه</a>
+    <a href="#insights">نکته‌های مهم</a>
+    <div class="grp">۱. فروش و مشتریان</div>
+    <a class="sub" href="#trend">فروش ماهانه</a>
+    <a class="sub" href="#branches">تحقق هدف شعبه‌ها</a>
+    <a class="sub" href="#proforma">قیف پیش‌فاکتور</a>
+    <a class="sub" href="#aging">سن مطالبات</a>
+    <a class="sub" href="#customers">جدول مشتریان</a>
+    <div class="grp">۲. زنجیرهٔ تأمین و انبار</div>
+    <a class="sub" href="#inventory">موجودی و کمبود</a>
+    <a class="sub" href="#transit">کالای در راه</a>
+    <div class="grp">۳. خرید</div>
+    <a class="sub" href="#postatus">وضعیت سفارش‌ها</a>
+    <a class="sub" href="#delivery">موعد تحویل</a>
+    <div class="grp">۴. مالی</div>
+    <a class="sub" href="#cash">موجودی نقد</a>
+    <a class="sub" href="#waterfall">از فروش تا سود</a>
+    <a class="sub" href="#profit">سودآوری شعبه‌ها</a>
+    <a href="#faq">پرسش‌های رایج</a>
+    <a href="#glossary">واژه‌نامه</a>
+  </nav>
+
+  <article>
+    <div class="hero">
+      <div class="kick">راهنمای کاربر</div>
+      <h1>داشبورد یکپارچهٔ مدیریت؛ همهٔ شرکت در یک صفحه</h1>
+      <p>این راهنما توضیح می‌دهد هر بخش داشبورد چه چیزی نشان می‌دهد، چطور خوانده می‌شود و به چه سؤالی جواب می‌دهد. همهٔ عددهای مثال‌ها از همان داده‌ای است که داشبورد نشان می‌دهد.</p>
+    </div>
+
+    <section id="glance">
+      <h2>در یک نگاه</h2>
+      <p>«شرکت نمونه» تجهیزات صنعتی وارد و در چهار شعبهٔ تهران، اصفهان، شیراز و مشهد پخش می‌کند. تا پیش از این داشبورد، مدیرعامل هر هفته از واحدهای فروش، انبار، بازرگانی و مالی گزارش جداگانه می‌گرفت؛ گزارش‌هایی که دیر می‌رسید و عددهایشان همیشه با هم جور نبود.</p>
+      <p>داشبورد یکپارچه همین چهار حوزه را از یک منبع داده و در یک صفحه کنار هم می‌گذارد:</p>
+      <div class="cards">
+        <div><b>۱. فروش و مشتریان</b>فروش در برابر هدف، پیش‌فاکتورها و نرخ تبدیل، مشتریان بزرگ، اعتبار و مطالبات</div>
+        <div><b>۲. زنجیرهٔ تأمین و انبار</b>ارزش موجودی، کالاهای زیر نقطهٔ سفارش و محموله‌های در راه</div>
+        <div><b>۳. خرید</b>سفارش‌های خرید به تفکیک وضعیت، موعد تحویل و سفارش‌های دیرکرد</div>
+        <div><b>۴. مالی</b>موجودی و جریان نقد ماهانه، ساختار هزینه و سودآوری شعبه‌ها</div>
+      </div>
+      <p><b>برای چه کسی؟</b> اول برای مدیرعامل و هیئت‌مدیره که می‌خواهند در چند دقیقه وضعیت کل شرکت را ببینند؛ بعد برای مدیران فروش، بازرگانی، انبار و مالی که هر کدام جزئیات حوزهٔ خود را در همان صفحه پیدا می‌کنند و با بقیه عدد مشترک دارند.</p>
+      <figure><img src="shots/overview.png" alt="نمای کلی داشبورد"><figcaption>نمای کلی داشبورد: سربرگ، ستون فیلترها در سمت راست و ردیف خلاصه برای مدیرعامل.</figcaption></figure>
+    </section>
+
+    <section id="quick">
+      <h2>شروع سریع</h2>
+      <div class="steps">
+        <div class="step"><i>۱</i><b>ردیف خلاصه را بخوانید</b><span>شش کارت بالای صفحه مهم‌ترین عدد هر حوزه را با مقایسه نشان می‌دهند. رنگ قرمز یعنی جای نگرانی.</span></div>
+        <div class="step"><i>۲</i><b>سراغ نکته‌های مهم بروید</b><span>کادر «نکته‌های مهم این دوره» مشکلات را به زبان ساده می‌گوید و با «مشاهده» به نمودار مربوط می‌برد.</span></div>
+        <div class="step"><i>۳</i><b>با فیلترها دقیق شوید</b><span>دوره، شعبه یا گروه کالا را عوض کنید تا ببینید مشکل از کجاست؛ همهٔ بخش‌ها هم‌زمان به‌روز می‌شوند.</span></div>
+      </div>
+    </section>
+
+    <section id="filters">
+      <h2>فیلترها</h2>
+      <p>ستون سمت راست (در گوشی: دکمهٔ «فیلترها» بالای صفحه) سه فیلتر دارد. تعداد فیلترهای فعال کنار عنوان نوشته می‌شود و «پاک کردن همه» داشبورد را به حالت پیش‌فرض (کل سال، همهٔ شعبه‌ها، همهٔ گروه‌ها) برمی‌گرداند.</p>
+      <figure style="max-width:300px"><img src="shots/filters.png" alt="ستون فیلترها"><figcaption>ستون بخش‌ها و فیلترها</figcaption></figure>
+      <ul class="clean">
+        <li><b>دوره (۱۴۰۴):</b> با دکمه‌های فصل یا دو فهرست «از ماه / تا ماه» هر بازهٔ دلخواهی را انتخاب کنید.</li>
+        <li><b>شعبه:</b> تهران، اصفهان، شیراز یا مشهد.</li>
+        <li><b>گروه کالا:</b> پمپ صنعتی، الکتروموتور و درایو، کمپرسور هوا، شیرآلات صنعتی، ابزار دقیق.</li>
+      </ul>
+      <p>بعضی بخش‌ها «وضعیت لحظه‌ای» هستند (مثلاً موجودی انبار امروز) و دوره برایشان معنا ندارد. هر جا فیلتری اثر ندارد، زیر عنوان نمودار یک یادداشت کوچک ⓘ دلیلش را می‌گوید. جدول زیر خلاصهٔ همین است:</p>
+      <div class="tw"><table>
+        <thead><tr><th>بخش</th><th class="c">دوره</th><th class="c">شعبه</th><th class="c">گروه کالا</th></tr></thead>
+        <tbody>
+          <tr><td>کارت‌های خلاصه و نکته‌های مهم</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+          <tr><td>فروش ماهانه در برابر هدف</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+          <tr><td>تحقق هدف شعبه‌ها</td><td class="c y">✓</td><td class="c hl">پررنگ‌سازی</td><td class="c y">✓</td></tr>
+          <tr><td>قیف پیش‌فاکتور</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+          <tr><td>سن مطالبات</td><td class="c y">✓</td><td class="c y">✓</td><td class="c no">—</td></tr>
+          <tr><td>جدول مشتریان</td><td class="c y">✓</td><td class="c y">✓</td><td class="c hl">فقط ستون فروش</td></tr>
+          <tr><td>ارزش موجودی و هشدار کمبود</td><td class="c no">—</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+          <tr><td>کالای در راه</td><td class="c no">—</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+          <tr><td>سفارش‌های خرید به تفکیک وضعیت</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+          <tr><td>موعد تحویل سفارش‌های باز</td><td class="c no">—</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+          <tr><td>موجودی نقد و جریان نقد</td><td class="c y">✓</td><td class="c no">—</td><td class="c no">—</td></tr>
+          <tr><td>از فروش تا سود خالص</td><td class="c y">✓</td><td class="c y">✓</td><td class="c no">—</td></tr>
+          <tr><td>سودآوری شعبه‌ها</td><td class="c y">✓</td><td class="c hl">پررنگ‌سازی</td><td class="c no">—</td></tr>
+        </tbody></table></div>
+      <div class="ex"><div class="h">مثال</div>اگر شعبه را «مشهد» و دوره را «زمستان» بگذارید، کارت فروش نشان می‌دهد مشهد فقط <b data-k="mhdQ4Pct"></b> هدف زمستان را محقق کرده و نرخ تبدیل پیش‌فاکتورش <b data-k="mhdQ4Conv"></b> است؛ یعنی مشکل مشهد هم در تعداد مشتری است و هم در بستن معامله.</div>
+    </section>
+
+    <section id="kpis">
+      <h2>کارت‌های خلاصه</h2>
+      <figure><img src="shots/summary.png" alt="کارت‌های خلاصه و نکته‌های مهم"><figcaption>ردیف «خلاصه برای مدیرعامل»: شش کارت و کادر نکته‌های مهم</figcaption></figure>
+      <p><b>چه چیزی نشان می‌دهد؟</b> شش عدد که سلامت چهار حوزه را خلاصه می‌کنند: فروش دوره، نرخ تبدیل پیش‌فاکتور، مطالبات بالای ۹۰ روز، قلم‌های زیر نقطهٔ سفارش، سفارش‌های خرید معوق و موجودی نقد پایان دوره. برچسب خاکستری گوشهٔ هر کارت حوزهٔ آن را می‌گوید و کلیک روی کارت شما را به نمودار مربوط می‌برد.</p>
+      <p><b>چطور بخوانیم؟</b> عدد بزرگ مقدار فعلی است. خط رنگی زیر آن مقایسه است: با هدف، با ابتدای دوره یا با حد امن. ▲ و ▼ جهت تغییر را نشان می‌دهند و رنگ، خوب یا بد بودن آن را؛ برای همین رشد مطالبات معوق با ▲ قرمز نشان داده می‌شود.</p>
+      <div class="ex"><div class="h">مثال با عددهای همین داشبورد (کل سال ۱۴۰۴)</div>فروش سال <b data-k="salesAct"></b> میلیارد تومان است، در برابر هدف <b data-k="salesTgt"></b> میلیارد؛ یعنی <b data-k="salesGap"></b> زیر هدف. مطالبات بالای ۹۰ روز از <b data-k="o90Start"></b> به <b data-k="o90End"></b> میلیارد تومان رسیده و موجودی نقد پایان سال <b data-k="cashEnd"></b> میلیارد تومان است.</div>
+      <div class="ask"><span class="q">؟</span><div><div class="h">این بخش به چه سؤالی جواب می‌دهد؟</div>«در یک نگاه، کدام حوزهٔ شرکت امروز به توجه من نیاز دارد؟»</div></div>
+      <a class="go" href="index.html#summary">دیدن در داشبورد ←</a>
+    </section>
+
+    <section id="insights">
+      <h2>نکته‌های مهم این دوره</h2>
+      <p><b>چه چیزی نشان می‌دهد؟</b> سه تا پنج جملهٔ کوتاه که داشبورد خودش از داده‌ها می‌سازد؛ مثل گزارشی که یک تحلیلگر برای مدیرعامل می‌نویسد. هر جمله با فیلترها عوض می‌شود.</p>
+      <p><b>چطور بخوانیم؟</b> علامت قرمز یعنی مشکلی که باید پیگیری شود، نارنجی یعنی هشدار و سبز یعنی وضعیت خوب است. نکته‌ها به ترتیب اهمیت مرتب شده‌اند و پیوند «مشاهده» به نمودار پشتیبان هر نکته می‌رود.</p>
+      <div class="ex"><div class="h">نکته‌هایی که برای کل سال ۱۴۰۴ ساخته می‌شود</div><ul class="clean" id="insEx"></ul></div>
+      <div class="ask"><span class="q">؟</span><div><div class="h">این بخش به چه سؤالی جواب می‌دهد؟</div>«اگر فقط یک دقیقه وقت دارم، چه چیزی را نباید از دست بدهم؟»</div></div>
+      <a class="go" href="index.html#insights">دیدن در داشبورد ←</a>
+    </section>
+
+    <div class="areahead"><span class="n">۱</span><div><b>فروش و مشتریان</b><span>فروش در برابر هدف، پیش‌فاکتورها، اعتبار و مطالبات</span></div></div>
+
+    <section id="trend">
+      <h2>فروش ماهانه در برابر هدف</h2>
+      <figure><img src="shots/trend.png" alt="نمودار فروش ماهانه"><figcaption>ستون‌ها فروش هر ماه و خط کوتاه تیره روی هر ستون هدف همان ماه است.</figcaption></figure>
+      <p><b>چه چیزی نشان می‌دهد؟</b> فروش قطعی هر ماه در دورهٔ انتخابی، کنار هدف همان ماه. ماه‌ها از راست به چپ مرتب شده‌اند (فروردین در راست).</p>
+      <p><b>چطور بخوانیم؟</b> اگر بالای ستون زیر خط هدف باشد، آن ماه از هدف عقب مانده است. ستون‌هایی که کمتر از ۹۵٪ هدف فروخته‌اند نارنجی می‌شوند تا بی‌درنگ دیده شوند. با بردن نشانگر روی هر ستون، فروش، هدف و درصد تحقق را می‌بینید. افت فروردین (تعطیلات نوروز) و اوج اسفند (خرید پیش از پایان سال) الگوی فصلی عادی بازار است.</p>
+      <div class="ex"><div class="h">مثال</div>در اسفند هدف <b data-k="esfTgt"></b> میلیارد تومان بود و فروش <b data-k="esfAct"></b> میلیارد شد؛ یعنی <b data-k="esfGap"></b> کمتر. دلیلش در بخش‌های بعد پیداست: افت مشهد و کمبود کالاهای ابزار دقیق که در گمرک مانده‌اند.</div>
+      <div class="ask"><span class="q">؟</span><div><div class="h">این بخش به چه سؤالی جواب می‌دهد؟</div>«آیا فروش طبق برنامه پیش می‌رود و از کدام ماه عقب افتادیم؟»</div></div>
+      <a class="go" href="index.html#trend">دیدن در داشبورد ←</a>
+    </section>
+
+    <section id="branches">
+      <h2>تحقق هدف فروش شعبه‌ها</h2>
+      <figure><img src="shots/branches.png" alt="نمودار تحقق هدف شعبه‌ها"><figcaption>هر نوار درصد تحقق هدف یک شعبه است؛ خط‌چین عمودی یعنی ۱۰۰٪.</figcaption></figure>
+      <p><b>چه چیزی نشان می‌دهد؟</b> درصد فروش هر شعبه به هدف آن در دورهٔ انتخابی، همراه مبلغ فروش و هدف زیر هر نوار.</p>
+      <p><b>چطور بخوانیم؟</b> نوار آبی یعنی شعبه دست‌کم ۹۷٪ هدف را آورده، نارنجی بین ۹۰ تا ۹۷٪ و قرمز زیر ۹۰٪. اگر شعبه‌ای را در فیلتر انتخاب کنید، بقیه کم‌رنگ می‌شوند ولی برای مقایسه سر جایشان می‌مانند.</p>
+      <div class="ex"><div class="h">مثال</div>در کل سال، مشهد <b data-k="mhdPct"></b> هدف را محقق کرده است (کسری <b data-k="mhdGap"></b> میلیارد تومان)، در حالی که اصفهان به <b data-k="isfPct"></b> رسیده. اگر دوره را ماه‌به‌ماه عوض کنید، می‌بینید افت مشهد از مهر شروع شده است.</div>
+      <div class="ask"><span class="q">؟</span><div><div class="h">این بخش به چه سؤالی جواب می‌دهد؟</div>«کدام شعبه هدفش را نیاورده و کسری‌اش چقدر است؟»</div></div>
+      <a class="go" href="index.html#branches">دیدن در داشبورد ←</a>
+    </section>
+
+    <section id="proforma">
+      <h2>قیف پیش‌فاکتور تا فاکتور</h2>
+      <figure><img src="shots/proforma.png" alt="قیف پیش‌فاکتور"><figcaption>چهار مرحلهٔ فروش و نرخ تبدیل هر شعبه</figcaption></figure>
+      <p><b>چه چیزی نشان می‌دهد؟</b> از پیش‌فاکتورهایی که صادر شده، چند مورد پیگیری شد، چند مورد به سفارش قطعی رسید و چند مورد فاکتور و تحویل شد. نمودار کوچک پایین، «نرخ تبدیل» هر شعبه را با هدف ۴۰٪ مقایسه می‌کند.</p>
+      <p><b>چطور بخوانیم؟</b> عدد داخل پرانتز درصد عبور از مرحلهٔ قبل است. بزرگ‌ترین ریزش معمولاً بین «پیگیری» و «سفارش قطعی» است؛ همان جایی که قیمت، موجودی کالا و پیگیری فروشنده تعیین‌کننده است.</p>
+      <div class="ex"><div class="h">مثال</div>در سال ۱۴۰۴، <b data-k="issued"></b> پیش‌فاکتور صادر شد و <b data-k="orders"></b> مورد به سفارش قطعی رسید؛ نرخ تبدیل <b data-k="conv"></b>. نرخ مشهد <b data-k="mhdConv"></b> است؛ یعنی مشهد پیش‌فاکتور کم نمی‌دهد، معامله کم می‌بندد.</div>
+      <div class="ask"><span class="q">؟</span><div><div class="h">این بخش به چه سؤالی جواب می‌دهد؟</div>«از هر ۱۰۰ پیش‌فاکتور چند تا فروش می‌شود و کدام شعبه در بستن معامله ضعیف است؟»</div></div>
+      <a class="go" href="index.html#proforma">دیدن در داشبورد ←</a>
+    </section>
+
+    <section id="aging">
+      <h2>سن مطالبات</h2>
+      <figure><img src="shots/aging.png" alt="نمودار سن مطالبات"><figcaption>ماندهٔ طلب از مشتریان در پایان هر ماه، به تفکیک سن</figcaption></figure>
+      <p><b>چه چیزی نشان می‌دهد؟</b> کل طلب شرکت از مشتریان در پایان هر ماه که بر اساس زمان گذشته از فاکتور به چهار دسته تقسیم شده است: جاری (زیر ۳۰ روز)، ۳۰ تا ۶۰، ۶۰ تا ۹۰ و بالای ۹۰ روز.</p>
+      <p><b>چطور بخوانیم؟</b> بخش قرمز پایین هر ستون طلب‌های بالای ۹۰ روز است؛ پرخطرترین بخش که احتمال سوخت شدنش بیشتر است. اگر این بخش ماه‌به‌ماه بلندتر شود، حتی وقتی کل طلب ثابت است، کیفیت مطالبات بدتر شده است. فیلتر گروه کالا روی این نمودار اثر ندارد چون طلب به نام مشتری ثبت می‌شود.</p>
+      <div class="ex"><div class="h">مثال</div>مطالبات بالای ۹۰ روز از <b data-k="o90Start"></b> میلیارد تومان در ابتدای سال به <b data-k="o90End"></b> میلیارد در پایان اسفند رسیده؛ رشد <b data-k="o90Chg"></b>. بیشترین سهم با شعبهٔ <b data-k="o90TopB"></b> است.</div>
+      <div class="ask"><span class="q">؟</span><div><div class="h">این بخش به چه سؤالی جواب می‌دهد؟</div>«آیا پول‌مان را به‌موقع از مشتری می‌گیریم یا طلب‌های کهنه رو به افزایش است؟»</div></div>
+      <a class="go" href="index.html#aging">دیدن در داشبورد ←</a>
+    </section>
+
+    <section id="customers">
+      <h2>جدول مشتریان: فروش، اعتبار و مطالبات</h2>
+      <figure><img src="shots/customers.png" alt="جدول مشتریان"><figcaption>جدول قابل مرتب‌سازی و جست‌وجوی مشتریان</figcaption></figure>
+      <p><b>چه چیزی نشان می‌دهد؟</b> برای هر مشتری: فروش دوره، سقف اعتبار، ماندهٔ طلب در پایان دوره، درصد استفاده از اعتبار، مبلغ بالای ۹۰ روز و وضعیت.</p>
+      <p><b>چطور بخوانیم؟</b> با کلیک روی عنوان هر ستون جدول مرتب می‌شود (کلیک دوباره ترتیب را برعکس می‌کند) و کادر جست‌وجو نام مشتری یا شعبه را پیدا می‌کند. نوار کوچک «استفاده از اعتبار» تا ۸۵٪ سبز، تا ۱۰۰٪ نارنجی و بالاتر از آن قرمز است. برچسب وضعیت یکی از این‌هاست: «عادی»، «نزدیک سقف»، «عبور از سقف» و «معوقهٔ سنگین» (بیش از یک‌چهارم بدهی بالای ۹۰ روز).</p>
+      <div class="ex"><div class="h">مثال</div>پنج مشتری بزرگ <b data-k="top5"></b> فروش سال را ساخته‌اند. <b data-k="lateN"></b> مشتری وضعیت «معوقهٔ سنگین» یا «عبور از سقف» دارند، از جمله <b data-k="lateNames"></b>؛ پیش از هر فروش اعتباری تازه به این مشتریان باید وضعیت بدهی‌شان روشن شود.</div>
+      <div class="ask"><span class="q">؟</span><div><div class="h">این بخش به چه سؤالی جواب می‌دهد؟</div>«مشتریان اصلی ما چه کسانی‌اند و به کدام‌شان نباید بدون تسویه، بیشتر نسیه بفروشیم؟»</div></div>
+      <a class="go" href="index.html#customers">دیدن در داشبورد ←</a>
+    </section>
+
+    <div class="areahead"><span class="n">۲</span><div><b>زنجیرهٔ تأمین و انبار</b><span>وضعیت لحظه‌ای انبار و محموله‌ها در ۲۹ اسفند ۱۴۰۴</span></div></div>
+
+    <section id="inventory">
+      <h2>ارزش موجودی و هشدار کمبود</h2>
+      <figure><img src="shots/inventory.png" alt="ارزش موجودی و کالاهای زیر نقطهٔ سفارش"><figcaption>ارزش موجودی هر گروه و فهرست قلم‌های زیر نقطهٔ سفارش</figcaption></figure>
+      <p><b>چه چیزی نشان می‌دهد؟</b> ارزش موجودی انبار هر گروه کالا به بهای خرید، و فهرست قلم‌هایی که موجودی‌شان از «نقطهٔ سفارش» کمتر شده است.</p>
+      <p><b>چطور بخوانیم؟</b> نوار نارنجی یعنی آن گروه قلم کمبود دارد. در فهرست پایین، «پوشش» می‌گوید با سرعت فروش فعلی موجودی چند روز دیگر تمام می‌شود و ستون «در راه» نشان می‌دهد آیا محموله‌ای از همان گروه در مسیر است و کجا مانده.</p>
+      <div class="ex"><div class="h">مثال</div>ارزش کل موجودی <b data-k="invVal"></b> میلیارد تومان است. <b data-k="lowCount"></b> قلم زیر نقطهٔ سفارش‌اند و همه از گروه ابزار دقیق؛ کم‌ترین پوشش مربوط به «<b data-k="lowName"></b>» با <b data-k="lowDays"></b> روز است. محموله‌های این گروه در گمرک مانده‌اند (بخش بعد).</div>
+      <div class="ask"><span class="q">؟</span><div><div class="h">این بخش به چه سؤالی جواب می‌دهد؟</div>«کدام کالا به‌زودی تمام می‌شود و فروش را از دست می‌دهیم؟»</div></div>
+      <a class="go" href="index.html#inventory">دیدن در داشبورد ←</a>
+    </section>
+
+    <section id="transit">
+      <h2>کالای در راه به تفکیک مرحله</h2>
+      <figure><img src="shots/transit.png" alt="کالای در راه"><figcaption>سه مرحلهٔ مسیر واردات و فهرست محموله‌ها به ترتیب زمان رسیدن</figcaption></figure>
+      <p><b>چه چیزی نشان می‌دهد؟</b> محموله‌های وارداتی که هنوز به انبار نرسیده‌اند، در سه مرحله: «حمل» (حمل بین‌المللی)، «گمرک» (ترخیص) و «در راه انبار» (حمل داخلی). برای هر مرحله تعداد، ارزش و میانگین روزهای ماندن آمده است.</p>
+      <p><b>چطور بخوانیم؟</b> نوار پایین هر کادر میانگین روزهای ماندن است و خط تیرهٔ عمودی روی آن «معیار» همان مرحله. اگر میانگین بیش از ۳۰٪ از معیار بیشتر شود، کادر قرمز می‌شود. در جدول پایین، محموله‌هایی که بیش از یک‌ونیم برابر معیار در مرحلهٔ خود مانده‌اند برچسب قرمز دارند.</p>
+      <div class="ex"><div class="h">مثال</div><b data-k="shipN"></b> محموله به ارزش <b data-k="shipVal"></b> میلیارد تومان در راه است. محموله‌های مرحلهٔ گمرک به‌طور میانگین <b data-k="custAvg"></b> روز مانده‌اند، در حالی که معیار ۱۰ روز است؛ <b data-k="custLate"></b> محمولهٔ دیرکرد همگی از گروه ابزار دقیق‌اند. این همان دلیل کمبود ابزار دقیق در انبار است.</div>
+      <div class="ask"><span class="q">؟</span><div><div class="h">این بخش به چه سؤالی جواب می‌دهد؟</div>«کالای سفارش‌داده‌شده کجاست، کی می‌رسد و کجای مسیر گیر کرده است؟»</div></div>
+      <a class="go" href="index.html#transit">دیدن در داشبورد ←</a>
+    </section>
+
+    <div class="areahead"><span class="n">۳</span><div><b>خرید</b><span>سفارش‌های خرید، موعدهای تحویل و دیرکردها</span></div></div>
+
+    <section id="postatus">
+      <h2>سفارش‌های خرید به تفکیک وضعیت</h2>
+      <figure><img src="shots/postatus.png" alt="سفارش‌های خرید به تفکیک وضعیت"><figcaption>مبلغ سفارش‌های خرید هر گروه کالا، بخش‌بندی‌شده بر اساس وضعیت</figcaption></figure>
+      <p><b>چه چیزی نشان می‌دهد؟</b> مبلغ سفارش‌های خریدی که در دورهٔ انتخابی ثبت شده‌اند، برای هر گروه کالا، به تفکیک وضعیت فعلی: در انتظار تأیید، تأییدشده، ارسال به تأمین‌کننده، تحویل جزئی و تحویل کامل.</p>
+      <p><b>چطور بخوانیم؟</b> بخش خاکستری سفارش‌های بسته‌شده (تحویل کامل) است و بخش‌های آبی سفارش‌های باز؛ هرچه آبی پررنگ‌تر، سفارش به تحویل نزدیک‌تر. روی هر بخش نشانگر را ببرید تا مبلغ و سهمش را ببینید.</p>
+      <div class="ex"><div class="h">مثال</div>در سال ۱۴۰۴، <b data-k="poCount"></b> سفارش خرید به ارزش <b data-k="poVal"></b> میلیارد تومان ثبت شد که <b data-k="poOpen"></b> سفارش از آن هنوز کامل تحویل نشده است.</div>
+      <div class="ask"><span class="q">؟</span><div><div class="h">این بخش به چه سؤالی جواب می‌دهد؟</div>«چقدر خرید در جریان داریم و در کدام مرحله‌اند؟»</div></div>
+      <a class="go" href="index.html#postatus">دیدن در داشبورد ←</a>
+    </section>
+
+    <section id="delivery">
+      <h2>موعد تحویل سفارش‌های باز</h2>
+      <figure><img src="shots/delivery.png" alt="موعد تحویل سفارش‌های باز"><figcaption>ستون قرمز سفارش‌های معوق و ستون‌های آبی تحویل‌های هفته‌های آینده</figcaption></figure>
+      <p><b>چه چیزی نشان می‌دهد؟</b> همهٔ سفارش‌های باز بر اساس هفته‌ای که تحویلشان انتظار می‌رود. ستون اول (راست) سفارش‌هایی است که موعدشان گذشته است؛ زیر نمودار، فهرست همین سفارش‌های معوق با تعداد روز تأخیر آمده است.</p>
+      <p><b>چطور بخوانیم؟</b> عدد بالای هر ستون تعداد سفارش است و ارتفاع آن مبلغ. زیر هر ستون روز شروع آن هفته نوشته شده است. اگر بیشتر سفارش‌های معوق از یک تأمین‌کننده باشد، مشکل از همان تأمین‌کننده است نه از واحد خرید.</p>
+      <div class="ex"><div class="h">مثال</div><b data-k="lateCount"></b> سفارش به ارزش <b data-k="lateVal"></b> میلیارد تومان از موعد گذشته است و <b data-k="lateSupN"></b> مورد آن از «<b data-k="lateSup"></b>». در چهار هفتهٔ آینده <b data-k="next4"></b> میلیارد تومان تحویل انتظار می‌رود.</div>
+      <div class="ask"><span class="q">؟</span><div><div class="h">این بخش به چه سؤالی جواب می‌دهد؟</div>«کدام خریدها دیر شده‌اند، تقصیر کدام تأمین‌کننده است و هفته‌های آینده چه چیزی می‌رسد؟»</div></div>
+      <a class="go" href="index.html#delivery">دیدن در داشبورد ←</a>
+    </section>
+
+    <div class="areahead"><span class="n">۴</span><div><b>مالی</b><span>نقدینگی، ساختار هزینه و سودآوری</span></div></div>
+
+    <section id="cash">
+      <h2>موجودی نقد و جریان نقد ماهانه</h2>
+      <figure><img src="shots/cash.png" alt="موجودی نقد و جریان نقد"><figcaption>خط آبی موجودی نقد پایان ماه، ستون‌ها جریان خالص و خط‌چین نارنجی حد امن</figcaption></figure>
+      <p><b>چه چیزی نشان می‌دهد؟</b> موجودی نقد شرکت در پایان هر ماه (خط آبی) و جریان خالص نقد همان ماه، یعنی وصول از مشتریان منهای پرداخت‌ها (ستون سبز یا قرمز). خط‌چین نارنجی «حداقل نقدینگی امن» (۴۰ میلیارد تومان) است.</p>
+      <p><b>چطور بخوانیم؟</b> هر نقطه‌ای که زیر خط‌چین برود قرمز می‌شود؛ یعنی شرکت در آن ماه برای پرداخت‌های ضروری حاشیهٔ امن نداشته است. این نمودار از فیلتر شعبه و گروه کالا پیروی نمی‌کند، چون نقدینگی در خزانهٔ مرکزی نگه‌داری می‌شود.</p>
+      <div class="ex"><div class="h">مثال</div>کمترین موجودی نقد در <b data-k="cashMinM"></b> بود: <b data-k="cashMin"></b> میلیارد تومان، زیر حد امن. دلیلش هم‌زمانی دو اتفاق است: وصول کم از مشتریان در تعطیلات نوروز و تسویهٔ اعتبار اسنادی خریدهای اسفند. از اردیبهشت دوباره بالای حد امن برگشت و سال با <b data-k="cashEnd"></b> میلیارد تومان بسته شد.</div>
+      <div class="ask"><span class="q">؟</span><div><div class="h">این بخش به چه سؤالی جواب می‌دهد؟</div>«آیا پول کافی برای تعهدات داریم و در کدام ماه‌ها باید از قبل برای نقدینگی برنامه بریزیم؟»</div></div>
+      <a class="go" href="index.html#cash">دیدن در داشبورد ←</a>
+    </section>
+
+    <section id="waterfall">
+      <h2>از فروش تا سود خالص</h2>
+      <figure><img src="shots/waterfall.png" alt="نمودار آبشاری سود"><figcaption>نمودار آبشاری: از درآمد شروع می‌کند و هر هزینه را کم می‌کند تا به سود خالص برسد.</figcaption></figure>
+      <p><b>چه چیزی نشان می‌دهد؟</b> درآمد فروش دوره (ستون آبی راست)، سپس هر دسته هزینه به‌صورت یک پلهٔ نارنجی رو به پایین (بهای تمام‌شدهٔ کالا، فروش و بازاریابی، انبار و حمل، اداری و ستادی، هزینهٔ مالی) و در انتها سود خالص (ستون سبز).</p>
+      <p><b>چطور بخوانیم؟</b> طول هر پله مبلغ آن هزینه است؛ هرچه پله بلندتر، سهم بیشتری از درآمد را خورده است. با فیلتر شعبه همین تصویر را برای هر شعبه جداگانه می‌بینید.</p>
+      <div class="ex"><div class="h">مثال</div>درآمد سال <b data-k="rev"></b> میلیارد تومان بود. <b data-k="cogsP"></b> آن صرف بهای کالا شد و از هر ۱۰۰ تومان فروش، <b data-k="netPer100"></b> تومان سود خالص ماند. برای مشهد این عدد فقط <b data-k="mhdNet100"></b> تومان است.</div>
+      <div class="ask"><span class="q">؟</span><div><div class="h">این بخش به چه سؤالی جواب می‌دهد؟</div>«از فروش ما چقدر سود می‌ماند و بیشترین هزینه کجاست؟»</div></div>
+      <a class="go" href="index.html#waterfall">دیدن در داشبورد ←</a>
+    </section>
+
+    <section id="profit">
+      <h2>سودآوری شعبه‌ها</h2>
+      <figure><img src="shots/profit.png" alt="جدول سودآوری شعبه‌ها"><figcaption>جدول رنگی سودآوری؛ خانه‌های قرمز ضعیف‌ترین عملکرد هر ستون‌اند.</figcaption></figure>
+      <p><b>چه چیزی نشان می‌دهد؟</b> برای هر شعبه: درآمد، حاشیهٔ ناخالص، هزینهٔ عملیاتی، سود عملیاتی، حاشیهٔ عملیاتی، حاشیهٔ خالص و «هزینه به ازای هر ۱۰۰ تومان فروش». سطر آخر جمع کل شرکت است.</p>
+      <p><b>چطور بخوانیم؟</b> در ستون‌های حاشیه و سود، آبی پررنگ‌تر یعنی بهتر و خانهٔ قرمز یعنی ضعیف‌ترین شعبه در آن ستون. در ستون «هزینه به ازای ۱۰۰ تومان» برعکس است: عدد کمتر بهتر است.</p>
+      <div class="ex"><div class="h">مثال</div>مشهد <b data-k="mhdRevShare"></b> درآمد شرکت را دارد، اما حاشیهٔ خالصش <b data-k="mhdNm"></b> است، در برابر <b data-k="isfNm"></b> اصفهان. دو دلیل دارد: تخفیف‌های پاییز که حاشیهٔ ناخالص را پایین آورد، و هزینه‌های ثابت شعبه که با افت فروش کم نشد.</div>
+      <div class="ask"><span class="q">؟</span><div><div class="h">این بخش به چه سؤالی جواب می‌دهد؟</div>«کدام شعبه واقعاً سود می‌سازد و کدام فقط فروش؟»</div></div>
+      <a class="go" href="index.html#profit">دیدن در داشبورد ←</a>
+    </section>
+
+    <section id="faq">
+      <h2>پرسش‌های رایج</h2>
+      <details class="qa"><summary>عددها از کجا می‌آیند و هر چند وقت به‌روز می‌شوند؟</summary><p>در نسخهٔ واقعی، داشبورد هر شب از نرم‌افزار حسابداری، سامانهٔ انبار و پروندهٔ خرید خارجی خوانده می‌شود.</p></details>
+      <details class="qa"><summary>چرا با تغییر دوره، نمودار انبار و محموله‌ها عوض نمی‌شود؟</summary><p>چون این‌ها «وضعیت لحظه‌ای»اند: موجودی انبار و محموله‌های در راه در ۲۹ اسفند. یادداشت ⓘ زیر عنوان هر نمودار می‌گوید کدام فیلتر روی آن اثر ندارد و چرا.</p></details>
+      <details class="qa"><summary>«نقطهٔ سفارش» را چطور حساب کرده‌اید؟</summary><p>نقطهٔ سفارش موجودی‌ای است که وقتی به آن برسیم باید دوباره سفارش بدهیم تا تا رسیدن محمولهٔ بعدی کالا تمام نشود. اینجا حدود مصرف یک‌ماه‌ونیم هر کالا در هر شعبه در نظر گرفته شده، چون واردات به‌طور معمول حدود شش هفته طول می‌کشد.</p></details>
+      <details class="qa"><summary>هدف فروش هر ماه چطور تعیین شده است؟</summary><p>هدف سالانه بر اساس فروش سال قبل و رشد برنامه‌ریزی‌شده تعیین و بعد بر اساس الگوی فصلی بازار (افت فروردین، اوج اسفند) بین ماه‌ها و شعبه‌ها پخش شده است.</p></details>
+      <details class="qa"><summary>می‌توانم داشبورد را در گوشی ببینم؟</summary><p>بله. در گوشی، فیلترها زیر دکمهٔ «فیلترها» جمع می‌شوند و بخش‌ها یکی زیر دیگری می‌آیند. جدول‌های پهن را می‌توانید افقی بکشید.</p></details>
+      <details class="qa"><summary>حالت تیره چطور فعال می‌شود؟</summary><p>داشبورد به‌طور پیش‌فرض از تنظیم دستگاه شما پیروی می‌کند. با دکمهٔ «حالت روشن / حالت تیره» در بالای صفحه می‌توانید آن را دستی عوض کنید.</p></details>
+    </section>
+
+    <section id="glossary">
+      <h2>واژه‌نامه</h2>
+      <dl class="gl">
+        <dt>پیش‌فاکتور</dt><dd>پیشنهاد قیمت رسمی که پیش از خرید برای مشتری فرستاده می‌شود و هنوز تعهدی ایجاد نمی‌کند.</dd>
+        <dt>نرخ تبدیل</dt><dd>درصد پیش‌فاکتورهایی که به سفارش قطعی تبدیل شده‌اند.</dd>
+        <dt>تحقق هدف</dt><dd>نسبت فروش واقعی به هدف فروش همان دوره، به درصد.</dd>
+        <dt>سقف اعتبار</dt><dd>بیشترین مبلغی که مشتری اجازه دارد به شرکت بدهکار باشد.</dd>
+        <dt>مطالبات بالای ۹۰ روز</dt><dd>بخشی از طلب که بیش از ۹۰ روز از تاریخ فاکتورش گذشته و هنوز وصول نشده است.</dd>
+        <dt>نقطهٔ سفارش</dt><dd>سطحی از موجودی که با رسیدن به آن باید سفارش خرید تازه ثبت شود.</dd>
+        <dt>پوشش موجودی</dt><dd>تعداد روزهایی که موجودی فعلی با سرعت فروش عادی کفایت می‌کند.</dd>
+        <dt>معیار مرحله</dt><dd>مدت زمان عادی ماندن محموله در هر مرحله (حمل ۲۵، گمرک ۱۰ و حمل داخلی ۴ روز).</dd>
+        <dt>اعتبار اسنادی</dt><dd>روش پرداخت در خرید خارجی که بانک پرداخت به فروشنده را تضمین می‌کند و در سررسید باید تسویه شود.</dd>
+        <dt>حاشیهٔ ناخالص</dt><dd>درصدی از فروش که پس از کسر بهای تمام‌شدهٔ کالا می‌ماند.</dd>
+        <dt>حاشیهٔ خالص</dt><dd>درصدی از فروش که پس از کسر همهٔ هزینه‌ها (کالا، عملیاتی و مالی) به‌عنوان سود می‌ماند.</dd>
+        <dt>حداقل نقدینگی امن</dt><dd>کمترین موجودی نقدی که شرکت برای پرداخت‌های ضروری یک ماه (حقوق، اقساط، عوارض) باید در دست داشته باشد.</dd>
+      </dl>
+    </section>
+  </article>
+</div>
+<footer class="credit">طراحی و ساخت: فاطمه منصوری · نمونه‌کار</footer>
+
+<script>
+/* ===== Generator: identical copy in index.html and guide.html ===== */
+const MONTHS=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const MDAYS=[31,31,31,31,31,31,30,30,30,30,30,29];
+const BR=[{id:'thr',name:'تهران',w:.40},{id:'isf',name:'اصفهان',w:.22},{id:'shz',name:'شیراز',w:.17},{id:'mhd',name:'مشهد',w:.21}];
+const GR=[{id:'pump',name:'پمپ صنعتی',w:.28,gm:.27,avg:380,uc:42},{id:'motor',name:'الکتروموتور و درایو',w:.24,gm:.24,avg:260,uc:28},{id:'comp',name:'کمپرسور هوا',w:.18,gm:.29,avg:420,uc:65},{id:'valve',name:'شیرآلات صنعتی',w:.16,gm:.31,avg:150,uc:9},{id:'inst',name:'ابزار دقیق',w:.14,gm:.34,avg:120,uc:6}];
+const SEASON=[.58,.86,.95,1.0,.93,.98,1.05,1.06,1.04,1.0,1.14,1.41];
+const BASE=75000;           /* million toman per month at season 1 */
+const SAFE_CASH=40000;      /* minimum safe cash, million toman */
+const CONV_TARGET=.40;
+const REF_DAY=365;          /* 29 Esfand 1404 = day 365 */
+const STAGES=[{id:'ship',name:'حمل',long:'حمل بین‌المللی',norm:25},{id:'cust',name:'گمرک',long:'ترخیص از گمرک',norm:10},{id:'road',name:'در راه انبار',long:'حمل داخلی تا انبار',norm:4}];
+const PO_ST=[{id:'pend',name:'در انتظار تأیید'},{id:'appr',name:'تأییدشده'},{id:'sent',name:'ارسال به تأمین‌کننده'},{id:'part',name:'تحویل جزئی'},{id:'done',name:'تحویل کامل'}];
+
+function genData(){
+  let s=1404; const rnd=()=> (s=s*16807%2147483647)/2147483647;
+  const rr=(a,b)=>a+(b-a)*rnd();
+  const pick=a=>a[Math.floor(rnd()*a.length)];
+  const D={};
+  /* ---- sales & targets: [m][b][g] ---- */
+  const perf={thr:m=>1.01, isf:m=>1.05, shz:m=>.975, mhd:m=>[.95,.94,.93,.93,.92,.90,.84,.80,.77,.74,.73,.72][m]};
+  const gperf={inst:m=>m===10?.68:m===11?.55:m===9?.9:1};
+  D.sales=[];D.target=[];D.orders=[];D.issued=[];D.followed=[];D.invoiced=[];
+  for(let m=0;m<12;m++){D.sales[m]=[];D.target[m]=[];D.orders[m]=[];D.issued[m]=[];D.followed[m]=[];D.invoiced[m]=[];
+    BR.forEach((b,bi)=>{D.sales[m][bi]=[];D.target[m][bi]=[];D.orders[m][bi]=[];D.issued[m][bi]=[];D.followed[m][bi]=[];D.invoiced[m][bi]=[];
+      GR.forEach((g,gi)=>{
+        const t=BASE*SEASON[m]*b.w*g.w*(1+m*.004);
+        const a=t*perf[b.id](m)*(gperf[g.id]?gperf[g.id](m):1)*rr(.95,1.05);
+        D.target[m][bi][gi]=t; D.sales[m][bi][gi]=a;
+        const ord=Math.max(1,Math.round(a/g.avg));
+        let conv={thr:.42,isf:.45,shz:.40,mhd:m<6?.36:.29}[b.id]*rr(.92,1.08);
+        if(g.id==='inst'&&m>=10) conv*=.7;
+        const iss=Math.max(ord+1,Math.round(ord/conv));
+        D.orders[m][bi][gi]=ord; D.issued[m][bi][gi]=iss;
+        D.followed[m][bi][gi]=Math.max(ord,Math.round(iss*rr(.64,.72)));
+        D.invoiced[m][bi][gi]=Math.min(ord,Math.round(ord*rr(.92,.97)));
+      });
+    });
+  }
+  /* ---- customers ---- */
+  const kinds=['صنایع فلزی','تولیدی پلاستیک','کشت و صنعت','پیمانکاری ساختمانی','صنایع غذایی','نساجی','فنی و مهندسی','صنایع شیمیایی','کارخانهٔ کاشی','صنایع بسته‌بندی','آب‌وفاضلاب‌سازان','قطعه‌سازی'];
+  const fams=['کریمی','رضایی','مرادی','احمدی','حسینی','جعفری','رحیمی','نادری','صادقی','کاظمی','موسوی','قاسمی','عباسی','نوری','بهرامی','شریفی','حیدری','یزدانی','فرهادی','سلطانی','اکبری','طاهری','زارعی','محمدی','امینی','کاوه','نیک‌نام','پارسا','رستمی','مهدوی','فاضلی','توکلی','سبحانی','شجاعی','وکیلی','افشار','بهمنی','خسروی','دلاوری','میرزایی','ثابتی','کیانی','رنجبر','هاشمی'];
+  const nPer={thr:14,isf:10,shz:9,mhd:11};
+  const bad={'mhd':[0,1,2],'thr':[3],'shz':[1]};
+  D.cust=[]; let ci=0;
+  BR.forEach((b,bi)=>{ for(let k=0;k<nPer[b.id];k++){
+    let w=Math.pow(rnd(),2.2)+.05; if((bad[b.id]||[]).includes(k)) w=Math.max(w,.45);
+    D.cust.push({id:ci,name:kinds[(ci*5)%kinds.length]+' '+fams[ci],bi,w,aff:GR.map(()=>rr(.3,1.7)),bad:(bad[b.id]||[]).includes(k)}); ci++; }});
+  // sales per customer [c][m][g] allocated from branch totals
+  D.csales=D.cust.map(()=>[]);
+  for(let m=0;m<12;m++) BR.forEach((b,bi)=>GR.forEach((g,gi)=>{
+    const cs=D.cust.filter(c=>c.bi===bi); const tot=cs.reduce((x,c)=>x+c.w*c.aff[gi],0);
+    cs.forEach(c=>{(D.csales[c.id][m]=D.csales[c.id][m]||[])[gi]=D.sales[m][bi][gi]*c.w*c.aff[gi]/tot;});
+  }));
+  // receivables buckets at end of month m (index 0..11), plus m=-1
+  const S=(c,m)=>{ if(m<0) return D.csales[c][m+12].reduce((x,y)=>x+y,0)*.95; return D.csales[c][m].reduce((x,y)=>x+y,0); };
+  D.rec=D.cust.map(c=>{
+    const L=m=>c.bad?(m<6?.16:.16+(m-5)*.1):rr(.03,.10);
+    const out=[]; let o90=(S(c.id,-1)+S(c.id,-2))/2*.04;
+    for(let m=-1;m<12;m++){
+      const l=L(m);
+      const cur=S(c.id,m)*.70;
+      const d30=S(c.id,m-1)*((m===0?.42:.20)+.3*l);
+      const d60=S(c.id,m-2)*(.05+.3*l);
+      o90=o90*(.70+.25*l)+S(c.id,m-3)*(.008+.3*l);
+      out.push({cur,d30,d60,o90});
+    }
+    return out; // index m+1
+  });
+  D.cust.forEach(c=>{ const avg=D.csales[c.id].reduce((x,r)=>x+r.reduce((a,b)=>a+b,0),0)/12; c.limit=Math.max(500,Math.round(avg*1.9/500)*500); });
+  /* ---- inventory SKUs ---- */
+  const skuNames={
+    pump:['پمپ سانتریفیوژ ۳ اینچ','پمپ طبقاتی عمودی','پمپ لجن‌کش','پمپ شناور چاه','پمپ دنده‌ای روغن','پمپ دیافراگمی','پمپ آتش‌نشانی','پمپ کفکش'],
+    motor:['الکتروموتور ۷٫۵ کیلووات','الکتروموتور ۱۵ کیلووات','الکتروموتور ۳۰ کیلووات','اینورتر ۱۱ کیلووات','اینورتر ۲۲ کیلووات','سافت‌استارتر ۴۵ کیلووات','گیربکس حلزونی','الکتروموتور ضدانفجار'],
+    comp:['کمپرسور اسکرو ۱۵ کیلووات','کمپرسور اسکرو ۳۷ کیلووات','کمپرسور پیستونی ۵۰۰ لیتری','درایر تبریدی','مخزن هوای فشرده','فیلتر خط هوا','کمپرسور بی‌صدا','بوستر فشار'],
+    valve:['شیر پروانه‌ای ۶ اینچ','شیر کشویی ۴ اینچ','شیر یک‌طرفه','شیر توپی استیل','شیر کنترل فشار','شیر برقی','شیر سوزنی','صافی Y شکل'],
+    inst:['ترانسمیتر فشار','فلومتر الکترومغناطیسی','سنسور دما PT100','لول‌سوئیچ','گیج فشار گلیسیرینی','نمایشگر دیجیتال پنلی','ترموکوپل نوع K','آنالایزر pH']};
+  D.sku=[]; let code=101;
+  GR.forEach((g,gi)=>skuNames[g.id].forEach((nm,k)=>{
+    const uc=g.uc*rr(.5,1.6);
+    const share=rr(.6,1.4)/8;
+    const per=BR.map((b,bi)=>{
+      const useVal=BASE*g.w*(1-g.gm)*b.w*share;
+      const use=Math.max(1,useVal/uc);
+      const rop=use*1.4;
+      let cover=rr(1.6,3.6);
+      if(g.id==='inst'&&k<6) cover=rr(.15,.9);
+      else if((g.id==='motor'&&k===3&&b.id==='mhd')||(g.id==='pump'&&k===6&&b.id==='shz')||(g.id==='comp'&&k===1&&b.id==='thr')) cover=rr(.7,1.2);
+      return {use,rop,on:Math.round(use*cover)};
+    });
+    D.sku.push({code:'SK-'+(code++),name:nm,gi,uc,per});
+  }));
+  /* ---- goods in transit ---- */
+  const origins=['چین','آلمان','ترکیه','ایتالیا','امارات','کره جنوبی'];
+  D.ship=[]; let sn=11;
+  const plan=[['inst','cust',5],['inst','ship',2],['pump','ship',3],['pump','cust',1],['pump','road',2],['motor','ship',2],['motor','cust',2],['motor','road',1],['comp','ship',2],['comp','cust',1],['comp','road',1],['valve','ship',1],['valve','cust',1],['valve','road',2]];
+  plan.forEach(([gid,st,n])=>{for(let k=0;k<n;k++){
+    const gi=GR.findIndex(g=>g.id===gid); const stg=STAGES.find(x=>x.id===st);
+    let days, eta;
+    if(st==='ship'){days=Math.round(rr(5,30)); eta=Math.round(rr(4,26))+10+4;}
+    else if(st==='cust'){ if(gid==='inst'){days=Math.round(rr(31,47)); eta=Math.round(rr(14,24));} else {days=Math.round(rr(3,13)); eta=Math.max(2,10-days)+4+Math.round(rr(0,3));}}
+    else {days=Math.round(rr(1,5)); eta=Math.round(rr(1,4));}
+    const bi=Math.floor(Math.pow(rnd(),1.3)*4);
+    D.ship.push({id:'IMP-04'+(sn++),gi,bi,stage:st,days,eta,origin:pick(origins),val:Math.round(rr(2500,14000)/100)*100*(gid==='inst'?.8:1)});
+  }});
+  /* ---- purchase orders ---- */
+  const sup=['بازرگانی صادقی','تأمین‌گستر نوری','فنی‌مهندسی کاظمی','تأمین‌کالای بهرامی','بازرگانی جعفری','پخش صنعتی زارعی','واردات طاهری'];
+  D.po=[]; let pn=1;
+  const cum=[0];for(let i=0;i<12;i++)cum.push(cum[i]+MDAYS[i]);
+  for(let m=0;m<12;m++){ const n=Math.round(6+SEASON[m]*3); for(let k=0;k<n;k++){
+    const day=cum[m]+1+Math.floor(rnd()*MDAYS[m]);
+    const gi=Math.floor(rnd()*5); const bi=Math.floor(Math.pow(rnd(),1.25)*4);
+    const si=Math.floor(rnd()*sup.length);
+    const lead=Math.round(rr(20,65)); const exp=day+lead;
+    const val=Math.round(rr(1500,16000)/100)*100;
+    let st;
+    if(exp<=REF_DAY){ const age=REF_DAY-exp; const pOk=si===4?(age>150?.9:.35):(age>60?.99:.9); st=rnd()<pOk?'done':(rnd()<.5?'sent':'part'); }
+    else { const left=REF_DAY-day; st= left<6?'pend': left<14?pick(['pend','appr']): left<30?pick(['appr','sent']):pick(['sent','part']); }
+    D.po.push({id:'PO-04-'+String(pn++).padStart(3,'0'),m,day,gi,bi,sup:sup[si],exp,val,st});
+  }}
+  /* ---- finance: fixed costs per branch per month ---- */
+  D.fix={sell:[900,500,420,900],wh:[700,420,330,700]};
+  D.adminTotal=2600; D.finTotal=1500;
+  D.cashOpen=62000;
+  return D;
+}
+const DATA=genData();
+
+/* ---------- helpers ---------- */
+const sum=a=>a.reduce((x,y)=>x+y,0);
+function inSel(F,bi,gi){return (F.branch==='all'||BR[bi].id===F.branch)&&(gi==null||F.group==='all'||GR[gi].id===F.group);}
+function jdate(day){ // day of 1404 (may exceed 365 -> 1405)
+  let y=1404,d=day; if(d>365){y=1405;d-=365;} if(d<1){d+=365;y=1403;}
+  const md=y===1405?[31,31,31,31,31,31,30,30,30,30,30,29]:MDAYS; let m=0; while(d>md[m]){d-=md[m];m++;}
+  return {y,m,d};
+}
+function jstr(day){const j=jdate(day);return j.d.toLocaleString('fa-IR')+' '+MONTHS[j.m]+(j.y!==1404?' '+j.y.toLocaleString('fa-IR',{useGrouping:false}):'');}
+
+function cogsRate(bi,gi,m){return 1-GR[gi].gm-[0,.012,-.004,-.008][bi]+(bi===3&&m>=6?.035:0);}
+/* ---------- the model for a filter set ---------- */
+function compute(F){
+  const D=DATA, ms=[]; for(let m=F.from;m<=F.to;m++) ms.push(m);
+  const R={F,ms};
+  const cell=(arr,m,bi,gi)=>arr[m][bi][gi];
+  const tot=(arr,m,bF=true,gF=true)=>{let t=0;BR.forEach((b,bi)=>GR.forEach((g,gi)=>{if((!bF||inSel(F,bi,null))&&(!gF||F.group==='all'||GR[gi].id===F.group))t+=arr[m][bi][gi];}));return t;};
+  /* sales by month */
+  R.monthly=ms.map(m=>({m,act:tot(D.sales,m),tgt:tot(D.target,m)}));
+  R.salesAct=sum(R.monthly.map(x=>x.act)); R.salesTgt=sum(R.monthly.map(x=>x.tgt));
+  R.salesPct=R.salesAct/R.salesTgt*100;
+  /* branch achievement (ignores branch filter for comparison, highlights selected) */
+  R.branches=BR.map((b,bi)=>{let a=0,t=0;ms.forEach(m=>GR.forEach((g,gi)=>{if(F.group==='all'||g.id===F.group){a+=D.sales[m][bi][gi];t+=D.target[m][bi][gi];}}));return {bi,name:b.name,act:a,tgt:t,pct:a/t*100,sel:F.branch==='all'||F.branch===b.id};});
+  /* funnel */
+  const f={issued:0,followed:0,orders:0,invoiced:0};
+  ms.forEach(m=>BR.forEach((b,bi)=>GR.forEach((g,gi)=>{if(inSel(F,bi,gi)){f.issued+=D.issued[m][bi][gi];f.followed+=D.followed[m][bi][gi];f.orders+=D.orders[m][bi][gi];f.invoiced+=D.invoiced[m][bi][gi];}})));
+  R.funnel=f; R.conv=f.orders/f.issued*100;
+  R.convBr=BR.map((b,bi)=>{let i=0,o=0;ms.forEach(m=>GR.forEach((g,gi)=>{if(F.group==='all'||g.id===F.group){i+=D.issued[m][bi][gi];o+=D.orders[m][bi][gi];}}));return {name:b.name,conv:o/i*100};});
+  /* receivables aging (ignores group) */
+  const custSel=D.cust.filter(c=>F.branch==='all'||BR[c.bi].id===F.branch);
+  R.aging=ms.map(m=>{const r={m,cur:0,d30:0,d60:0,o90:0};custSel.forEach(c=>{const x=D.rec[c.id][m+1];r.cur+=x.cur;r.d30+=x.d30;r.d60+=x.d60;r.o90+=x.o90;});r.total=r.cur+r.d30+r.d60+r.o90;return r;});
+  const pre=F.from-1; R.o90Start=sum(custSel.map(c=>D.rec[c.id][pre+1].o90)); R.o90End=R.aging[R.aging.length-1].o90;
+  R.recEnd=R.aging[R.aging.length-1].total;
+  /* customers table */
+  R.cust=custSel.map(c=>{
+    let s=0; ms.forEach(m=>GR.forEach((g,gi)=>{if(F.group==='all'||g.id===F.group)s+=D.csales[c.id][m][gi];}));
+    const x=D.rec[c.id][F.to+1]; const bal=x.cur+x.d30+x.d60+x.o90;
+    const use=bal/c.limit*100;
+    let st='ok'; if(x.o90>bal*.25&&x.o90>300) st='late'; else if(use>100) st='over'; else if(use>85) st='near';
+    return {name:c.name,branch:BR[c.bi].name,sales:s,limit:c.limit,bal,o90:x.o90,use,st};
+  });
+  /* inventory snapshot (ignores period) */
+  R.inv=GR.map((g,gi)=>({gi,name:g.name,val:0,low:0,items:0}));
+  R.low=[];
+  D.sku.forEach(k=>{ if(F.group!=='all'&&GR[k.gi].id!==F.group) return;
+    let on=0,rop=0,use=0; BR.forEach((b,bi)=>{if(inSel(F,bi,null)){on+=k.per[bi].on;rop+=k.per[bi].rop;use+=k.per[bi].use;}});
+    R.inv[k.gi].val+=on*k.uc; R.inv[k.gi].items++;
+    if(on<rop){R.inv[k.gi].low++; R.low.push({code:k.code,name:k.name,g:GR[k.gi].name,gi:k.gi,on,rop:Math.round(rop),days:on/use*30});}
+  });
+  R.low.sort((a,b)=>a.days-b.days);
+  R.invVal=sum(R.inv.map(x=>x.val)); R.lowCount=R.low.length; R.skuCount=sum(R.inv.map(x=>x.items));
+  if(F.group!=='all') R.inv=R.inv.filter(x=>GR[x.gi].id===F.group);
+  /* transit (ignores period) */
+  R.ship=D.ship.filter(x=>inSel(F,x.bi,x.gi)).map(x=>({...x,late:x.days>STAGES.find(s=>s.id===x.stage).norm*1.5}));
+  R.stages=STAGES.map(st=>{const a=R.ship.filter(x=>x.stage===st.id);return {...st,n:a.length,val:sum(a.map(x=>x.val)),avg:a.length?sum(a.map(x=>x.days))/a.length:0,late:a.filter(x=>x.late).length};});
+  R.transitVal=sum(R.ship.map(x=>x.val));
+  /* POs */
+  const poSel=D.po.filter(p=>inSel(F,p.bi,p.gi));
+  const poPer=poSel.filter(p=>p.m>=F.from&&p.m<=F.to);
+  R.poGroups=GR.filter(g=>F.group==='all'||g.id===F.group).map(g=>{const gi=GR.indexOf(g);const r={name:g.name,gi,tot:0};PO_ST.forEach(s=>r[s.id]=0);poPer.filter(p=>p.gi===gi).forEach(p=>{r[p.st]+=p.val;r.tot+=p.val;});return r;});
+  R.poCount=poPer.length; R.poVal=sum(poPer.map(p=>p.val));
+  R.poStatusTot=PO_ST.map(s=>({...s,val:sum(poPer.filter(p=>p.st===s.id).map(p=>p.val)),n:poPer.filter(p=>p.st===s.id).length}));
+  const open=poSel.filter(p=>p.st!=='done');
+  R.open=open; R.late=open.filter(p=>p.exp<REF_DAY).map(p=>({...p,lateDays:REF_DAY-p.exp})).sort((a,b)=>b.lateDays-a.lateDays);
+  R.lateVal=sum(R.late.map(p=>p.val));
+  R.weeks=[{lab:'معوق',val:R.lateVal,n:R.late.length,late:true}];
+  for(let w=0;w<8;w++){const a=open.filter(p=>p.exp>=REF_DAY+w*7&&p.exp<REF_DAY+(w+1)*7);R.weeks.push({lab:jstr(REF_DAY+w*7).replace(' ۱۴۰۵',''),from:REF_DAY+w*7,to:REF_DAY+w*7+6,val:sum(a.map(p=>p.val)),n:a.length});}
+  const lateBySup={};R.late.forEach(p=>{lateBySup[p.sup]=(lateBySup[p.sup]||0)+1;});
+  R.lateSup=Object.entries(lateBySup).sort((a,b)=>b[1]-a[1])[0]||null;
+  /* finance per branch for period (ignores group) */
+  R.pl=BR.map((b,bi)=>{
+    let rev=0,cogs=0,sell=0,wh=0;
+    ms.forEach(m=>{GR.forEach((g,gi)=>{const v=D.sales[m][bi][gi];rev+=v;cogs+=v*cogsRate(bi,gi,m);});
+      const rv=sum(D.sales[m][bi]); sell+=D.fix.sell[bi]+rv*.035; wh+=D.fix.wh[bi]+rv*.015;});
+    return {bi,name:b.name,rev,cogs,sell,wh,sel:F.branch==='all'||F.branch===b.id};
+  });
+  ms.forEach(m=>{const totRev=sum(BR.map((b,bi)=>sum(DATA.sales[m][bi])));BR.forEach((b,bi)=>{const sh=sum(DATA.sales[m][bi])/totRev;R.pl[bi].adm=(R.pl[bi].adm||0)+D.adminTotal*sh;R.pl[bi].fin=(R.pl[bi].fin||0)+D.finTotal*sh;});});
+  R.pl.forEach(p=>{p.gp=p.rev-p.cogs;p.opex=p.sell+p.wh+p.adm;p.op=p.gp-p.opex;p.net=p.op-p.fin;p.gm=p.gp/p.rev*100;p.om=p.op/p.rev*100;p.nm=p.net/p.rev*100;p.cost100=(p.cogs+p.opex+p.fin)/p.rev*100;});
+  const plSel=R.pl.filter(p=>p.sel); const agg=k=>sum(plSel.map(p=>p[k]));
+  R.wf={rev:agg('rev'),cogs:agg('cogs'),sell:agg('sell'),wh:agg('wh'),adm:agg('adm'),fin:agg('fin')};
+  R.wf.net=R.wf.rev-R.wf.cogs-R.wf.sell-R.wf.wh-R.wf.adm-R.wf.fin; R.wf.op=R.wf.net+R.wf.fin;
+  /* cash (company level: ignores branch & group) */
+  let bal=D.cashOpen; const cash=[];
+  const recTot=i=>sum(D.cust.map(c=>{const x=D.rec[c.id][i];return x.cur+x.d30+x.d60+x.o90;}));
+  for(let m=0;m<12;m++){
+    const sal=sum(BR.map((b,bi)=>sum(D.sales[m][bi])));
+    const inflow=recTot(m)+sal-recTot(m+1);
+    const cg=mm=>sum(BR.map((b,bi)=>sum(GR.map((g,gi)=>D.sales[(mm+12)%12][bi][gi]*cogsRate(bi,gi,(mm+12)%12)*(mm<0?.95:1)))));
+    let opx=sum(D.fix.sell)+sum(D.fix.wh)+D.adminTotal+D.finTotal+sal*.05;
+    if(m===11) opx+=9000; /* عیدی و پاداش */
+    let out=cg(m)*.45+cg(m-1)*.55+opx;
+    if(m===0) out+=16000; /* تسویهٔ اعتبار اسنادی خریدهای اسفند */
+    if([1,4,7,10].includes(m)) out+=6500; /* مالیات بر ارزش افزوده */
+    if(m===3) out+=9000; /* مالیات عملکرد */
+    const open0=bal; bal=bal+inflow-out;
+    cash.push({m,open:open0,inflow,out,net:inflow-out,close:bal});
+  }
+  R.cashAll=cash; R.cash=cash.filter(c=>c.m>=F.from&&c.m<=F.to);
+  R.cashEnd=R.cash[R.cash.length-1].close; R.cashStart=R.cash[0].open;
+  R.cashMin=R.cash.reduce((a,b)=>b.close<a.close?b:a);
+  return R;
+}
+
+/* ---------- formatting & theme (shared) ---------- */
+const fa=(n,d=0)=>Number(n).toLocaleString('fa-IR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const B=(v,d=1)=>fa(v/1000,d);                 /* million -> billion */
+const P=(x,d=1)=>fa(x,d)+'٪';
+const faY=n=>Number(n).toLocaleString('fa-IR',{useGrouping:false});
+function initTheme(btn){
+  const mq=matchMedia('(prefers-color-scheme: dark)');
+  const cur=()=>document.documentElement.getAttribute('data-theme')||(mq.matches?'dark':'light');
+  const paint=()=>{const d=cur()==='dark';btn.innerHTML=(d?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>حالت تیره':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>حالت روشن');btn.title='تغییر به '+(d?'حالت روشن':'حالت تیره');};
+  btn.addEventListener('click',()=>{document.documentElement.setAttribute('data-theme',cur()==='dark'?'light':'dark');paint();});
+  mq.addEventListener('change',paint); paint();
+}
+
+</script>
+<script>
+/* fill worked-example numbers from the same generator the dashboard uses */
+(function(){
+  const R=compute({from:0,to:11,branch:'all',group:'all'});
+  const Q4=compute({from:9,to:11,branch:'mhd',group:'all'});
+  const br=n=>R.branches.find(b=>b.name===n);
+  const esf=R.monthly[11];
+  const byB={};R.cust.forEach(c=>byB[c.branch]=(byB[c.branch]||0)+c.o90);const topB=Object.entries(byB).sort((a,b)=>b[1]-a[1])[0];
+  const top=[...R.cust].sort((a,b)=>b.sales-a.sales);const ctot=sum(R.cust.map(c=>c.sales));
+  const lateC=R.cust.filter(c=>c.st==='late'||c.st==='over');
+  const cust=R.stages.find(s=>s.id==='cust');
+  const open=R.poStatusTot.filter(s=>s.id!=='done');
+  const plT={rev:sum(R.pl.map(p=>p.rev)),net:sum(R.pl.map(p=>p.net))};
+  const mhd=R.pl[3],isf=R.pl[1];
+  const K={
+    salesAct:B(R.salesAct),salesTgt:B(R.salesTgt),salesGap:P(100-R.salesPct),
+    o90Start:B(R.o90Start),o90End:B(R.o90End),o90Chg:P((R.o90End/R.o90Start-1)*100,0),o90TopB:topB[0],
+    cashEnd:B(R.cashEnd),cashMin:B(R.cashMin.close),cashMinM:MONTHS[R.cashMin.m],
+    esfTgt:B(esf.tgt),esfAct:B(esf.act),esfGap:P(100-esf.act/esf.tgt*100),
+    mhdPct:P(br('مشهد').pct),mhdGap:B(br('مشهد').tgt-br('مشهد').act),isfPct:P(br('اصفهان').pct),
+    issued:fa(R.funnel.issued),orders:fa(R.funnel.orders),conv:P(R.conv),mhdConv:P(R.convBr[3].conv),
+    top5:P(sum(top.slice(0,5).map(c=>c.sales))/ctot*100,0),lateN:fa(lateC.length),lateNames:lateC.slice(0,2).map(c=>'«'+c.name+'»').join(' و '),
+    invVal:B(R.invVal),lowCount:fa(R.lowCount),lowName:R.low[0].name,lowDays:fa(R.low[0].days,0),
+    shipN:fa(R.ship.length),shipVal:B(R.transitVal),custAvg:fa(cust.avg,0),custLate:fa(cust.late),
+    poCount:fa(R.poCount),poVal:B(R.poVal),poOpen:fa(sum(open.map(s=>s.n))),
+    lateCount:fa(R.late.length),lateVal:B(R.lateVal),lateSup:R.lateSup[0],lateSupN:fa(R.lateSup[1]),next4:B(sum(R.weeks.slice(1,5).map(x=>x.val))),
+    rev:B(R.wf.rev),cogsP:P(R.wf.cogs/R.wf.rev*100,0),netPer100:fa(R.wf.net/R.wf.rev*100,1),mhdNet100:fa(mhd.nm,1),
+    mhdRevShare:P(mhd.rev/plT.rev*100,0),mhdNm:P(mhd.nm),isfNm:P(isf.nm),
+    mhdQ4Pct:P(Q4.salesPct),mhdQ4Conv:P(Q4.conv)
+  };
+  document.querySelectorAll('[data-k]').forEach(e=>{const v=K[e.dataset.k];e.textContent=v==null?'—':v;});
+  /* the insights list, same rules as the dashboard (summary) */
+  const L=[];
+  const w=R.branches.reduce((a,b)=>b.pct<a.pct?b:a);
+  L.push(`شعبهٔ ${w.name} ${P(100-w.pct)} زیر هدف فروش است؛ کسری ${B(w.tgt-w.act)} میلیارد تومان.`);
+  L.push(`مطالبات بالای ۹۰ روز از ${B(R.o90Start)} به ${B(R.o90End)} میلیارد تومان رسیده (${P((R.o90End/R.o90Start-1)*100,0)} رشد).`);
+  L.push(`${fa(R.lowCount)} قلم کالا زیر نقطهٔ سفارش است و ${fa(cust.late)} محمولهٔ ابزار دقیق به‌طور میانگین ${fa(sum(R.ship.filter(s=>s.stage==='cust'&&s.late).map(s=>s.days))/Math.max(1,cust.late),0)} روز در گمرک مانده است.`);
+  L.push(`موجودی نقد در ${MONTHS[R.cashMin.m]} به ${B(R.cashMin.close)} میلیارد تومان رسید که زیر حد امن ۴۰ میلیارد است.`);
+  L.push(`${fa(R.late.length)} سفارش خرید به ارزش ${B(R.lateVal)} میلیارد تومان از موعد تحویل گذشته؛ ${fa(R.lateSup[1])} مورد از «${R.lateSup[0]}».`);
+  document.getElementById('insEx').innerHTML=L.map(t=>`<li>${t}</li>`).join('');
+})();
+initTheme(document.getElementById('themeBtn'));
+/* toc highlight */
+const links=[...document.querySelectorAll('#toc a')];
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id));const on=links.find(a=>a.classList.contains('on'));if(on&&innerWidth<=900){const t=document.getElementById('toc');t.scrollTo({left:on.offsetLeft-t.clientWidth/2,behavior:'smooth'});}}});},{rootMargin:'-15% 0px -75% 0px'});
+document.querySelectorAll('article section').forEach(s=>io.observe(s));
+</script>
+</body>
+</html>

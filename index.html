@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard Portfolio</title>
+<meta name="description" content="Four interactive business dashboards (CEO, Finance, Production, HR) in English and Persian, each with a full guide.">
+<link href="fonts/fonts.css" rel="stylesheet">
+<link href="fonts/vazirmatn.css" rel="stylesheet">
+<script>
+/* Pick language before paint: ?lang= wins, then the saved choice, then the browser language. */
+(function () {
+  var q = new URLSearchParams(location.search).get("lang"), s = null;
+  try { s = localStorage.getItem("lang"); } catch (e) {}
+  var l = q === "fa" || q === "en" ? q : s === "fa" || s === "en" ? s : (navigator.language || "").slice(0, 2) === "fa" ? "fa" : "en";
+  document.documentElement.lang = l;
+  document.documentElement.dir = l === "fa" ? "rtl" : "ltr";
+})();
+</script>
+<style>
+/* Bilingual front page: four dashboard samples, each with a dashboard and a guide, in English and Persian. */
+:root { --page: #f3f5f8; --panel: #ffffff; --panel-2: #eef1f5; --line: #e2e6ec; --ink: #121826; --ink-2: #4a5468; --muted: #8a93a5;
+  --blue: #2a78d6; --soft: #e3edfb; --deep: #0d366b; --shadow: 0 1px 2px rgba(18,24,38,.06), 0 4px 16px rgba(18,24,38,.05); color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --page: #0e1116; --panel: #161a21; --panel-2: #1d222b; --line: #2a303b;
+  --ink: #f1f3f7; --ink-2: #c2c8d3; --blue: #3987e5; --soft: #1c2a40; --deep: #9ec5f4; --shadow: 0 1px 2px rgba(0,0,0,.3); color-scheme: dark; } }
+:root[data-theme="dark"] { --page: #0e1116; --panel: #161a21; --panel-2: #1d222b; --line: #2a303b; --ink: #f1f3f7; --ink-2: #c2c8d3;
+  --blue: #3987e5; --soft: #1c2a40; --deep: #9ec5f4; --shadow: 0 1px 2px rgba(0,0,0,.3); color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { background: var(--page); }
+body { margin: 0; color: var(--ink); font-family: "IBM Plex Sans", system-ui, sans-serif; font-size: 15.5px; line-height: 1.7; }
+:root[lang="fa"] body { font-family: "IBM Plex Sans Arabic", Vazirmatn, Tahoma, sans-serif; line-height: 1.9; }
+:root[lang="fa"] [data-l="en"], :root[lang="en"] [data-l="fa"] { display: none !important; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 32px 16px 40px; }
+header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px 20px; margin-bottom: 22px; }
+.eyebrow { display: inline-block; background: var(--soft); color: var(--deep); font-size: 12.5px; font-weight: 600; padding: 2px 12px; border-radius: 999px; }
+h1 { margin: 8px 0 0; font-size: 28px; line-height: 1.3; color: var(--deep); }
+.sub { margin: 6px 0 0; color: var(--ink-2); max-width: 660px; }
+.tools { display: flex; gap: 8px; align-items: center; }
+.seg { display: inline-flex; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+.seg button { font: inherit; font-size: 13.5px; border: 0; background: transparent; color: var(--ink-2); padding: 4px 12px; border-radius: 7px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--blue); color: #fff; font-weight: 600; }
+.seg button:lang(fa) { font-family: "IBM Plex Sans Arabic", Vazirmatn, Tahoma, sans-serif; }
+.mode { font: inherit; font-size: 13.5px; padding: 6px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer; }
+.seg button:focus-visible, .mode:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.card { background: var(--panel); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; }
+:root[data-theme="dark"] .card { border: 1px solid var(--line); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .card { border: 1px solid var(--line); } }
+.thumb { display: block; aspect-ratio: 16 / 9; background: var(--panel-2); overflow: hidden; border-bottom: 1px solid var(--line); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform .3s ease; }
+.card:hover .thumb img { transform: scale(1.015); }
+.body { padding: 16px 20px 18px; display: flex; flex-direction: column; flex: 1; }
+.card h2 { margin: 0; font-size: 18px; color: var(--deep); }
+.card p { margin: 6px 0 12px; color: var(--ink-2); font-size: 14.5px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.tags span { background: var(--soft); color: var(--deep); border-radius: 7px; padding: 0 10px; font-size: 12.5px; }
+.links { display: flex; gap: 10px; margin-top: auto; }
+.links a { flex: 1; text-align: center; text-decoration: none; font-weight: 600; font-size: 14px; padding: 8px 10px; border-radius: 10px; }
+.links .d { background: var(--blue); color: #fff; }
+.links .g { border: 1px solid var(--line); color: var(--ink); }
+.links a:hover { filter: brightness(1.06); }
+.links .g:hover { border-color: var(--blue); }
+.feat { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 26px 0 0; }
+.feat div { background: var(--panel); border-radius: 12px; padding: 12px 14px; box-shadow: var(--shadow); font-size: 13.5px; color: var(--ink-2); }
+.feat b { display: block; color: var(--ink); font-size: 14px; }
+footer { margin-top: 26px; text-align: center; color: var(--muted); font-size: 13px; }
+@media (max-width: 860px) { .grid { grid-template-columns: 1fr; } .feat { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { h1 { font-size: 23px; } .feat { grid-template-columns: 1fr; } .tools { width: 100%; } .mode { margin-inline-start: auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <span class="eyebrow"><span data-l="en">Portfolio · Data &amp; BI</span><span data-l="fa">نمونه‌کار · داده و هوش تجاری</span></span>
+      <h1><span data-l="en">Business Dashboard Samples</span><span data-l="fa">نمونه‌کارهای داشبورد مدیریتی</span></h1>
+      <p class="sub" data-l="en">Four interactive dashboards for four common business needs. Each sample comes with a complete guide that walks through every section, using the dashboard's own numbers, to explain what it shows and which question it answers.</p>
+      <p class="sub" data-l="fa">چهار داشبورد تعاملی برای چهار نیاز رایج کسب‌وکار. هر نمونه یک راهنمای کامل هم دارد که بخش‌به‌بخش، با عددهای همان داشبورد، توضیح می‌دهد چه چیزی را نشان می‌دهد و به چه سؤالی جواب می‌دهد.</p>
+    </div>
+    <div class="tools">
+      <div class="seg" role="group" aria-label="Language / زبان">
+        <button type="button" data-set="en" lang="en">English</button>
+        <button type="button" data-set="fa" lang="fa">فارسی</button>
+      </div>
+      <button class="mode" id="mode" type="button"></button>
+    </div>
+  </header>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="feat">
+    <div><b data-l="en">Fully interactive</b><b data-l="fa">کاملاً تعاملی</b><span data-l="en">Filters, tooltips, sortable and searchable tables.</span><span data-l="fa">فیلتر، راهنمای شناور و جدول‌های قابل مرتب‌سازی و جست‌وجو.</span></div>
+    <div><b data-l="en">Light &amp; dark</b><b data-l="fa">روشن و تیره</b><span data-l="en">Both themes designed, not auto-inverted.</span><span data-l="fa">هر دو حالت جداگانه طراحی شده‌اند.</span></div>
+    <div><b data-l="en">Responsive</b><b data-l="fa">واکنش‌گرا</b><span data-l="en">Works from wide monitors down to phones.</span><span data-l="fa">از مانیتور عریض تا گوشی موبایل.</span></div>
+    <div><b data-l="en">Zero dependencies</b><b data-l="fa">بدون وابستگی</b><span data-l="en">Plain HTML, CSS and JavaScript; opens offline.</span><span data-l="fa">فقط HTML، CSS و جاوااسکریپت؛ بدون اینترنت هم باز می‌شود.</span></div>
+  </div>
+
+  <footer><span data-l="en">Designed and built by Fatemeh Mansouri</span><span data-l="fa">طراحی و ساخت: فاطمه منصوری</span></footer>
+</div>
+<script>
+const CARDS = [
+  { id: "ceo",
+    en: { t: "Executive (CEO) Dashboard", p: "One page for the CEO: sales and customers, inventory and goods in transit, purchasing and the financial position, with no manual reports from departments.", tags: ["Sales vs. target", "Proformas", "Inventory & in-transit", "Cash flow"] },
+    fa: { t: "داشبورد یکپارچهٔ مدیریت", p: "یک صفحه برای مدیرعامل: فروش و مشتریان، انبار و کالای در راه، خرید و وضعیت مالی؛ بدون نیاز به گزارش دستی واحدها.", tags: ["فروش و هدف", "پیش‌فاکتور", "موجودی و کالای در راه", "جریان نقد"] } },
+  { id: "finance",
+    en: { t: "Six-Month Financial Performance", p: "Revenue, profit and cash against budget, receivables aging, cost centers and project contract status, from raw data to decisions.", tags: ["Budget & variance", "Cash-flow waterfall", "Receivables aging", "Projects"] },
+    fa: { t: "داشبورد عملکرد مالی شش‌ماهه", p: "درآمد، سود و نقدینگی در برابر بودجه، سن مطالبات، مراکز هزینه و وضعیت قرارداد پروژه‌ها؛ از دادهٔ خام تا تصمیم.", tags: ["بودجه و انحراف", "آبشار جریان نقد", "سن مطالبات", "پروژه‌ها"] } },
+  { id: "production",
+    en: { t: "Orders & Production Stages", p: "Every order from proforma and payment through ten production stages to shipping: where the bottleneck is and which orders will run late.", tags: ["Production stages", "Bottlenecks", "On-time delivery", "Payment status"] },
+    fa: { t: "داشبورد سفارش و مراحل تولید", p: "هر سفارش از پیش‌فاکتور و پرداخت تا ده مرحلهٔ تولید و ارسال؛ گلوگاه کجاست و کدام سفارش دیر می‌شود.", tags: ["مراحل تولید", "گلوگاه", "تحویل به‌موقع", "وضعیت پرداخت"] } },
+  { id: "hr",
+    en: { t: "Human Resources Dashboard", p: "Direct staff, client-side and contractor workforce side by side: turnover, training, absence, HR projects and excellence-model indicators.", tags: ["Three workforce groups", "Turnover", "Training", "Excellence model"] },
+    fa: { t: "داشبورد مدیریت منابع انسانی", p: "نیروی مستقیم، کارفرما و پیمانکار کنار هم؛ ترک خدمت، آموزش، غیبت، پروژه‌های منابع انسانی و شاخص‌های مدل تعالی.", tags: ["سه گروه نیرو", "ترک خدمت", "آموزش", "مدل تعالی"] } }
+];
+const UI = { en: { d: "Open dashboard", g: "Guide", dark: "Dark mode", light: "Light mode" },
+             fa: { d: "مشاهدهٔ داشبورد", g: "راهنما", dark: "حالت تیره", light: "حالت روشن" } };
+const root = document.documentElement, grid = document.getElementById("grid"), modeBtn = document.getElementById("mode");
+const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+const themeQ = () => root.dataset.theme ? "?theme=" + root.dataset.theme : "";
+
+function render() {
+  const l = root.lang, u = UI[l], q = themeQ();
+  grid.innerHTML = CARDS.map(c => {
+    const x = c[l], base = l + "/" + c.id + "/";
+    return `<article class="card">
+      <a class="thumb" href="${base}index.html${q}" tabindex="-1"><img src="${base}shots/thumb.png" alt="${esc(x.t)}" loading="lazy"></a>
+      <div class="body"><h2>${esc(x.t)}</h2><p>${esc(x.p)}</p>
+        <div class="tags">${x.tags.map(t => `<span>${esc(t)}</span>`).join("")}</div>
+        <div class="links"><a class="d" href="${base}index.html${q}">${u.d}</a><a class="g" href="${base}guide.html${q}">${u.g}</a></div>
+      </div></article>`;
+  }).join("");
+  document.title = l === "fa" ? "نمونه‌کارهای داشبورد" : "Dashboard Portfolio";
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.set === l));
+  modeBtn.textContent = isDark() ? u.light : u.dark;
+}
+document.querySelectorAll(".seg button").forEach(b => b.onclick = () => {
+  root.lang = b.dataset.set; root.dir = b.dataset.set === "fa" ? "rtl" : "ltr";
+  try { localStorage.setItem("lang", b.dataset.set); } catch (e) {}
+  render();
+});
+modeBtn.onclick = () => { root.dataset.theme = isDark() ? "light" : "dark"; render(); };
+render();
+</script>
+</body>
+</html>

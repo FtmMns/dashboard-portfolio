@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Financial Dashboard Guide</title>
+<link href="../../fonts/fonts.css" rel="stylesheet">
+<script>
+(function(){var q=new URLSearchParams(location.search).get('theme');if(q==='dark'||q==='light')document.documentElement.setAttribute('data-theme',q);})();
+</script>
+<style>
+:root{
+  --page:#f3f5f8;--panel:#ffffff;--panel2:#eef1f5;--line:#e2e6ec;--ink:#121826;--ink2:#4a5468;--muted:#8a93a5;
+  --blue:#2a78d6;--soft:#e3edfb;--deep:#0d366b;--orange:#eb6834;--green:#1baf7a;--red:#c23434;
+  --green-soft:#e1f5ed;--red-soft:#fae6e6;--orange-soft:#fdeee6;
+  --shadow:0 1px 2px rgba(18,24,38,.06),0 4px 16px rgba(18,24,38,.05);color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --page:#0e1116;--panel:#161a21;--panel2:#1d222b;--line:#2a303b;--ink:#f1f3f7;--ink2:#c2c8d3;--muted:#8d96a8;
+  --blue:#3987e5;--soft:#1a2a40;--deep:#9ec5f4;--orange:#d95926;--green:#199e70;--red:#de5a5a;
+  --green-soft:#12322a;--red-soft:#3a1d1f;--orange-soft:#3a2418;--shadow:0 1px 2px rgba(0,0,0,.3);color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --page:#0e1116;--panel:#161a21;--panel2:#1d222b;--line:#2a303b;--ink:#f1f3f7;--ink2:#c2c8d3;--muted:#8d96a8;
+  --blue:#3987e5;--soft:#1a2a40;--deep:#9ec5f4;--orange:#d95926;--green:#199e70;--red:#de5a5a;
+  --green-soft:#12322a;--red-soft:#3a1d1f;--orange-soft:#3a2418;--shadow:0 1px 2px rgba(0,0,0,.3);color-scheme:dark;}
+*{box-sizing:border-box}
+html,body{margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--page);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}
+.mono{font-family:"IBM Plex Mono",Consolas,monospace;font-size:13px}
+[lang="fa"]{font-family:"IBM Plex Sans Arabic","IBM Plex Sans",system-ui,sans-serif}
+.top{background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.top-in{max-width:1180px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.top h1{font-size:16px;margin:0;flex:1;min-width:0}
+.top h1 small{display:block;font-weight:400;font-size:12px;color:var(--ink2)}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.home{font-size:12px;color:var(--muted);text-decoration:none;white-space:nowrap}
+.home:hover{color:var(--blue)}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:6px 12px;cursor:pointer;text-decoration:none;color:var(--ink);font:inherit;font-size:13px;line-height:1.6;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--blue)}
+.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn[lang="fa"]{font-family:"IBM Plex Sans Arabic","IBM Plex Sans",system-ui,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 24px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:40px;align-items:start}
+.toc{position:sticky;top:76px;font-size:13.5px;max-height:calc(100vh - 96px);overflow:auto}
+.toc b{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600}
+.toc a{display:block;padding:4px 12px;border-inline-start:2px solid var(--line);color:var(--ink2);text-decoration:none;line-height:1.7}
+.toc a:hover{color:var(--blue)}
+.toc a.on{border-color:var(--blue);color:var(--blue);font-weight:600}
+article{max-width:780px;min-width:0}
+.hero{background:var(--panel);border-radius:14px;box-shadow:var(--shadow);padding:22px 24px;margin-bottom:26px}
+.hero h2{margin:0 0 6px;font-size:22px}
+.hero p{margin:0;color:var(--ink2)}
+section{padding-top:8px;margin-bottom:34px;scroll-margin-top:80px}
+h2{font-size:19px;margin:0 0 10px;display:flex;align-items:center;gap:10px}
+h2 .n{width:28px;height:28px;border-radius:8px;background:var(--soft);color:var(--blue);display:grid;place-items:center;font-size:14px;flex:none}
+h3{font-size:15px;margin:18px 0 4px}
+p{margin:6px 0}
+ul,ol{margin:6px 0;padding-inline-start:22px}
+figure{margin:14px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;box-shadow:var(--shadow)}
+figure img{display:block;max-width:100%;height:auto;margin:0 auto;border-radius:8px}
+figure.narrow img{max-width:min(100%,520px)}
+figcaption{font-size:12.5px;color:var(--ink2);margin-top:8px;text-align:center}
+.ex{background:var(--panel);border-inline-start:3px solid var(--blue);border-radius:10px;padding:12px 16px;margin:12px 0;box-shadow:var(--shadow)}
+.ex b.t{display:block;font-size:13px;color:var(--blue);margin-bottom:2px}
+.q{background:var(--soft);border-radius:10px;padding:10px 16px;margin:12px 0}
+.q b{color:var(--blue)}
+.v{font-weight:700;color:var(--ink);white-space:nowrap}
+.go{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;text-decoration:none;font-weight:600;margin-top:4px}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;counter-reset:s;padding:0;list-style:none}
+.steps li{background:var(--panel);border-radius:12px;box-shadow:var(--shadow);padding:14px;font-size:14px;line-height:1.7}
+.steps li::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--blue);color:#fff;font-weight:700;margin-bottom:6px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;line-height:1.6}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{background:var(--panel2);font-size:12.5px;color:var(--ink2);font-weight:600;white-space:nowrap}
+td.c,th.c{text-align:center}
+tr:last-child td{border-bottom:0}
+.y{color:var(--green);font-weight:700}
+.p{color:var(--orange);font-weight:700}
+.x{color:var(--muted)}
+details{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin:8px 0}
+details summary{cursor:pointer;font-weight:600}
+dl{margin:0;display:grid;grid-template-columns:190px minmax(0,1fr);gap:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+dt,dd{margin:0;padding:9px 14px;border-bottom:1px solid var(--line)}
+dt{font-weight:700;background:var(--panel2)}
+dl>*:nth-last-child(-n+2){border-bottom:0}
+.callout{display:flex;gap:10px;background:var(--orange-soft);border-radius:10px;padding:10px 14px;font-size:14px;margin:10px 0}
+footer{max-width:1180px;margin:0 auto;padding:12px 24px 32px;color:var(--muted);font-size:12.5px;text-align:center}
+@media (max-width:900px){
+  .wrap{grid-template-columns:minmax(0,1fr);gap:16px;padding:16px}
+  .toc{position:sticky;top:56px;z-index:4;background:var(--page);display:flex;gap:6px;overflow-x:auto;max-height:none;padding:8px 0;margin:0 -16px;padding-inline:16px}
+  .toc b{display:none}
+  .toc a{border:1px solid var(--line);border-radius:999px;padding:3px 12px;white-space:nowrap;background:var(--panel);font-size:12.5px}
+  .top-in{padding:10px 16px}
+  .steps{grid-template-columns:minmax(0,1fr)}
+  dl{grid-template-columns:minmax(0,1fr)}
+  dt{border-bottom:0;padding-bottom:2px}
+  section{scroll-margin-top:120px}
+}
+@media (max-width:600px){
+  body{font-size:14.5px}
+  .top h1 small{display:none}
+  .actions{width:100%}.actions .btn{flex:1;justify-content:center}
+  .actions .home{width:100%;order:9}
+  .hero{padding:16px}
+  .hero h2{font-size:19px}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <h1>Guide: Six-Month Financial Performance Dashboard<small>Sample Co. · Farvardin – Shahrivar 1404</small></h1>
+  <div class="actions"><a class="home" href="../../index.html">← All dashboards</a><a class="btn primary" href="index.html">Back to dashboard</a><a class="btn" id="langBtn" href="../../fa/finance/guide.html" lang="fa" hreflang="fa">فارسی</a><button class="btn" id="themeBtn" type="button">Light mode</button></div>
+</div></header>
+
+<div class="wrap">
+<nav class="toc" id="toc" aria-label="Table of contents">
+  <b>Contents</b>
+  <a href="#glance">At a glance</a>
+  <a href="#quick">Quick start</a>
+  <a href="#g-filters">Filters</a>
+  <a href="#g-kpis">KPI cards</a>
+  <a href="#g-insights">Key findings</a>
+  <a href="#g-revenue">Revenue vs budget</a>
+  <a href="#g-aging">Receivables aging</a>
+  <a href="#g-cash">Cash flow</a>
+  <a href="#g-costs">Cost centers</a>
+  <a href="#g-projects">Contracts &amp; collections</a>
+  <a href="#g-data">Raw data</a>
+  <a href="#faq">FAQ</a>
+  <a href="#terms">Glossary</a>
+</nav>
+
+<article>
+<div class="hero">
+  <h2>Six-Month Financial Performance Dashboard</h2>
+  <p>This guide explains what each part of the dashboard shows, how to read it and which question it answers. Every number quoted in the examples is calculated live from the dashboard's own data (default view: six months, all projects).</p>
+</div>
+
+<section id="glance">
+  <h2><span class="n">1</span>At a glance</h2>
+  <p>“Sample Co.” is an engineering and contracting company with five active projects. On <b>a single page</b>, the dashboard shows the CEO, the CFO and the board how the first six months of 1404 went financially:</p>
+  <ul>
+    <li>Where do revenue and profit stand against budget?</li>
+    <li>Was there enough cash, and when did it get tight?</li>
+    <li>Which clients pay late?</li>
+    <li>Which project has overspent its budget?</li>
+    <li>How far along is each contract, and how much of it has been collected?</li>
+  </ul>
+  <figure><img src="shots/overview.png" alt="Dashboard overview" loading="lazy"><figcaption>Top of the dashboard: header, filters, KPI cards, key findings and the first two charts</figcaption></figure>
+  <p>The dashboard is built in three layers: <b>raw data</b> (transactions, budget and contracts) → <b>calculation layer</b> (defined measures) → <b>presentation</b>. That makes every number traceable, and when next month's data is added the whole dashboard updates with no manual changes.</p>
+</section>
+
+<section id="quick">
+  <h2><span class="n">2</span>Quick start</h2>
+  <ol class="steps">
+    <li><b>Scan the cards.</b> The five cards at the top tell you in seconds where things stand against budget: green means better than budget, red means worse.</li>
+    <li><b>Read the findings.</b> The “Key findings” panel states the most important points in plain sentences with exact figures, so you know which chart deserves a closer look.</li>
+    <li><b>Drill down with filters.</b> Pick a project or a month and every section focuses on that slice. Hover over any bar to see the exact details.</li>
+  </ol>
+</section>
+
+<section id="g-filters">
+  <h2><span class="n">3</span>Filters</h2>
+  <figure class="narrow"><img src="shots/filters.png" alt="Filter panel" loading="lazy" style="max-width:230px"><figcaption>The filter panel at the side of the page; on mobile it opens with the “Show filters” button</figcaption></figure>
+  <p>There are three filters, and every selection is applied to all sections at once. The “Current view” box under the filters always tells you what you are looking at, and “Clear all” returns the dashboard to the six-month view.</p>
+  <ul>
+    <li><b>Period:</b> start and end month, or the “6 months”, “Spring”, “Summer” and “Tir” shortcuts.</li>
+    <li><b>Project:</b> any one of the five projects, or all projects.</li>
+    <li><b>Cost center:</b> materials, subcontractors, site labor, machinery or HQ expenses.</li>
+  </ul>
+  <h3>Which filter affects which section?</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Section</th><th class="c">Period</th><th class="c">Project</th><th class="c">Cost center</th></tr></thead>
+    <tbody>
+      <tr><td>Revenue, gross profit, operating profit</td><td class="c y">✓</td><td class="c y">✓</td><td class="c x">—</td></tr>
+      <tr><td>Closing cash balance (card)</td><td class="c y">✓</td><td class="c x">— company-wide</td><td class="c x">—</td></tr>
+      <tr><td>Cost variance vs budget (card)</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+      <tr><td>Key findings</td><td class="c y">✓</td><td class="c y">✓</td><td class="c p">Partly</td></tr>
+      <tr><td>Monthly revenue vs budget</td><td class="c y">✓ highlight</td><td class="c y">✓</td><td class="c x">—</td></tr>
+      <tr><td>Receivables aging and DSO</td><td class="c y">✓ to period end</td><td class="c y">✓</td><td class="c x">—</td></tr>
+      <tr><td>Cash flow waterfall</td><td class="c y">✓</td><td class="c y">✓ project flows only</td><td class="c x">—</td></tr>
+      <tr><td>Month-end cash balance</td><td class="c y">✓ highlight</td><td class="c x">— company-wide</td><td class="c x">—</td></tr>
+      <tr><td>Cost centers and project variance</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+      <tr><td>Contract status</td><td class="c y">✓ cumulative to period end</td><td class="c y">✓ highlight</td><td class="c x">—</td></tr>
+      <tr><td>Raw data (transactions)</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+    </tbody></table></div>
+  <p>Wherever a filter has no effect, a small note marked ⓘ under the chart explains why; for example, revenue is not split by cost center, and the bank balance belongs to the whole company rather than to a single project.</p>
+  <a class="go" href="index.html#filters">See the filters in the dashboard →</a>
+</section>
+
+<section id="g-kpis">
+  <h2><span class="n">4</span>KPI cards</h2>
+  <figure><img src="shots/kpis.png" alt="KPI cards" loading="lazy"><figcaption>Five KPI cards, each compared with budget</figcaption></figure>
+  <h3>What does it show?</h3>
+  <p>Total revenue, gross profit, operating profit, closing cash balance and cost variance vs budget. All amounts are in <b>billion Toman</b>.</p>
+  <h3>How to read it</h3>
+  <p>The large number is the actual value. The line below it shows the gap to budget with ▲ or ▼; green means favorable to the company and red means unfavorable (on the cost card, a cost increase is red). The bar at the bottom of each card is budget achievement, and the small vertical tick on it marks 100%.</p>
+  <div class="ex"><b class="t">Example with dashboard figures</b>
+    Six-month revenue is <span class="v" data-v="rev"></span> B Toman against a budget of <span class="v" data-v="revB"></span> B, i.e. <span class="v" data-v="revPct"></span> above budget. Gross profit is <span class="v" data-v="gross"></span> B (a <span class="v" data-v="gm"></span> margin) and operating profit is <span class="v" data-v="op"></span> B. Total costs came in <span class="v" data-v="costDiff"></span> B Toman (<span class="v" data-v="costPct"></span>) over budget, so even though sales are ahead of plan, operating profit has stayed roughly in line with budget (<span class="v" data-v="opAch"></span> achieved).
+  </div>
+  <div class="q"><b>What question does this answer?</b> “Overall, are we ahead of or behind budget, and has the sales lead turned into profit?”</div>
+  <a class="go" href="index.html#kpis">See the cards in the dashboard →</a>
+</section>
+
+<section id="g-insights">
+  <h2><span class="n">5</span>Key findings</h2>
+  <figure><img src="shots/insights.png" alt="Key findings" loading="lazy"><figcaption>Findings are generated automatically from the filtered data</figcaption></figure>
+  <p>This panel holds five short sentences built from the dashboard's own calculations, rewritten whenever the filters change. The colored icon next to each sentence shows its type: green is good news, orange needs follow-up and red is a warning.</p>
+  <div class="ex"><b class="t">Example with dashboard figures</b>
+    One finding states that direct costs on the <b>Kouhsar Overpass</b> are <span class="v" data-v="p2dv"></span> over budget, pulling its gross margin down to <span class="v" data-v="p2gm"></span>, compared with a budgeted margin of 22%.
+  </div>
+  <div class="q"><b>What question does this answer?</b> “If I only have one minute, what are the most important things I need to know?”</div>
+  <a class="go" href="index.html#insights">See the findings in the dashboard →</a>
+</section>
+
+<section id="g-revenue">
+  <h2><span class="n">6</span>Monthly revenue vs budget</h2>
+  <figure class="narrow"><img src="shots/revenue.png" alt="Monthly revenue chart" loading="lazy"><figcaption>Blue bar: actual revenue · gray bar behind it: that month's budget</figcaption></figure>
+  <h3>What does it show?</h3>
+  <p>Each month's revenue is the total of progress invoices approved in that month. Months run from left to right, with Farvardin on the left.</p>
+  <h3>How to read it</h3>
+  <p>If the blue bar is taller than the gray one, that month was ahead of budget. The number above each bar is the budget achievement percentage. Months outside the selected period are faded so the comparison context is not lost.</p>
+  <div class="ex"><b class="t">Example with dashboard figures</b>
+    The dip in Farvardin is normal because of the Nowruz holidays and is built into the budget: Farvardin revenue was <span class="v" data-v="farRev"></span> B against a budget of <span class="v" data-v="farRevB"></span> B. The highest budget achievement over the six months belongs to the <b>Narvan Residential Complex</b> (<span class="v" data-v="p3ach"></span>).
+  </div>
+  <div class="q"><b>What question does this answer?</b> “Have sales tracked the plan month by month, and in which month did we pull ahead or fall behind?”</div>
+  <a class="go" href="index.html#revenue">See this chart in the dashboard →</a>
+</section>
+
+<section id="g-aging">
+  <h2><span class="n">7</span>Receivables aging &amp; collection period</h2>
+  <figure class="narrow"><img src="shots/aging.png" alt="Receivables aging" loading="lazy"><figcaption>Four aging buckets and the list of clients with receivables over 90 days</figcaption></figure>
+  <h3>What does it show?</h3>
+  <p>Invoices that have been issued but not yet fully collected, grouped into four buckets by days since issue: 0–30, 31–60, 61–90 and over 90 days. The position is measured at the <b>end of the last month in the period</b>.</p>
+  <h3>How to read it</h3>
+  <p>The larger the red bar (over 90 days), the higher the collection risk. “Days sales outstanding (DSO)” tells you how many days, on average, it takes for revenue to turn into cash; the company's target is 60 days.</p>
+  <div class="ex"><b class="t">Example with dashboard figures</b>
+    At the end of Shahrivar, total receivables are <span class="v" data-v="ar"></span> B Toman and DSO is <span class="v" data-v="dso"></span> days. Of the <span class="v" data-v="b90"></span> B in receivables over 90 days, <span class="v" data-v="c90share"></span> (<span class="v" data-v="c90amt"></span> B) is owed by <b data-v="c90name"></b>; this client has been paying invoices about 100 days late, and only for half of the amount.
+  </div>
+  <div class="q"><b>What question does this answer?</b> “Who is holding our money, and where should collection efforts start?”</div>
+  <a class="go" href="index.html#aging">See this chart in the dashboard →</a>
+</section>
+
+<section id="g-cash">
+  <h2><span class="n">8</span>Cash flow (waterfall) &amp; monthly balance</h2>
+  <figure class="narrow"><img src="shots/cash.png" alt="Cash flow" loading="lazy"><figcaption>Top: cash flow waterfall for the period · Bottom: month-end cash balance vs plan and minimum target</figcaption></figure>
+  <h3>What does it show?</h3>
+  <p>The waterfall starts from the opening cash balance, adds cash inflows by type (invoice collections, advance payments, bank loan, other) and subtracts outflows by type (materials, subcontractors, payroll, machinery, HQ expenses) to arrive at the closing balance. The line chart below compares each month-end balance with the cash plan and the minimum target (20 B Toman).</p>
+  <h3>How to read it</h3>
+  <p>Green bars push cash up and orange bars pull it down. The dark bars at the start and end are balances. On the line chart, a red dot means that month's balance fell below the minimum target.</p>
+  <div class="ex"><b class="t">Example with dashboard figures</b>
+    Cash went from <span class="v" data-v="cashOpen"></span> B at the start of Farvardin to <span class="v" data-v="cash"></span> B at the end of Shahrivar. At the end of <b>Tir</b>, however, it dropped to <span class="v" data-v="tirCash"></span> B, below the minimum target, because <span class="v" data-v="tirMat"></span> B Toman was paid to material suppliers that month (settling three months of rebar and steel-beam payables and pre-purchasing steel ahead of a price rise). In Mordad a <span class="v" data-v="loan"></span> B bank loan was drawn and the balance returned above the line.
+  </div>
+  <div class="callout"><span>⚠</span><span>Note: part of the improvement in the closing balance comes from the bank loan, not from operations. That is also why HQ finance costs have risen since Mordad.</span></div>
+  <div class="q"><b>What question does this answer?</b> “Where did the cash come from and where did it go, and in which month was our liquidity at risk?”</div>
+  <a class="go" href="index.html#cash">See this chart in the dashboard →</a>
+</section>
+
+<section id="g-costs">
+  <h2><span class="n">9</span>Cost centers &amp; project variance</h2>
+  <figure class="narrow"><img src="shots/costs.png" alt="Cost centers" loading="lazy"><figcaption>Top: actual cost of each center vs budget · Bottom: direct cost variance by project</figcaption></figure>
+  <h3>What does it show?</h3>
+  <p>The top part shows costs in two groups: direct project costs (four cost centers) and HQ operating expenses. Each group has its own scale because HQ expenses are much smaller. The bottom part shows each project's direct cost variance from budget as a percentage.</p>
+  <h3>How to read it</h3>
+  <p>If the blue bar extends past the dark vertical tick (the budget), that center has overspent. The number at the right end of each row is the variance percentage; red means more than 3% over budget. In the lower chart, a bar pointing right means cost above budget.</p>
+  <div class="ex"><b class="t">Example with dashboard figures</b>
+    Direct costs on the <b>Kouhsar Overpass</b> are <span class="v" data-v="p2dv"></span> over budget, while the other four projects are within 1%. The largest overruns on this project are in “Machinery &amp; haulage” (<span class="v" data-v="p2mac"></span>) and “Materials &amp; equipment” (<span class="v" data-v="p2mat"></span>). Among HQ expenses, “Finance costs &amp; insurance” is <span class="v" data-v="finDv"></span> over budget, driven by interest on the Mordad loan.
+  </div>
+  <div class="q"><b>What question does this answer?</b> “Where are costs getting out of control, and in which project and cost type is the problem?”</div>
+  <a class="go" href="index.html#costs">See this chart in the dashboard →</a>
+</section>
+
+<section id="g-projects">
+  <h2><span class="n">10</span>Contracts &amp; collections</h2>
+  <figure><img src="shots/projects.png" alt="Contract status" loading="lazy"><figcaption>Each project's bar is split into three parts, with the details in the table below</figcaption></figure>
+  <h3>What does it show?</h3>
+  <p>The length of each bar is proportional to the contract value and has three parts: dark blue is the amount received from the client; orange is work done and invoiced but not yet paid; gray is the part of the contract not yet executed. Figures are cumulative from the start of the contract.</p>
+  <h3>How to read it</h3>
+  <p>In the table, click any column header to sort, and use the search box to find a project or client. The “Status” column is labeled automatically: “Over budget” (cost variance above 10%), “Overdue receivables” (more than 30% of receivables over 90 days), “Ahead of plan” and “On track”.</p>
+  <div class="ex"><b class="t">Example with dashboard figures</b>
+    The <b>Dasht-e Sabz Water Treatment Plant</b> is the most advanced project with <span class="v" data-v="p4prog"></span> financial progress, yet <span class="v" data-v="p4ar"></span> B Toman of its billed work, or <span class="v" data-v="p4arPct"></span>, has not been collected. By contrast, the Ofogh Central Logistics Warehouse has the lowest receivables, and its Phase 2 advance was collected in Ordibehesht.
+  </div>
+  <div class="q"><b>What question does this answer?</b> “Where is each contract along the way, and how much completed work has not yet turned into cash?”</div>
+  <a class="go" href="index.html#projects">See this section in the dashboard →</a>
+</section>
+
+<section id="g-data">
+  <h2><span class="n">11</span>Raw data</h2>
+  <figure><img src="shots/data.png" alt="Raw data table" loading="lazy"><figcaption>The data pipeline: raw data → calculation layer → dashboard, plus the searchable, sortable transactions table</figcaption></figure>
+  <p>This section shows the data the dashboard is built on. There are three input tables:</p>
+  <ul>
+    <li><b>Transactions</b> (<span class="v" data-v="nDocs"></span> rows): each row is a document of type invoice, receipt, cost or payment, with its date, project, cost center, counterparty and amount in million Toman.</li>
+    <li><b>Budget</b> (<span class="v" data-v="nBud"></span> rows): the monthly revenue and cost budget for each project and for head office.</li>
+    <li><b>Contracts</b> (5 rows): contract value, client and work billed to the end of 1403.</li>
+  </ul>
+  <p>Every measure is defined only once, in the calculation layer (the formulas are listed under “Measure definitions” in the dashboard), and every chart uses that same definition, so two charts never show different numbers for the same concept. To update for the next month, simply append the new transactions to the first table.</p>
+  <div class="ex"><b class="t">Example</b>
+    To see where the large Tir payment came from, set the period to “Tir”, search the transactions table for “settlement” and sort by the amount column: two payments to “Sepehr Felez Trading” appear, one for Aftab Tower and one for Kouhsar Bridge.
+  </div>
+  <div class="q"><b>What question does this answer?</b> “Where does this number come from, and can I trust it?”</div>
+  <a class="go" href="index.html#data">See the table in the dashboard →</a>
+</section>
+
+<section id="faq">
+  <h2><span class="n">12</span>Frequently asked questions</h2>
+  <details><summary>Why doesn't the cash balance change with the project filter?</summary><p>The bank account belongs to the whole company and is not split between projects. With a project filter, the waterfall shows only that project's receipts and payments and their net total, but the cash card and the monthly balance chart stay at company level.</p></details>
+  <details><summary>How is operating profit calculated for a single project?</summary><p>HQ expenses do not belong to any specific project. When you filter by a project, its share of HQ expenses is allocated in proportion to its revenue and subtracted from gross profit. This method is explained by the ⓘ icon on the operating profit card.</p></details>
+  <details><summary>Why is revenue above budget while operating profit is only roughly on budget?</summary><p>Two factors have offset the sales lead: the <span class="v" data-v="p2dv"></span> cost overrun on the Kouhsar Bridge project and the finance costs of the Mordad loan. The “Cost variance vs budget” card and the cost center section show exactly this.</p></details>
+  <details><summary>What does receivables aging show when I select “Spring”?</summary><p>Receivables are always a point-in-time snapshot; with Spring selected, the position at the end of Khordad is shown and DSO is calculated from revenue for those three months.</p></details>
+  <details><summary>Can the dashboard be connected to the company's real data?</summary><p>Yes. All it needs is an export of transactions, budget and contracts from the accounting software in the same three-table format; the calculation layer and charts work unchanged.</p></details>
+</section>
+
+<section id="terms">
+  <h2><span class="n">13</span>Glossary</h2>
+  <dl>
+    <dt>Progress invoice</dt><dd>A periodic invoice from the contractor to the client for work completed; in this dashboard it is the basis for recognizing revenue.</dd>
+    <dt>Gross profit</dt><dd>Revenue minus direct project costs (materials, subcontractors, site labor, machinery).</dd>
+    <dt>Operating profit</dt><dd>Gross profit minus head-office expenses (HQ salaries, administration, tendering, finance and insurance).</dd>
+    <dt>Budget achievement</dt><dd>Actual value divided by budget; 100% means exactly on budget.</dd>
+    <dt>Receivables</dt><dd>The amount of invoices issued but not yet collected.</dd>
+    <dt>Receivables aging</dt><dd>Grouping of receivables by the number of days since the invoice was issued.</dd>
+    <dt>Days sales outstanding (DSO)</dt><dd>Closing receivables ÷ period revenue × days in period; the average number of days it takes to turn revenue into cash.</dd>
+    <dt>Advance payment</dt><dd>An amount the client pays before work is done, later deducted from progress invoices.</dd>
+    <dt>Waterfall chart</dt><dd>A chart showing how a starting value reaches an ending value through a series of increases and decreases.</dd>
+    <dt>Cash plan</dt><dd>The forecast cash balance at the end of each month, based on the revenue and cost budget and the usual collection pattern.</dd>
+    <dt>Financial progress</dt><dd>Cumulative billed work divided by the contract value.</dd>
+  </dl>
+</section>
+</article>
+</div>
+<footer>Designed &amp; built by Fatemeh Mansouri · Portfolio project</footer>
+
+<script>
+/* ===== Data generator (identical in index.html and guide.html) ===== */
+function buildFinData(){
+  let s=1404; const rnd=()=> (s=s*16807%2147483647)/2147483647;
+  const nz=a=>1+(rnd()*2-1)*a;
+  const r10=x=>Math.round(x/10)*10;
+  const MONTHS=['Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar'];
+  const PRIOR=['Dey','Bahman','Esfand'];
+  const SEAS=[0.62,0.95,1.05,1.08,1.10,1.12], PSEAS=[1.00,1.05,1.25];
+  const CC=[
+    {id:'MAT',name:'Materials & equipment',sh:.42},
+    {id:'SUB',name:'Subcontractors',sh:.28},
+    {id:'LAB',name:'Site labor',sh:.18},
+    {id:'MAC',name:'Machinery & haulage',sh:.12}];
+  const OPX=[
+    {id:'HQ', name:'HQ salaries & benefits',b:3200},
+    {id:'ADM',name:'Rent & administration',b:950},
+    {id:'BID',name:'Tendering & marketing',b:450},
+    {id:'FIN',name:'Finance costs & insurance',b:650}];
+  const P=[
+    {id:'P1',code:'AF-01',name:'Aftab Office Tower',short:'Aftab Tower',client:'Arman Investment Holding',contract:520000,prior:182000,rev:16500,bias:.07,lag:42,start:'1402/08/15',end:'1405/12/29',mat:'Sepehr Felez Trading',sub:'Arkan Contracting'},
+    {id:'P2',code:'KS-02',name:'Kouhsar Overpass',short:'Kouhsar Bridge',client:'Kouhsar Development Authority',contract:380000,prior:118000,rev:12500,bias:-.03,lag:55,start:'1402/11/01',end:'1405/06/31',mat:'Sepehr Felez Trading',sub:'Rad Structures Group',eff:{MAT:1.30,SUB:1.06,LAB:1.08,MAC:1.38}},
+    {id:'P3',code:'NR-03',name:'Narvan Residential Complex',short:'Narvan Complex',client:'Narvan Housing Cooperative',contract:300000,prior:64000,rev:10000,bias:.15,lag:30,start:'1403/03/20',end:'1405/10/30',mat:'Setareh Ready-Mix Concrete',sub:'Arkan Contracting'},
+    {id:'P4',code:'DS-04',name:'Dasht-e Sabz Water Treatment Plant',short:'Dasht-e Sabz Plant',client:'Dasht-e Sabz Water & Wastewater Co.',contract:450000,prior:212000,rev:13500,bias:.01,lag:105,start:'1402/05/10',end:'1405/03/31',mat:'Niloufar MEP Equipment',sub:'Pouya MEP Group'},
+    {id:'P5',code:'OF-05',name:'Ofogh Central Logistics Warehouse',short:'Ofogh Warehouse',client:'Ofogh Gostar Distribution Co.',contract:210000,prior:26000,rev:8000,bias:.05,lag:33,start:'1403/09/01',end:'1405/09/30',mat:'Setareh Ready-Mix Concrete',sub:'Rad Structures Group'}];
+  const HQ={id:'HQ',name:'Head office',short:'Head office'};
+  const docs=[]; let seq=0;
+  const add=o=>{o.id='FN-'+String(++seq).padStart(4,'0'); docs.push(o); return o;};
+  const mOf=day=>day>=1?Math.floor((day-1)/31):-1;
+  const budget=[];   // {m,p,rev,cost,MAT..MAC} and HQ rows {m,p:'HQ',opex,HQ..FIN}
+  const OPEN_CASH=24000, END=186, CASH_MIN=20000;
+
+  // ---- prior-year (1403) open invoices
+  P.forEach(p=>{
+    PRIOR.forEach((pm,i)=>{
+      const day=-90+i*30+22+Math.floor(rnd()*6);
+      const amt=r10(p.rev*PSEAS[i]*(1+p.bias)*nz(.05));
+      let open=amt, payDay, share=1;
+      if(p.id==='P4'){ payDay=day+Math.round(p.lag*nz(.12)); share=.5; }
+      else { payDay=day+Math.round(p.lag*nz(.2)); if(p.id==='P2'&&i===2) share=.7; }
+      if(payDay<1){ open=r10(amt*(1-share)); if(open<=0) return; payDay=null; }
+      const inv=add({day,m:-1,pm:i,prior:true,type:'INV',p:p.id,cc:'',party:p.client,desc:'Open balance – '+pm+' 1403 invoice',amt:open});
+      if(payDay&&payDay<=END){ const a=r10(amt*share); add({day:payDay,m:mOf(payDay),type:'REC',sub:'Invoice collections',p:p.id,cc:'',party:p.client,desc:'Collection – '+pm+' 1403 invoice',amt:Math.min(a,open),ref:inv.id}); }
+    });
+  });
+  // ---- 1404 invoices, receipts, costs
+  const cost={}; // cost[p][m][cc]
+  P.forEach(p=>{
+    cost[p.id]=[];
+    for(let m=0;m<6;m++){
+      const bRev=r10(p.rev*SEAS[m]);
+      const bCost={}; CC.forEach(c=>bCost[c.id]=r10(bRev*.78*c.sh));
+      budget.push({m,p:p.id,rev:bRev,cost:CC.reduce((t,c)=>t+bCost[c.id],0),...bCost});
+      const day=m*31+22+Math.floor(rnd()*7);
+      const amt=r10(bRev*(1+p.bias)*nz(.05));
+      const inv=add({day,m,type:'INV',p:p.id,cc:'',party:p.client,desc:'Progress invoice no. '+(m+1)+' – '+MONTHS[m],amt});
+      let payDay=day+Math.round(p.lag*nz(p.id==='P4'?.12:.2)), share=p.id==='P4'?.5:1;
+      if(payDay<=END) add({day:payDay,m:mOf(payDay),type:'REC',sub:'Invoice collections',p:p.id,cc:'',party:p.client,desc:'Collection – '+MONTHS[m]+' invoice',amt:r10(amt*share),ref:inv.id});
+      const c={};
+      CC.forEach(cc=>{
+        const e=(p.eff&&p.eff[cc.id])||1;
+        c[cc.id]=r10(bCost[cc.id]*e*nz(.035));
+        const party=cc.id==='MAT'?p.mat:cc.id==='SUB'?p.sub:cc.id==='LAB'?'Site staff':'Rahnavard Transport';
+        add({day:m*31+27,m,type:'COST',p:p.id,cc:cc.id,party,desc:cc.name+' – '+MONTHS[m],amt:c[cc.id]});
+      });
+      cost[p.id][m]=c;
+    }
+  });
+  // advance payment & other inflows & loan
+  add({day:31+12,m:1,type:'REC',sub:'Advance payments',p:'P5',cc:'',party:'Ofogh Gostar Distribution Co.',desc:'Advance on contract amendment (Phase 2)',amt:21000});
+  add({day:4*31+8,m:4,type:'REC',sub:'Bank loan',p:'HQ',cc:'',party:'Bank (working-capital facility)',desc:'Working-capital loan drawdown',amt:35000});
+  for(let m=0;m<6;m++) add({day:m*31+29,m,type:'REC',sub:'Other receipts',p:'HQ',cc:'',party:'Miscellaneous',desc:'Deposit interest and scrap sales',amt:r10(450*nz(.4))});
+  // opex
+  for(let m=0;m<6;m++){
+    const b={}; OPX.forEach(o=>b[o.id]=o.b);
+    budget.push({m,p:'HQ',opex:OPX.reduce((t,o)=>t+o.b,0),...b});
+    OPX.forEach(o=>{
+      let a=r10(o.b*nz(.06)); if(o.id==='FIN'&&m>=4) a+=r10(620*nz(.05));
+      add({day:m*31+28,m,type:'COST',p:'HQ',cc:'OPX',sub:o.id,party:'Head office',desc:o.name+' – '+MONTHS[m],amt:a});
+      add({day:m*31+28,m,type:'PAY',sub:'HQ expenses',p:'HQ',cc:'OPX',party:'Head office',desc:'Payment – '+o.name,amt:a});
+    });
+  }
+  // payments for project costs
+  P.forEach(p=>{
+    const steel=(p.id==='P1'||p.id==='P2');
+    const esf=k=>r10(p.rev*1.25*.78*k);
+    let deferred=0, credit=0;
+    for(let m=0;m<6;m++){
+      const c=cost[p.id][m], prev=m?cost[p.id][m-1]:{MAT:esf(.42),SUB:esf(.28)};
+      const base=m*31, lbl=m?MONTHS[m-1]:'Esfand 1403';
+      add({day:base+30,m,type:'PAY',sub:'Payroll',p:p.id,cc:'LAB',party:'Site staff',desc:'Site staff payroll and insurance – '+MONTHS[m],amt:c.LAB});
+      add({day:base+25,m,type:'PAY',sub:'Machinery & haulage',p:p.id,cc:'MAC',party:'Rahnavard Transport',desc:'Machinery rental and haulage – '+MONTHS[m],amt:c.MAC});
+      add({day:base+10,m,type:'PAY',sub:'Subcontractors',p:p.id,cc:'SUB',party:p.sub,desc:'Subcontractor invoice – '+lbl,amt:prev.SUB});
+      if(steel&&m<3){
+        const a=r10(prev.MAT*.35); deferred+=prev.MAT-a;
+        add({day:base+8,m,type:'PAY',sub:'Material suppliers',p:p.id,cc:'MAT',party:p.mat,desc:'On-account payment for materials – '+lbl,amt:a});
+      } else if(steel&&m===3){
+        const pre=p.id==='P1'?22000:16000; credit=pre;
+        add({day:base+12,m,type:'PAY',sub:'Material suppliers',p:p.id,cc:'MAT',party:p.mat,desc:'Settlement of rebar and steel-beam payables + Q2 steel pre-purchase',amt:r10(deferred+prev.MAT+pre)});
+        deferred=0;
+      } else {
+        let a=prev.MAT; if(credit>0){ const u=Math.min(credit,r10(a*.5)); a-=u; credit-=u; }
+        add({day:base+8,m,type:'PAY',sub:'Material suppliers',p:p.id,cc:'MAT',party:p.mat,desc:'Materials and equipment purchase – '+lbl,amt:a});
+      }
+    }
+  });
+  docs.sort((a,b)=>a.day-b.day||a.id.localeCompare(b.id));
+  // cash plan (budget)
+  const cashPlan=[]; let cp=OPEN_CASH;
+  for(let m=0;m<6;m++){
+    const br=k=>k>=0?budget.filter(b=>b.m===k&&b.p!=='HQ').reduce((t,b)=>t+b.rev,0):P.reduce((t,p)=>t+p.rev*PSEAS[3+k],0);
+    const out=budget.filter(b=>b.m===m).reduce((t,b)=>t+(b.cost||0)+(b.opex||0),0);
+    cp+=br(m-1)*.5+br(m-2)*.42+400-out; cashPlan.push(r10(cp));
+  }
+  return {MONTHS,PRIOR,CC,OPX,P,HQ,docs,budget,OPEN_CASH,END,CASH_MIN,cashPlan,SEAS};
+}
+
+/* ===== Calculation layer: raw data -> measures ===== */
+function finCalc(D,f){
+  // f: {from,to,project,cc}  (months 0..5, project id or '', cc id or '')
+  const inM=m=>m>=f.from&&m<=f.to;
+  const S=f.from*31, E=(f.to+1)*31, nDays=E-S;
+  const pOK=p=>!f.project||p===f.project;
+  const docs=D.docs;
+  const sum=(arr,fn=x=>x.amt)=>arr.reduce((t,x)=>t+fn(x),0);
+  const directIds=D.CC.map(c=>c.id);
+  // revenue
+  const inv=docs.filter(d=>d.type==='INV'&&!d.prior&&inM(d.m)&&pOK(d.p));
+  const rev=sum(inv);
+  const bud=D.budget.filter(b=>inM(b.m));
+  const revB=sum(bud.filter(b=>b.p!=='HQ'&&pOK(b.p)),b=>b.rev);
+  const costRows=docs.filter(d=>d.type==='COST'&&inM(d.m));
+  const direct=sum(costRows.filter(d=>d.p!=='HQ'&&pOK(d.p)));
+  const directB=sum(bud.filter(b=>b.p!=='HQ'&&pOK(b.p)),b=>b.cost);
+  const opexAll=sum(costRows.filter(d=>d.p==='HQ'));
+  const opexAllB=sum(bud.filter(b=>b.p==='HQ'),b=>b.opex);
+  const revAll=sum(docs.filter(d=>d.type==='INV'&&!d.prior&&inM(d.m)));
+  const revAllB=sum(bud.filter(b=>b.p!=='HQ'),b=>b.rev);
+  const opex=f.project?opexAll*rev/revAll:opexAll;
+  const opexB=f.project?opexAllB*revB/revAllB:opexAllB;
+  const gross=rev-direct, grossB=revB-directB;
+  const op=gross-opex, opB=grossB-opexB;
+  // cost deviation (respects cc filter)
+  const ccOK=d=>!f.cc||(f.cc==='OPX'?d.p==='HQ':d.cc===f.cc);
+  const costSel=sum(costRows.filter(d=>ccOK(d)&&(d.p==='HQ'?!f.project:pOK(d.p))));
+  const costSelB=bud.reduce((t,b)=>{
+    if(b.p==='HQ'){ if(f.project) return t; return t+(f.cc&&f.cc!=='OPX'?0:b.opex); }
+    if(!pOK(b.p)) return t;
+    if(!f.cc) return t+b.cost; if(f.cc==='OPX') return t; return t+b[f.cc];
+  },0);
+  // cash (company level)
+  const flow=d=>d.type==='REC'?d.amt:d.type==='PAY'?-d.amt:0;
+  const cashAt=day=>D.OPEN_CASH+sum(docs.filter(d=>(d.type==='REC'||d.type==='PAY')&&d.day<=day),flow);
+  const monthEnd=D.MONTHS.map((_,m)=>cashAt((m+1)*31));
+  const cashOpen=cashAt(S), cashClose=cashAt(E);
+  const cashCloseB=D.cashPlan[f.to];
+  const flowsIn={}, flowsOut={};
+  docs.filter(d=>d.day>S&&d.day<=E&&pOK(d.p)).forEach(d=>{
+    if(d.type==='REC') flowsIn[d.sub]=(flowsIn[d.sub]||0)+d.amt;
+    if(d.type==='PAY') flowsOut[d.sub]=(flowsOut[d.sub]||0)+d.amt;
+  });
+  // receivables & aging at E
+  const paid={}; docs.filter(d=>d.type==='REC'&&d.ref&&d.day<=E).forEach(d=>paid[d.ref]=(paid[d.ref]||0)+d.amt);
+  const buckets=[0,0,0,0], byClient={}, byClient90={}; let ar=0;
+  const openInv=[];
+  docs.filter(d=>d.type==='INV'&&d.day<=E&&pOK(d.p)).forEach(d=>{
+    const o=d.amt-(paid[d.id]||0); if(o<=0) return;
+    const age=E-d.day, b=age<=30?0:age<=60?1:age<=90?2:3;
+    buckets[b]+=o; ar+=o; byClient[d.party]=(byClient[d.party]||0)+o;
+    if(b===3) byClient90[d.party]=(byClient90[d.party]||0)+o;
+    openInv.push({...d,open:o,age,bucket:b});
+  });
+  const dso=rev>0?ar/rev*nDays:0;
+  // per project
+  const projects=D.P.map(p=>{
+    const r=sum(docs.filter(d=>d.type==='INV'&&!d.prior&&inM(d.m)&&d.p===p.id));
+    const rb=sum(bud.filter(b=>b.p===p.id),b=>b.rev);
+    const c=sum(costRows.filter(d=>d.p===p.id&&(!f.cc||f.cc==='OPX'||d.cc===f.cc)));
+    const cb=sum(bud.filter(b=>b.p===p.id),b=>(!f.cc||f.cc==='OPX')?b.cost:b[f.cc]);
+    const cAll=sum(costRows.filter(d=>d.p===p.id)), cbAll=sum(bud.filter(b=>b.p===p.id),b=>b.cost);
+    const invCum=p.prior+sum(docs.filter(d=>d.type==='INV'&&!d.prior&&d.p===p.id&&d.day<=E));
+    const priorOpen=sum(docs.filter(d=>d.type==='INV'&&d.prior&&d.p===p.id));
+    const recInv=sum(docs.filter(d=>d.type==='REC'&&d.ref&&d.p===p.id&&d.day<=E));
+    const adv=sum(docs.filter(d=>d.type==='REC'&&d.sub==='Advance payments'&&d.p===p.id&&d.day<=E));
+    const received=p.prior-priorOpen+recInv;
+    const open=openInv.filter(o=>o.p===p.id);
+    const arP=open.reduce((t,o)=>t+o.open,0), ar90=open.filter(o=>o.bucket===3).reduce((t,o)=>t+o.open,0);
+    return {id:p.id,name:p.name,short:p.short,client:p.client,code:p.code,contract:p.contract,
+      rev:r,revB:rb,cost:c,costB:cb,costAll:cAll,costAllB:cbAll,gm:r?(r-cAll)/r:0,
+      invoiced:invCum,received,adv,ar:invCum-received,ar90,remaining:p.contract-invCum,progress:invCum/p.contract};
+  });
+  // cost centers
+  const centers=D.CC.map(c=>({id:c.id,name:c.name,grp:'direct',
+      a:sum(costRows.filter(d=>d.cc===c.id&&pOK(d.p))),
+      b:sum(bud.filter(b=>b.p!=='HQ'&&pOK(b.p)),b=>b[c.id])}))
+    .concat(D.OPX.map(o=>({id:o.id,name:o.name,grp:'opex',
+      a:sum(costRows.filter(d=>d.p==='HQ'&&d.sub===o.id)),
+      b:sum(bud.filter(b=>b.p==='HQ'),b=>b[o.id])})));
+  // monthly
+  const monthly=D.MONTHS.map((n,m)=>({m,name:n,
+    rev:sum(docs.filter(d=>d.type==='INV'&&!d.prior&&d.m===m&&pOK(d.p))),
+    revB:sum(D.budget.filter(b=>b.m===m&&b.p!=='HQ'&&pOK(b.p)),b=>b.rev),
+    cash:monthEnd[m],cashB:D.cashPlan[m]}));
+  return {f,S,E,nDays,rev,revB,direct,directB,gross,grossB,opex,opexB,op,opB,costSel,costSelB,
+    cashOpen,cashClose,cashCloseB,monthEnd,flowsIn,flowsOut,buckets,byClient,byClient90,ar,dso,openInv,projects,centers,monthly};
+}
+</script>
+<script>
+(function(){
+  const D=buildFinData(), R=finCalc(D,{from:0,to:5,project:'',cc:''});
+  const nf=(n,d=0)=>Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+  const bn=(m,d=1)=>nf(m/1000,d), pc=(x,d=1)=>nf(x*100,d)+'%';
+  const P=id=>R.projects.find(p=>p.id===id);
+  const sumD=fn=>D.docs.filter(fn).reduce((t,d)=>t+d.amt,0);
+  const ccDev=(pid,cc)=>sumD(d=>d.type==='COST'&&d.p===pid&&d.cc===cc)/D.budget.filter(b=>b.p===pid).reduce((t,b)=>t+b[cc],0)-1;
+  const c90=Object.entries(R.byClient90).sort((a,b)=>b[1]-a[1])[0];
+  const tir=finCalc(D,{from:3,to:3,project:'',cc:''});
+  const fin=R.centers.find(c=>c.id==='FIN');
+  const p2=P('P2'), p3=P('P3'), p4=P('P4');
+  const V={
+    rev:bn(R.rev),revB:bn(R.revB),revPct:pc(R.rev/R.revB-1),gross:bn(R.gross),gm:pc(R.gross/R.rev),op:bn(R.op),opAch:pc(R.op/R.opB),
+    costDiff:bn(R.costSel-R.costSelB),costPct:pc(R.costSel/R.costSelB-1),
+    p2dv:pc(p2.costAll/p2.costAllB-1),p2gm:pc(p2.gm),p2mac:pc(ccDev('P2','MAC')),p2mat:pc(ccDev('P2','MAT')),
+    farRev:bn(R.monthly[0].rev),farRevB:bn(R.monthly[0].revB),p3ach:pc(p3.rev/p3.revB),
+    ar:bn(R.ar),dso:nf(R.dso),b90:bn(R.buckets[3]),c90share:pc(c90[1]/R.buckets[3]),c90amt:bn(c90[1]),c90name:c90[0],
+    cashOpen:bn(R.cashOpen),cash:bn(R.cashClose),tirCash:bn(R.monthEnd[3]),tirMat:bn(tir.flowsOut['Material suppliers']),loan:bn(R.flowsIn['Bank loan']),
+    finDv:pc(fin.a/fin.b-1),p4prog:pc(p4.progress),p4ar:bn(p4.ar),p4arPct:pc(p4.ar/p4.invoiced),
+    nDocs:nf(D.docs.length),nBud:nf(D.budget.length)
+  };
+  document.querySelectorAll('[data-v]').forEach(e=>{const k=e.dataset.v; e.textContent=V[k]!=null?V[k]:'?';});
+  // theme
+  const btn=document.getElementById('themeBtn');
+  const cur=()=>document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  const sync=()=>btn.textContent=cur()==='dark'?'◐ Dark mode':'◑ Light mode';
+  btn.onclick=()=>{document.documentElement.setAttribute('data-theme',cur()==='dark'?'light':'dark');sync();};
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change',sync); sync();
+  // keep theme when going back to the dashboard or switching language
+  document.querySelectorAll('a[href^="index.html"],#langBtn').forEach(a=>a.addEventListener('click',()=>{const t=document.documentElement.getAttribute('data-theme'); if(t){const [p,h]=a.getAttribute('href').split('#'); a.href=p+'?theme='+t+(h?'#'+h:'');}}));
+  // TOC highlight
+  const links=[...document.querySelectorAll('#toc a')], secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)); const on=links.find(l=>l.classList.contains('on')); if(on&&innerWidth<900) on.scrollIntoView({block:'nearest',inline:'center'});}});},{rootMargin:'-20% 0px -70% 0px'});
+  secs.forEach(s=>s&&io.observe(s));
+})();
+</script>
+</body>
+</html>
