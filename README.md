@@ -2,6 +2,8 @@
 
 **Four interactive business dashboards (Executive, Finance, Production and HR), each fully bilingual in English and Persian, each with a step-by-step guide.**
 
+**Live demo: [ftmmns.github.io/dashboard-portfolio](https://ftmmns.github.io/dashboard-portfolio/)** · [English](https://ftmmns.github.io/dashboard-portfolio/?lang=en) · [فارسی](https://ftmmns.github.io/dashboard-portfolio/?lang=fa)
+
 Every dashboard turns raw operational data into answers a manager can act on: where the business stands against target, what changed, and what needs attention first. They are built with plain HTML, CSS and JavaScript, with no frameworks, no build step and no internet connection required.
 
 ![Executive dashboard](en/ceo/shots/thumb.png)
